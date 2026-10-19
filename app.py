@@ -1,5 +1,3 @@
-"""AML Triage Copilot, simple prototype UI.   streamlit run app.py"""
-
 from __future__ import annotations
 
 import csv
@@ -24,179 +22,248 @@ st.markdown(
     """
     <style>
     :root {
-        --aml-border: rgba(128, 128, 128, .22);
-        --aml-muted: #8f96a3;
-        --aml-surface: rgba(128, 128, 128, .08);
+        --bg: #080a08;
+        --surface: #0f130f;
+        --surface-2: #141a13;
+        --border: #243019;
+        --border-strong: #3a4d24;
+        --accent: #a3e635;
+        --accent-dim: #84cc16;
+        --accent-soft: rgba(163, 230, 53, .10);
+        --text: #e6eddc;
+        --muted: #8b9780;
+        --radius: 12px;
     }
+
+    /* ---------- base ---------- */
+    html, body, [data-testid="stApp"] { background: var(--bg); color: var(--text); }
+    [data-testid="stAppViewContainer"] { overflow-x: hidden; }
+    [data-testid="stHeader"] { background: transparent; }
     .block-container {
-        max-width: 1500px;
-        padding: 2.25rem 3.5rem 4rem;
+        max-width: 1400px;
+        padding: 2rem 2.5rem 4rem;
+        overflow-x: hidden;
     }
+    .block-container > div[data-testid="stVerticalBlock"] { gap: 1rem; }
+    * { min-width: 0; }
+    h1, h2, h3, h4 { color: var(--text); letter-spacing: -.01em; overflow-wrap: anywhere; }
+    h2, h3 { margin-top: 0 !important; padding-top: .25rem !important; }
+    h4 { margin: 1.4rem 0 .6rem !important; padding: 0 !important; }
+    hr { border-color: var(--border) !important; margin: 1.75rem 0 !important; }
+    p, li, label, span { overflow-wrap: anywhere; }
+    ::selection { background: var(--accent); color: #000; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+
+    /* ---------- sidebar ---------- */
     [data-testid="stSidebar"] {
-        border-right: 1px solid var(--aml-border);
+        background: var(--surface);
+        border-right: 1px solid var(--border);
     }
-    [data-testid="stSidebar"] > div:first-child {
-        padding: 0 .9rem .25rem;
+    [data-testid="stSidebar"] > div:first-child { padding: 0 1rem 1rem; }
+    [data-testid="stSidebarHeader"] { height: 1.5rem; min-height: 1.5rem; padding: 0; }
+    [data-testid="stSidebarCollapseButton"] { top: 0; right: .35rem; width: 1.5rem; height: 1.5rem; padding: 0; }
+    [data-testid="stSidebarCollapseButton"] button { width: 1.5rem; height: 1.5rem; padding: 0; }
+    [data-testid="stSidebar"] [data-testid="stVerticalBlock"] { gap: .85rem; }
+    [data-testid="stSidebar"] h3 {
+        font-size: 1rem; color: var(--accent); text-transform: uppercase;
+        letter-spacing: .08em; margin: .75rem 0 0 !important;
     }
-    [data-testid="stSidebarHeader"] {
-        height: 1.5rem;
-        min-height: 1.5rem;
+    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] { margin: 0; color: var(--muted); }
+    [data-testid="stSidebar"] label p { font-size: .88rem; color: var(--text); }
+
+    /* ---------- header ---------- */
+    .aml-header { display: flex; align-items: center; gap: .9rem; padding: .25rem 0 .5rem; }
+    .aml-logo {
+        flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px;
+        display: grid; place-items: center; font-size: 1.35rem;
+        background: var(--accent-soft); border: 1px solid var(--border-strong);
+        box-shadow: 0 0 24px rgba(163, 230, 53, .12);
     }
-    [data-testid="stSidebarCollapseButton"] {
-        top: 0;
-        right: .35rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        padding: 0;
-    }
-    [data-testid="stSidebarCollapseButton"] button {
-        width: 1.5rem;
-        height: 1.5rem;
-        padding: 0;
-    }
-    [data-testid="stSidebar"] h1 {
-        margin-top: 0;
-        margin-bottom: .25rem;
-    }
-    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
-        margin-top: 0;
-    }
-    div[data-testid="stPopover"] > button {
-        min-width: 2.25rem;
-        width: 2.25rem;
-        height: 2.25rem;
-        padding: 0;
-        border-radius: 999px;
-    }
-    [data-testid="stHorizontalBlock"]:has(div[data-testid="stPopover"]) {
-        align-items: center;
-    }
-    [data-testid="stHorizontalBlock"]:has(div[data-testid="stPopover"]) > [data-testid="column"]:has(div[data-testid="stPopover"]) {
-        display: flex;
-        justify-content: flex-end;
-        margin-left: auto;
-    }
-    [data-testid="column"]:has(div[data-testid="stPopover"]) > div {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-    }
-    [data-testid="column"]:has(div[data-testid="stPopover"]) div[data-testid="stPopover"] {
-        margin-left: auto;
-    }
-    [data-testid="stFileUploaderDropzoneInstructions"] small {
-        display: none;
-    }
-    .aml-header {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        padding: .35rem 0 .65rem;
-    }
-    .aml-header-title {
-        font-size: 1.55rem;
-        font-weight: 700;
-        line-height: 1.2;
-    }
-    .aml-header-subtitle {
-        color: var(--aml-muted);
-        font-size: .9rem;
-        margin-top: .25rem;
-    }
+    .aml-header-title { font-size: 1.55rem; font-weight: 800; line-height: 1.2; color: var(--text); }
+    .aml-header-title span { color: var(--accent); }
+    .aml-header-subtitle { color: var(--muted); font-size: .9rem; margin-top: .2rem; }
     .aml-full-divider {
-        background: var(--aml-border);
-        height: 1px;
-        margin: .25rem 0 1.1rem;
-        width: 100%;
+        height: 1px; width: 100%; margin: .25rem 0 1.25rem;
+        background: linear-gradient(90deg, var(--accent) 0, var(--border) 35%, transparent 100%);
     }
-    .aml-settings-label {
-        border-bottom: 1px solid var(--aml-border);
-        color: var(--aml-muted);
-        font-size: .78rem;
-        font-weight: 700;
-        letter-spacing: .08em;
-        margin: .25rem 0 .9rem;
-        padding-bottom: .55rem;
-        text-transform: uppercase;
+
+    /* role popover */
+    div[data-testid="stPopover"] > button {
+        border-radius: 999px; padding: .35rem 1rem; white-space: nowrap;
+        background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text);
     }
+    div[data-testid="stPopover"] > button:hover { border-color: var(--accent); color: var(--accent); }
+    [data-testid="stPopover"] [data-testid="stIconMaterial"], [data-testid="stPopoverButton"] [data-testid="stIconMaterial"] { color: var(--accent) !important; font-size: 1.25rem; }
+    [data-testid="stHorizontalBlock"]:has(div[data-testid="stPopover"]) { align-items: center; }
+    [data-testid="stColumn"]:has(div[data-testid="stPopover"]) > div,
+    [data-testid="column"]:has(div[data-testid="stPopover"]) > div {
+        display: flex; justify-content: flex-end; width: 100%;
+    }
+
+    /* ---------- section labels ---------- */
+    .aml-settings-label, .aml-eyebrow, .aml-section-label {
+        color: var(--accent); font-size: .75rem; font-weight: 700;
+        letter-spacing: .12em; text-transform: uppercase;
+    }
+    .aml-settings-label { border-bottom: 1px solid var(--border); margin: .5rem 0 .25rem; padding-bottom: .6rem; }
+    .aml-eyebrow { margin: .25rem 0 .1rem; }
+    .aml-section-label { margin: 1.2rem 0 .45rem; }
+    .aml-intro { margin: 0 0 .5rem; color: var(--muted); font-size: .97rem; line-height: 1.65; max-width: 900px; }
+    .aml-intro strong { color: var(--accent); font-weight: 700; }
     .aml-user-hint {
-        background: var(--aml-surface);
-        border: 1px solid var(--aml-border);
-        border-radius: 8px;
-        color: var(--aml-muted);
-        font-size: .82rem;
-        line-height: 1.45;
-        margin-top: .75rem;
-        padding: .65rem .75rem;
-    }
-    [data-testid="stMetric"] {
-        min-height: 108px;
-        padding: 1rem 1.1rem;
-        border: 1px solid var(--aml-border);
-        border-radius: 12px;
-        background: var(--aml-surface);
-    }
-    [data-testid="stMetricLabel"] {
-        min-height: 2.4rem;
-    }
-    [data-testid="stMetricValue"] {
-        font-size: clamp(1.65rem, 3vw, 2.35rem);
-    }
-    div[data-testid="stDataFrame"] {
-        border: 1px solid var(--aml-border);
-        border-radius: 10px;
-        overflow: hidden;
-    }
-    [data-testid="stExpander"] {
-        border-color: var(--aml-border);
-        border-radius: 10px;
-    }
-    [data-testid="stExpander"] details summary {
-        padding: .65rem .85rem;
-    }
-    [data-testid="stExpander"] details div[data-testid="stExpanderDetails"] {
-        padding: .35rem .85rem .75rem;
-    }
-    .aml-eyebrow {
-        margin: .25rem 0 .35rem;
-        color: var(--aml-muted);
-        font-size: .78rem;
-        font-weight: 700;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-    }
-    .aml-intro {
-        margin: 0 0 1.4rem;
-        color: var(--aml-muted);
-        font-size: .98rem;
-        line-height: 1.6;
+        background: var(--accent-soft); border: 1px solid var(--border-strong); border-radius: 10px;
+        color: var(--muted); font-size: .82rem; line-height: 1.5; padding: .7rem .85rem;
     }
     .aml-detail {
-        margin: .25rem 0 1rem;
-        padding: .8rem 1rem;
-        border: 1px solid var(--aml-border);
-        border-radius: 10px;
-        background: var(--aml-surface);
-        line-height: 1.6;
+        padding: 1rem 1.15rem; line-height: 1.65; color: var(--text);
+        background: var(--surface); border: 1px solid var(--border);
+        border-left: 3px solid var(--accent); border-radius: var(--radius);
     }
-    .aml-detail strong {
-        color: inherit;
+    .aml-detail strong { color: var(--accent); }
+
+    /* ---------- metrics ---------- */
+    [data-testid="stMetric"] {
+        min-height: 112px; padding: 1rem 1.2rem;
+        background: linear-gradient(160deg, var(--surface-2), var(--surface));
+        border: 1px solid var(--border); border-radius: var(--radius);
+        display: flex; flex-direction: column; justify-content: space-between;
+        transition: border-color .15s ease, box-shadow .15s ease;
     }
-    .aml-section-label {
-        margin: 1.2rem 0 .45rem;
-        color: var(--aml-muted);
-        font-size: .78rem;
-        font-weight: 700;
-        letter-spacing: .08em;
-        text-transform: uppercase;
+    [data-testid="stMetric"]:hover { border-color: var(--accent-dim); box-shadow: 0 0 0 1px var(--accent-soft); }
+    [data-testid="stMetricLabel"] { color: var(--muted); min-height: 0; }
+    [data-testid="stMetricLabel"] p {
+        font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600;
     }
+    [data-testid="stMetricValue"] { color: var(--accent); font-weight: 800; }
+    [data-testid="stMetricValue"] > div {
+        font-size: clamp(1.25rem, 2.2vw, 2rem);
+        white-space: normal; overflow: visible; text-overflow: clip;
+        overflow-wrap: anywhere; line-height: 1.15;
+    }
+
+    /* ---------- tables ---------- */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid var(--border); border-radius: var(--radius);
+        overflow: hidden; background: var(--surface); max-width: 100%;
+    }
+
+    /* ---------- expanders ---------- */
+    [data-testid="stExpander"] {
+        border: 1px solid var(--border); border-radius: var(--radius);
+        background: var(--surface); overflow: hidden;
+    }
+    [data-testid="stExpander"] details { border: 0; }
+    [data-testid="stExpander"] details summary { padding: .75rem 1rem; }
+    [data-testid="stExpander"] details summary:hover { color: var(--accent); }
+    [data-testid="stExpander"] details div[data-testid="stExpanderDetails"] { padding: .25rem 1rem 1rem; }
+
+    /* ---------- inputs ---------- */
+    [data-baseweb="input"], [data-baseweb="select"] > div, [data-baseweb="textarea"] {
+        background: var(--surface-2) !important; border-color: var(--border-strong) !important;
+        border-radius: 10px !important;
+    }
+    [data-baseweb="input"]:focus-within, [data-baseweb="select"]:focus-within > div {
+        border-color: var(--accent) !important; box-shadow: 0 0 0 1px var(--accent) !important;
+    }
+    [data-testid="stFileUploader"] { max-width: 520px; }
+    [data-testid="stFileUploaderDropzone"] {
+        background: transparent; border: 1px dashed var(--border-strong); border-radius: 10px;
+        padding: .4rem .6rem; min-height: 0; gap: .75rem; align-items: center;
+        flex-wrap: nowrap; transition: border-color .15s ease, background .15s ease;
+    }
+    [data-testid="stFileUploaderDropzone"]:hover { border-color: var(--accent); background: var(--accent-soft); }
+    [data-testid="stFileUploaderDropzone"] button {
+        min-height: 2rem; padding: .2rem .8rem; font-size: .85rem; flex: 0 0 auto;
+    }
+    [data-testid="stFileUploaderDropzoneInstructions"] { flex: 1 1 auto; }
+    [data-testid="stFileUploaderDropzoneInstructions"] > div { font-size: 0; line-height: 0; }
+    [data-testid="stFileUploaderDropzoneInstructions"] > div > span { display: none; }
+    [data-testid="stFileUploaderDropzoneInstructions"] > div::after {
+        content: "PDF only"; font-size: .8rem; line-height: 1.2; color: var(--muted);
+    }
+    [data-testid="stFileUploaderFile"] { overflow: hidden; }
+
+    /* ---------- buttons ---------- */
+    .stButton > button, [data-testid="stBaseButton-secondary"] {
+        border-radius: 10px; font-weight: 600; min-height: 2.6rem;
+        background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong);
+        white-space: normal; line-height: 1.25;
+        transition: all .15s ease;
+    }
+    .stButton > button:hover:not(:disabled) {
+        border-color: var(--accent); color: var(--accent); background: var(--accent-soft);
+    }
+    .stButton > button:disabled { opacity: .4; }
+    .stButton > button[kind="primary"], [data-testid="stBaseButton-primary"] {
+        background: var(--accent); color: #0a0d06; border-color: var(--accent);
+    }
+    .stButton > button[kind="primary"]:hover:not(:disabled) { background: var(--accent-dim); color: #000; }
+
+    /* ---------- alerts ---------- */
+    [data-testid="stAlert"] { border-radius: var(--radius); border: 1px solid var(--border-strong); }
+    [data-testid="stAlertContainer"] { overflow-wrap: anywhere; }
+    [data-testid="stAlert"] p { line-height: 1.55; }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentError"]) { background: rgba(239, 68, 68, .09); border-color: rgba(239, 68, 68, .45); }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentInfo"]) { background: var(--accent-soft); border-color: var(--border-strong); }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentSuccess"]) { background: rgba(163, 230, 53, .14); border-color: var(--accent-dim); }
+    [data-testid="stAlert"]:has([data-testid="stAlertContentWarning"]) { background: rgba(250, 204, 21, .08); border-color: rgba(250, 204, 21, .4); }
+
+
+    /* ---------- charts ---------- */
+    [data-testid="stVegaLiteChart"], .stVegaLiteChart, [data-testid="stArrowVegaLiteChart"] {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: .75rem .5rem .25rem; overflow: hidden;
+    }
+    [data-testid="stCaptionContainer"] { color: var(--muted); }
+
+
+    /* ---------- toolbar ---------- */
+    [data-testid="stAppDeployButton"], [data-testid="stDeployButton"] { display: none; }
+    [data-testid="stToolbar"] { right: 1rem; }
+
+    /* ---------- sliders ---------- */
+    [data-testid="stSlider"] { padding: 0 .25rem; }
+    [data-testid="stSlider"] label p { color: var(--text); font-weight: 500; }
+    [data-testid="stSlider"] [role="slider"] {
+        background: var(--accent) !important;
+        box-shadow: 0 0 0 4px rgba(163, 230, 53, .18), 0 0 14px rgba(163, 230, 53, .45);
+        border: 2px solid #0a0d06 !important;
+    }
+    [data-testid="stSlider"] [role="slider"]:hover,
+    [data-testid="stSlider"] [role="slider"]:focus {
+        box-shadow: 0 0 0 6px rgba(163, 230, 53, .25), 0 0 18px rgba(163, 230, 53, .6);
+    }
+    [data-testid="stSliderThumbValue"] {
+        color: #0a0d06 !important; background: var(--accent); border-radius: 6px;
+        padding: .05rem .4rem; font-size: .72rem; font-weight: 700;
+    }
+    [data-testid="stSliderTickBarMin"], [data-testid="stSliderTickBarMax"] { color: var(--muted); font-size: .7rem; }
+
+    /* ---------- dropdown lists and popovers ---------- */
+    [data-baseweb="popover"] > div, [data-baseweb="menu"], [data-baseweb="select"] ul {
+        background: var(--surface-2) !important; border: 1px solid var(--border-strong);
+        border-radius: 10px !important; box-shadow: 0 12px 32px rgba(0, 0, 0, .6) !important;
+    }
+    [data-baseweb="menu"] li, [role="option"] { background: transparent !important; color: var(--text) !important; }
+    [data-baseweb="menu"] li:hover, [role="option"]:hover, [role="option"][aria-selected="true"] {
+        background: var(--accent-soft) !important; color: var(--accent) !important;
+    }
+    [data-testid="stPopoverBody"] { min-width: 260px; padding: 1rem 1.1rem; }
+    [data-testid="stPopoverBody"] h4 { margin: 0 0 .5rem !important; }
+
+    /* ---------- radio / toggle ---------- */
+    [data-testid="stRadio"] label { padding-right: .6rem; }
+    [data-testid="stRadio"] [role="radiogroup"] { gap: .35rem 1rem; }
+    [data-testid="stToggle"] label p { color: var(--text); }
+
+    /* ---------- responsive ---------- */
     @media (max-width: 900px) {
-        .block-container {
-            padding: 1.25rem 1rem 3rem;
-        }
-        [data-testid="stMetric"] {
-            min-height: 92px;
-        }
+        .block-container { padding: 1.25rem 1rem 3rem; }
+        [data-testid="stMetric"] { min-height: 92px; }
+        .aml-header-title { font-size: 1.25rem; }
     }
     </style>
     """,
@@ -220,14 +287,18 @@ st.session_state.setdefault("role", "Supervisor")
 header_left, header_right = st.columns([1, .18], vertical_alignment="center")
 with header_left:
     st.markdown(
-        '<div class="aml-header"><div>'
-        '<div class="aml-header-title">⚖️ AML Triage Copilot</div>'
+        '<div class="aml-header"><div class="aml-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div><div>'
+        '<div class="aml-header-title">AML Triage <span>Copilot</span></div>'
         '<div class="aml-header-subtitle">Explainable transaction monitoring</div>'
         '</div></div>',
         unsafe_allow_html=True,
     )
 with header_right:
-    with st.popover("👤  " + st.session_state["role"], help="Choose application role"):
+    with st.popover(
+        st.session_state["role"],
+        icon=":material/admin_panel_settings:" if st.session_state["role"] == "Supervisor" else ":material/person:",
+        help="Choose application role",
+    ):
         st.markdown("#### Application role")
         st.radio("Access level", ["Supervisor", "User"], key="role")
 st.markdown('<div class="aml-full-divider"></div>', unsafe_allow_html=True)
@@ -309,10 +380,10 @@ picked = st.dataframe(
     view,
     hide_index=True,
     width="stretch",
-    height=min(460, max(180, 48 + len(view.head(9)) * 35)),
+    height=37 + max(3, min(len(view), 9)) * 35,
     row_height=35,
     on_select="rerun",
-                      selection_mode="single-row",
+    selection_mode="single-row",
     column_config={
         "client_id": st.column_config.TextColumn("Client ID", width="small"),
         "risk_score": st.column_config.ProgressColumn(
@@ -347,14 +418,26 @@ for h in d.hard_rules:
 
 st.markdown("#### Risk drivers")
 bd = pd.DataFrame([vars(p) for p in d.breakdown])
-bars = alt.Chart(bd).mark_bar().encode(
-    x=alt.X(
-        "weighted_points:Q",
-        title="points (xᵢ · wᵢ)",
-        scale=alt.Scale(domain=[0, max(bd["weight"].max(), 1)]),
-    ),
-    y=alt.Y("attribute:N", sort="-x", title=None),
-    tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+bars = (
+    alt.Chart(bd)
+    .mark_bar(color="#a3e635", cornerRadiusEnd=4, size=16)
+    .encode(
+        x=alt.X(
+            "weighted_points:Q",
+            title="points (xᵢ · wᵢ)",
+            scale=alt.Scale(domain=[0, max(bd["weight"].max(), 1)], nice=False),
+            axis=alt.Axis(tickCount=5, format=".0f"),
+        ),
+        y=alt.Y("attribute:N", sort="-x", title=None),
+        tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+    )
+    .properties(height=max(180, 34 * len(bd)), padding={"left": 8, "right": 28, "top": 8, "bottom": 8})
+    .configure(background="transparent")
+    .configure_view(strokeWidth=0)
+    .configure_axis(
+        labelColor="#e6eddc", titleColor="#8b9780", gridColor="#1c2616",
+        domainColor="#3a4d24", tickColor="#3a4d24", labelLimit=220, labelFontSize=12,
+    )
 )
 st.altair_chart(bars, width="stretch", theme=None)
 
@@ -418,6 +501,7 @@ for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
         decision.replace("_", " ").capitalize(),
         disabled=not note.strip(),
         width="stretch",
+        type="primary" if decision == "ESCALATE" else "secondary",
     ):
         attachment_path = ""
         if attachment is not None:
