@@ -8,7 +8,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from .data import HISTORY_END, HISTORY_START
+from ..io.csv_source import HISTORY_END, HISTORY_START
 
 STRUCTURING_THRESHOLD = 25_000      # CZK, ~EUR 1,000 identification threshold for occasional transactions
 STRUCTURING_BAND = 0.85             # "just below" = 85-100 % of the threshold

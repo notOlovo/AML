@@ -4,3 +4,14 @@ data/real/
 data/cache/
 data/audit_log.jsonl
 out/
+
+# Datasets added through the app land in their own folder under data/. A bank's own
+# data must never reach the repository, so only the ones already committed are kept.
+data/*/
+!data/sample/
+!data/test/
+results.csv
+data/decisions.csv
+data/decision_attachments/
+.idea/
+.venv/

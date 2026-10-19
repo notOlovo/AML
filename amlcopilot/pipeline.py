@@ -6,8 +6,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from . import data, features, screening
-from .scoring import DEFAULT_TIERS, VectorRiskEngine
+from .io import csv_source as data
+from .risk import features, screening
+from .risk.scoring import DEFAULT_TIERS, VectorRiskEngine
 
 
 def analyse(folder: str | Path, weights: dict | None = None, tiers=DEFAULT_TIERS) -> dict:
