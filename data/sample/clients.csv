@@ -1,0 +1,1201 @@
+﻿client ID;contract date;onboarding channel;PEP;client type;expected volume 2Q2026;actual volume 2Q2026;expected count 2Q2026;actual count 2Q2026;AML risk;country of residence;segment
+C100000;30.11.2017;branch;N;individual;73000,00;158489,34;13;56;medium;CZ;retail
+C100001;18.12.2024;branch;N;individual;77000,00;176707,96;24;62;low;CZ;retail
+C100002;04.11.2025;online;N;sole trader;75000,00;172211,62;15;62;low;CZ;retail
+C100003;18.03.2026;online;N;sole trader;64000,00;548128,20;22;58;low;CZ;affluent
+C100004;02.11.2019;branch;N;individual;69000,00;195927,90;20;65;low;CZ;retail
+C100005;20.10.2021;online;N;individual;91000,00;182138,74;22;60;high;CZ;affluent
+C100006;09.02.2024;branch;N;legal entity;1252000,00;4999037,10;57;168;medium;SK;SME
+C100007;24.02.2021;online;N;individual;70000,00;143398,61;16;53;high;CZ;retail
+C100008;22.04.2016;branch;N;sole trader;66000,00;191394,55;25;71;low;UA;retail
+C100009;08.08.2018;online;N;sole trader;65000,00;160243,81;12;53;medium;CZ;retail
+C100010;08.10.2023;online;N;legal entity;2881000,00;6368008,14;64;149;low;DE;SME
+C100011;22.12.2023;branch;N;individual;54000,00;166179,53;17;45;medium;CZ;retail
+C100012;01.04.2020;online;N;legal entity;1794000,00;4041964,33;71;158;medium;CZ;retail
+C100013;26.12.2021;online;N;individual;53000,00;154985,06;17;49;low;UA;affluent
+C100014;05.10.2023;branch;N;individual;51000,00;121660,05;19;55;low;CZ;retail
+C100015;31.07.2020;branch;N;sole trader;68000,00;215812,26;18;60;low;CZ;affluent
+C100016;15.07.2017;broker;N;individual;79000,00;162274,57;15;54;low;CZ;affluent
+C100017;23.06.2016;broker;N;individual;83000,00;208542,99;20;63;low;DE;retail
+C100018;31.05.2018;online;N;individual;65000,00;150711,47;14;42;low;CZ;retail
+C100019;11.11.2018;branch;N;individual;53000,00;136368,59;20;61;low;CZ;retail
+C100020;21.11.2018;online;N;individual;60000,00;134068,02;15;42;low;DE;retail
+C100021;25.10.2025;online;N;individual;65000,00;158408,89;12;51;medium;VN;affluent
+C100022;05.09.2024;branch;N;individual;54000,00;107636,20;23;54;low;CZ;retail
+C100023;18.07.2025;branch;N;individual;36000,00;125273,58;14;51;low;CZ;affluent
+C100024;08.10.2021;online;Y;individual;47000,00;128838,91;25;66;low;CZ;retail
+C100025;11.12.2025;online;N;individual;47000,00;4319408,79;25;72;high;UA;retail
+C100026;14.07.2016;branch;N;individual;52000,00;141143,50;18;61;low;CZ;retail
+C100027;04.01.2017;broker;N;individual;63000,00;131266,02;12;47;medium;CZ;retail
+C100028;22.12.2018;online;N;individual;75000,00;160181,29;26;63;low;CZ;retail
+C100029;07.08.2025;online;N;sole trader;71000,00;219753,56;20;53;high;CZ;retail
+C100030;25.08.2024;branch;N;sole trader;67000,00;136759,16;18;46;medium;UA;retail
+C100031;11.02.2022;online;N;individual;44000,00;92000,90;20;47;low;DE;retail
+C100032;09.06.2017;branch;N;individual;81000,00;234114,66;17;50;high;CZ;retail
+C100033;30.05.2024;online;N;legal entity;1666000,00;4120454,32;46;175;low;CZ;affluent
+C100034;17.12.2017;online;N;individual;44000,00;5172604,03;29;92;high;CZ;retail
+C100035;08.05.2018;branch;N;individual;54000,00;228718,19;18;51;low;CZ;retail
+C100036;09.11.2019;branch;N;individual;63000,00;205011,74;15;58;low;CZ;retail
+C100037;03.05.2025;online;N;individual;78000,00;181075,57;18;60;medium;DE;affluent
+C100038;03.01.2024;branch;N;individual;64000,00;183316,22;24;53;high;CZ;retail
+C100039;16.07.2021;branch;N;sole trader;74000,00;182087,81;21;61;low;CZ;retail
+C100040;22.04.2016;online;N;legal entity;1781000,00;6590434,87;75;162;medium;CZ;corporate
+C100041;14.07.2019;online;N;individual;46000,00;117394,70;15;55;high;CZ;retail
+C100042;20.06.2025;online;N;individual;79000,00;180139,81;17;60;medium;CZ;retail
+C100043;10.06.2018;branch;N;individual;73000,00;153441,15;22;53;low;CZ;retail
+C100044;11.12.2023;branch;N;individual;39000,00;145062,12;21;51;low;CZ;retail
+C100045;05.06.2019;online;N;sole trader;76000,00;190603,33;19;59;low;CZ;affluent
+C100046;24.11.2025;branch;N;individual;107000,00;4574812,29;28;83;low;CZ;retail
+C100047;03.02.2018;branch;N;legal entity;1405000,00;4140528,02;58;168;low;CZ;SME
+C100048;15.10.2016;online;N;individual;83000,00;167565,82;23;66;medium;SK;retail
+C100049;29.01.2023;broker;N;individual;42000,00;177804,64;21;47;medium;CZ;retail
+C100050;14.07.2025;branch;N;individual;47000,00;191044,69;20;59;low;CZ;affluent
+C100051;29.12.2022;broker;N;individual;76000,00;182954,78;29;66;low;CZ;retail
+C100052;27.10.2018;broker;N;individual;42000,00;166157,21;26;58;low;CZ;affluent
+C100053;08.10.2023;broker;N;individual;69000,00;188366,50;28;68;low;CZ;retail
+C100054;25.03.2024;broker;N;sole trader;53000,00;149608,59;16;60;medium;DE;affluent
+C100055;05.11.2018;online;N;individual;68000,00;232954,57;22;53;medium;SK;affluent
+C100056;13.02.2023;online;N;individual;47000,00;156126,49;21;57;high;CZ;retail
+C100057;29.11.2016;online;N;individual;39000,00;136263,82;19;48;low;CZ;affluent
+C100058;20.11.2020;branch;N;legal entity;630000,00;1982107,84;77;181;high;CZ;SME
+C100059;11.08.2021;branch;N;individual;51000,00;142268,28;14;59;medium;CZ;retail
+C100060;29.01.2019;online;N;individual;43000,00;130149,25;25;64;low;CZ;affluent
+C100061;21.04.2023;branch;N;individual;81000,00;196545,35;18;55;low;UA;retail
+C100062;18.03.2026;online;N;sole trader;72000,00;144149,57;18;52;low;CZ;affluent
+C100063;05.04.2025;online;N;sole trader;51000,00;209898,63;23;57;medium;CZ;retail
+C100064;27.09.2025;online;N;individual;52000,00;134376,13;12;54;low;CZ;affluent
+C100065;10.10.2020;branch;N;individual;65000,00;163428,71;24;59;low;CZ;retail
+C100066;04.12.2021;branch;N;individual;85000,00;216313,00;12;50;low;CZ;affluent
+C100067;12.05.2024;broker;N;individual;67000,00;181865,73;19;49;medium;CZ;affluent
+C100068;25.09.2023;branch;N;individual;67000,00;216145,21;28;63;medium;CZ;affluent
+C100069;08.12.2017;branch;N;individual;50000,00;119109,02;25;59;high;CZ;retail
+C100070;06.11.2017;branch;N;individual;37000,00;140282,24;19;68;medium;CZ;affluent
+C100071;10.03.2019;branch;N;legal entity;2500000,00;10433118,64;61;156;low;CZ;affluent
+C100072;28.10.2023;online;N;sole trader;64000,00;227398,50;21;58;low;CZ;retail
+C100073;01.02.2026;online;N;individual;54000,00;4081119,17;15;65;medium;VN;affluent
+C100074;01.09.2020;branch;N;individual;59000,00;148262,05;20;72;low;CZ;retail
+C100075;15.08.2018;online;N;sole trader;56000,00;160847,50;15;64;low;DE;retail
+C100076;30.09.2020;branch;N;sole trader;93000,00;226808,56;19;68;low;CZ;retail
+C100077;12.07.2020;online;N;individual;47000,00;180062,39;21;52;low;DE;retail
+C100078;10.03.2022;online;N;individual;42000,00;117895,43;21;49;medium;CZ;retail
+C100079;24.03.2026;online;N;individual;50000,00;2167689,63;23;65;low;CZ;retail
+C100080;19.08.2022;online;N;sole trader;61000,00;159812,92;15;62;low;UA;retail
+C100081;16.11.2024;online;N;individual;79000,00;606459,58;14;60;low;CZ;affluent
+C100082;18.01.2025;online;N;individual;99000,00;250962,42;24;54;low;CZ;retail
+C100083;15.06.2020;online;N;individual;61000,00;156143,08;15;45;low;CZ;retail
+C100084;01.12.2025;branch;N;legal entity;1216000,00;3639104,95;46;150;medium;VN;SME
+C100085;13.08.2022;branch;N;individual;50000,00;151346,09;15;63;low;CZ;retail
+C100086;27.12.2017;online;N;individual;112000,00;258110,95;10;46;medium;CZ;affluent
+C100087;04.02.2020;online;N;individual;65000,00;163516,90;16;67;low;CZ;retail
+C100088;06.03.2026;online;N;legal entity;2322000,00;4842776,20;55;160;low;CZ;corporate
+C100089;31.01.2017;branch;N;individual;54000,00;225801,02;15;51;low;CZ;retail
+C100090;24.11.2024;branch;N;sole trader;56000,00;128552,11;14;50;low;CZ;affluent
+C100091;13.09.2016;branch;N;individual;72000,00;259142,00;15;51;low;UA;affluent
+C100092;03.02.2022;branch;N;individual;56000,00;170235,07;23;72;low;UA;retail
+C100093;06.11.2016;online;N;individual;112000,00;230239,83;19;52;low;CZ;retail
+C100094;03.04.2018;broker;N;individual;78000,00;170023,60;14;46;medium;CZ;retail
+C100095;18.09.2018;online;N;individual;68000,00;148951,89;17;56;low;CZ;retail
+C100096;21.12.2024;online;N;sole trader;59000,00;184031,50;21;57;low;VN;retail
+C100097;29.09.2020;online;N;individual;63000,00;158583,51;17;59;low;CZ;affluent
+C100098;17.07.2024;branch;N;sole trader;106000,00;221306,02;24;59;low;CZ;retail
+C100099;26.09.2016;branch;N;sole trader;43000,00;112642,37;20;66;low;CZ;affluent
+C100100;16.05.2016;branch;N;sole trader;63000,00;166534,30;23;55;low;CZ;affluent
+C100101;13.11.2025;online;N;legal entity;2419000,00;5293808,36;45;171;low;CZ;SME
+C100102;16.08.2016;branch;Y;individual;63000,00;162694,52;18;60;low;CZ;retail
+C100103;22.12.2017;branch;N;individual;57000,00;117387,89;13;48;high;CZ;affluent
+C100104;01.06.2022;online;N;legal entity;4325000,00;8820149,16;52;164;low;CZ;SME
+C100105;09.12.2017;broker;N;individual;71000,00;146528,04;17;57;low;CZ;retail
+C100106;11.04.2020;branch;N;legal entity;1623000,00;5341218,80;73;172;medium;DE;SME
+C100107;25.06.2018;branch;N;individual;41000,00;142362,23;13;46;low;CZ;affluent
+C100108;14.06.2020;online;N;individual;50000,00;112689,99;17;59;low;CZ;affluent
+C100109;20.09.2024;online;N;individual;73000,00;184841,77;24;58;low;CZ;retail
+C100110;03.03.2023;broker;N;legal entity;8755000,00;23827639,81;50;170;low;DE;corporate
+C100111;08.05.2022;branch;N;legal entity;6847000,00;15097079,42;74;163;low;SK;affluent
+C100112;23.05.2025;branch;N;legal entity;1402000,00;3337734,03;45;163;low;UA;affluent
+C100113;19.08.2025;online;N;individual;97000,00;263181,83;16;59;low;CZ;affluent
+C100114;22.09.2020;branch;N;individual;38000,00;143817,56;16;45;medium;UA;retail
+C100115;09.12.2019;branch;N;sole trader;45000,00;149212,95;22;51;low;CZ;retail
+C100116;24.05.2020;online;N;individual;48000,00;133627,47;16;59;medium;CZ;retail
+C100117;24.06.2021;online;N;individual;38000,00;160327,52;22;55;low;CZ;retail
+C100118;07.09.2023;online;N;sole trader;76000,00;166417,93;21;55;low;CZ;retail
+C100119;17.11.2017;branch;N;individual;55000,00;202262,07;14;58;low;CZ;retail
+C100120;24.12.2019;branch;N;individual;105000,00;240454,55;22;58;low;DE;retail
+C100121;25.10.2020;broker;N;legal entity;2387000,00;6762165,16;58;183;low;CZ;retail
+C100122;19.01.2022;branch;N;individual;37000,00;101165,61;18;53;low;CZ;affluent
+C100123;22.09.2025;broker;N;individual;63000,00;145765,02;20;44;medium;UA;retail
+C100124;10.12.2022;broker;N;sole trader;43000,00;129581,63;20;57;high;CZ;affluent
+C100125;16.02.2026;online;N;individual;46000,00;526347,15;28;71;low;CZ;affluent
+C100126;01.11.2018;online;N;individual;66000,00;133760,33;12;43;medium;CZ;retail
+C100127;06.04.2022;branch;N;legal entity;721000,00;2565469,87;64;151;low;CZ;SME
+C100128;18.02.2018;online;N;individual;55000,00;201941,58;20;65;low;CZ;retail
+C100129;16.05.2016;online;N;individual;59000,00;153721,95;14;50;low;CZ;retail
+C100130;18.07.2017;online;N;individual;78000,00;187992,48;25;59;low;CZ;affluent
+C100131;28.07.2020;online;N;individual;35000,00;138626,66;27;68;low;CZ;affluent
+C100132;09.06.2023;branch;N;individual;22000,00;83914,48;16;52;low;CZ;retail
+C100133;22.10.2023;branch;N;individual;86000,00;178608,22;21;64;medium;CZ;retail
+C100134;07.02.2026;online;N;individual;12000,00;1505897,89;3;14;medium;CZ;retail
+C100135;02.11.2018;branch;N;individual;63000,00;196464,00;16;56;low;CZ;retail
+C100136;19.01.2020;branch;N;individual;58000,00;217767,67;15;53;low;CZ;retail
+C100137;10.06.2024;branch;N;individual;48000,00;122133,28;12;48;low;CZ;affluent
+C100138;31.12.2020;branch;N;legal entity;3483000,00;11886044,40;74;179;low;CZ;SME
+C100139;23.04.2016;broker;N;individual;57000,00;174039,87;29;65;medium;CZ;retail
+C100140;24.09.2021;online;N;individual;91000,00;201868,26;20;74;low;CZ;affluent
+C100141;12.02.2020;branch;N;individual;48000,00;122804,73;17;47;low;CZ;affluent
+C100142;07.06.2021;online;N;individual;44000,00;536903,81;18;66;medium;CZ;retail
+C100143;10.10.2023;branch;N;individual;101000,00;213665,61;19;60;low;CZ;retail
+C100144;23.02.2022;branch;N;sole trader;33000,00;136266,66;20;57;low;CZ;retail
+C100145;30.03.2024;online;N;sole trader;64000,00;201105,88;23;50;low;CZ;retail
+C100146;05.07.2023;branch;N;individual;29000,00;107661,14;16;42;low;CZ;retail
+C100147;19.07.2018;branch;N;individual;49000,00;185614,13;14;43;low;CZ;affluent
+C100148;29.08.2021;branch;N;individual;50000,00;144387,97;13;47;low;CZ;affluent
+C100149;27.09.2018;branch;Y;individual;73000,00;264172,74;15;57;low;CZ;affluent
+C100150;13.09.2018;online;N;individual;39000,00;113348,61;24;65;low;VN;affluent
+C100151;28.03.2020;online;N;sole trader;61000,00;122423,21;13;52;medium;DE;retail
+C100152;09.11.2021;online;N;legal entity;1459000,00;4966415,86;38;134;low;CZ;corporate
+C100153;09.03.2022;online;N;individual;48000,00;140412,30;27;67;high;CZ;retail
+C100154;21.08.2023;branch;N;sole trader;31000,00;103612,93;29;65;low;CZ;retail
+C100155;29.10.2020;branch;N;individual;38000,00;139215,75;24;62;low;CZ;affluent
+C100156;21.02.2023;branch;N;individual;39000,00;148838,82;14;58;medium;CZ;retail
+C100157;06.10.2023;branch;N;individual;56000,00;123272,51;19;52;medium;CZ;affluent
+C100158;14.09.2023;branch;N;individual;34000,00;114418,68;23;64;low;UA;retail
+C100159;29.09.2023;branch;N;sole trader;53000,00;118310,39;29;65;low;CZ;affluent
+C100160;23.10.2024;online;N;individual;67000,00;168113,37;26;61;low;DE;affluent
+C100161;01.08.2018;online;N;sole trader;70000,00;212088,26;28;68;low;CZ;retail
+C100162;29.06.2024;online;N;legal entity;2408000,00;5005406,38;36;152;medium;CZ;SME
+C100163;18.11.2025;branch;N;individual;23000,00;72682,65;16;47;medium;CZ;affluent
+C100164;08.09.2016;branch;N;individual;72000,00;159742,15;12;40;low;DE;affluent
+C100165;06.03.2026;online;N;individual;115000,00;298966,41;20;56;low;CZ;retail
+C100166;12.02.2025;online;N;individual;82000,00;171720,91;25;61;low;CZ;retail
+C100167;17.06.2019;online;N;individual;46000,00;120984,87;18;50;low;CZ;retail
+C100168;25.04.2024;online;N;individual;82000,00;180996,35;18;58;low;CZ;affluent
+C100169;31.12.2023;online;N;individual;51000,00;145505,26;26;61;low;CZ;retail
+C100170;31.07.2023;branch;Y;individual;87000,00;180073,31;18;57;medium;CZ;affluent
+C100171;07.01.2023;online;N;individual;73000,00;187210,43;31;68;high;CZ;retail
+C100172;23.03.2019;branch;N;individual;75000,00;185453,33;20;57;low;CZ;affluent
+C100173;10.01.2022;online;N;individual;22000,00;93454,01;15;62;low;CZ;affluent
+C100174;05.06.2017;online;N;individual;63000,00;187683,47;20;53;low;CZ;affluent
+C100175;25.04.2021;online;N;individual;28000,00;118848,37;15;56;medium;CZ;retail
+C100176;28.01.2018;branch;N;sole trader;145000,00;317324,97;18;50;medium;CZ;retail
+C100177;07.04.2017;branch;N;individual;55000,00;152597,20;25;60;low;VN;retail
+C100178;21.03.2017;online;N;individual;31000,00;126239,78;18;44;low;CZ;retail
+C100179;05.03.2026;branch;N;individual;57000,00;187671,34;13;51;low;CZ;retail
+C100180;28.08.2022;branch;N;individual;42000,00;153604,62;13;55;low;CZ;retail
+C100181;23.02.2026;online;N;individual;141000,00;436977,77;16;63;medium;CZ;affluent
+C100182;29.07.2025;branch;N;individual;68000,00;176127,06;23;55;low;CZ;retail
+C100183;11.05.2018;branch;N;individual;61000,00;126049,88;21;68;high;CZ;retail
+C100184;04.11.2018;branch;N;individual;85000,00;198811,08;17;47;medium;CZ;retail
+C100185;28.04.2023;online;N;sole trader;46000,00;149489,07;13;53;low;CZ;retail
+C100186;18.06.2017;branch;N;sole trader;73000,00;254072,43;22;65;medium;CZ;retail
+C100187;26.12.2022;online;N;individual;102000,00;223555,87;23;57;low;CZ;retail
+C100188;13.03.2021;branch;N;individual;49000,00;177322,87;26;65;low;CZ;retail
+C100189;06.10.2020;online;N;individual;60000,00;163449,89;14;48;low;CZ;retail
+C100190;17.01.2024;online;Y;sole trader;46000,00;121715,68;24;60;low;CZ;affluent
+C100191;17.10.2025;branch;N;individual;61000,00;1832441,58;18;98;high;CZ;affluent
+C100192;02.04.2025;branch;N;individual;36000,00;139394,17;20;54;low;DE;affluent
+C100193;23.05.2019;online;N;individual;78000,00;189261,61;21;57;medium;DE;retail
+C100194;18.08.2022;online;N;individual;46000,00;179203,05;20;56;medium;CZ;affluent
+C100195;31.10.2022;online;N;individual;81000,00;178395,18;25;58;low;CZ;retail
+C100196;03.10.2019;online;N;individual;63000,00;4197187,05;20;73;high;CZ;retail
+C100197;12.02.2020;branch;N;sole trader;97000,00;206419,02;25;70;low;CZ;retail
+C100198;06.02.2025;online;N;individual;70000,00;181437,51;19;63;low;CZ;retail
+C100199;26.04.2024;branch;N;individual;41000,00;159658,60;12;51;low;CZ;affluent
+C100200;26.11.2025;branch;N;individual;99000,00;219627,00;12;39;high;CZ;affluent
+C100201;18.06.2019;branch;Y;individual;51000,00;172330,71;13;52;low;CZ;retail
+C100202;23.07.2017;branch;N;legal entity;2538000,00;8046017,70;69;173;medium;CZ;affluent
+C100203;27.01.2023;online;N;individual;65000,00;149551,07;26;63;low;CZ;affluent
+C100204;04.07.2017;broker;N;individual;83000,00;179088,01;23;53;low;CZ;affluent
+C100205;20.04.2022;online;N;individual;46000,00;128062,51;24;60;low;CZ;retail
+C100206;04.06.2019;online;N;sole trader;39000,00;133737,86;29;64;low;CZ;affluent
+C100207;20.06.2018;branch;N;sole trader;96000,00;240026,94;21;50;low;CZ;affluent
+C100208;27.05.2016;branch;N;individual;61000,00;191736,15;16;60;medium;CZ;retail
+C100209;29.10.2025;branch;N;individual;52000,00;127811,69;16;53;low;CZ;retail
+C100210;27.07.2021;branch;N;individual;40000,00;114181,48;13;57;low;CZ;retail
+C100211;24.12.2025;online;N;sole trader;42000,00;166493,68;14;54;high;CZ;retail
+C100212;04.11.2016;online;N;sole trader;85000,00;174860,57;23;66;low;CZ;retail
+C100213;16.03.2025;online;N;individual;54000,00;120387,93;27;64;low;CZ;retail
+C100214;26.11.2021;branch;N;individual;47000,00;170807,83;21;48;low;CZ;affluent
+C100215;12.11.2023;branch;N;individual;32000,00;114462,79;24;55;medium;CZ;retail
+C100216;20.04.2022;broker;N;individual;50000,00;391202,54;15;58;low;CZ;retail
+C100217;15.01.2024;online;N;legal entity;1941000,00;4011886,02;60;155;low;DE;corporate
+C100218;23.10.2020;branch;N;individual;74000,00;190397,09;19;62;medium;CZ;retail
+C100219;10.10.2024;branch;N;legal entity;928000,00;1966323,94;75;165;low;CZ;affluent
+C100220;21.02.2019;broker;N;individual;73000,00;182211,39;31;70;medium;UA;retail
+C100221;21.12.2022;online;N;individual;72000,00;177699,34;16;53;low;CZ;retail
+C100222;08.04.2020;branch;N;individual;59000,00;134031,52;20;61;low;VN;affluent
+C100223;10.04.2020;online;N;individual;81000,00;172284,88;16;54;medium;CZ;retail
+C100224;30.01.2021;branch;N;sole trader;68000,00;155563,38;24;64;medium;CZ;retail
+C100225;05.11.2021;online;N;individual;55000,00;151801,96;24;60;low;CZ;affluent
+C100226;01.06.2020;broker;N;legal entity;5595000,00;13302250,31;71;174;low;CZ;SME
+C100227;25.03.2018;broker;N;individual;68000,00;162997,06;15;52;medium;CZ;retail
+C100228;19.08.2020;online;N;individual;52000,00;145109,48;13;54;low;CZ;affluent
+C100229;06.01.2023;branch;N;individual;28000,00;111496,83;13;46;low;UA;retail
+C100230;10.04.2024;online;N;individual;41000,00;145113,81;15;58;low;CZ;retail
+C100231;24.01.2023;online;N;individual;46000,00;191048,84;29;66;low;CZ;affluent
+C100232;16.10.2024;online;N;legal entity;1139000,00;3062516,13;40;174;low;CZ;SME
+C100233;12.10.2022;online;N;individual;56000,00;131228,49;22;62;low;CZ;retail
+C100234;30.04.2024;online;N;individual;57000,00;141698,95;22;64;low;CZ;retail
+C100235;13.06.2021;branch;N;individual;67000,00;197471,06;30;67;low;CZ;retail
+C100236;22.03.2025;branch;N;individual;49000,00;191615,20;17;64;low;UA;affluent
+C100237;01.11.2021;online;N;individual;84000,00;229822,66;18;49;low;CZ;retail
+C100238;30.04.2022;branch;N;legal entity;6309000,00;19200161,18;73;189;medium;CZ;affluent
+C100239;22.12.2023;branch;N;individual;32000,00;133488,21;14;31;medium;CZ;retail
+C100240;27.09.2019;online;N;individual;68000,00;156232,49;23;54;low;CZ;retail
+C100241;23.09.2022;online;N;individual;49000,00;143969,96;27;69;low;CZ;retail
+C100242;07.09.2017;broker;N;sole trader;66000,00;190775,61;19;51;low;CZ;retail
+C100243;31.07.2022;online;N;sole trader;40000,00;130832,12;15;51;medium;CZ;retail
+C100244;06.04.2023;online;N;sole trader;39000,00;128631,43;18;56;low;VN;retail
+C100245;15.02.2025;online;N;sole trader;96000,00;201741,85;16;56;medium;CZ;retail
+C100246;28.06.2025;branch;N;legal entity;1196000,00;3394073,74;62;160;low;CZ;retail
+C100247;07.05.2018;branch;N;individual;43000,00;176481,43;30;70;medium;DE;affluent
+C100248;08.08.2022;online;N;sole trader;69000,00;139481,97;19;52;medium;CZ;affluent
+C100249;10.12.2024;online;N;legal entity;3750000,00;11410655,69;58;152;low;VN;affluent
+C100250;16.04.2019;online;N;individual;68000,00;189339,53;14;58;low;CZ;retail
+C100251;13.12.2022;broker;N;individual;51000,00;206433,63;21;52;high;UA;retail
+C100252;25.10.2018;broker;N;individual;53000,00;194236,73;21;54;low;CZ;retail
+C100253;17.01.2025;branch;N;individual;63000,00;153351,70;17;59;low;DE;retail
+C100254;11.09.2020;branch;N;individual;48000,00;148963,11;27;78;high;CZ;retail
+C100255;13.06.2021;online;N;individual;58000,00;198621,99;20;61;medium;CZ;retail
+C100256;03.09.2020;online;N;individual;113000,00;292863,64;17;55;low;UA;retail
+C100257;25.08.2024;online;N;sole trader;34000,00;120708,98;13;50;high;DE;retail
+C100258;02.03.2020;online;N;sole trader;62000,00;157580,92;20;62;low;CZ;affluent
+C100259;03.01.2022;online;N;individual;42000,00;146288,45;29;64;low;CZ;affluent
+C100260;25.05.2023;branch;N;individual;62000,00;148212,19;20;49;medium;CZ;retail
+C100261;27.09.2023;online;N;individual;43000,00;142937,34;14;56;low;CZ;affluent
+C100262;27.07.2025;online;N;sole trader;42000,00;152991,94;21;65;low;CZ;affluent
+C100263;08.06.2021;online;N;individual;64000,00;183752,91;27;60;low;CZ;retail
+C100264;19.06.2017;broker;N;legal entity;6640000,00;19141234,74;79;176;low;CZ;affluent
+C100265;04.10.2023;branch;N;legal entity;2010000,00;4607570,98;41;163;low;CZ;corporate
+C100266;12.01.2025;branch;N;individual;39000,00;128323,25;12;52;low;CZ;retail
+C100267;14.03.2018;branch;N;individual;67000,00;148201,21;23;58;low;CZ;retail
+C100268;02.04.2024;broker;N;individual;54000,00;181913,97;17;45;low;CZ;affluent
+C100269;03.01.2020;branch;N;legal entity;3379000,00;6767222,16;66;170;low;CZ;affluent
+C100270;23.05.2020;online;N;individual;63000,00;159309,04;16;56;low;CZ;retail
+C100271;21.10.2020;online;N;legal entity;3176000,00;6684160,12;63;180;medium;CZ;SME
+C100272;14.01.2026;branch;N;individual;71000,00;167379,54;14;50;low;CZ;retail
+C100273;05.01.2023;branch;N;individual;60000,00;159268,12;16;63;high;UA;affluent
+C100274;09.05.2020;branch;N;legal entity;2278000,00;7609262,91;61;146;low;CZ;retail
+C100275;05.11.2019;online;N;sole trader;47000,00;110458,78;25;56;low;CZ;retail
+C100276;28.02.2022;branch;N;individual;69000,00;222897,70;22;58;high;UA;affluent
+C100277;27.03.2023;branch;N;individual;42000,00;128284,85;22;57;low;CZ;affluent
+C100278;09.03.2020;branch;N;individual;64000,00;142937,07;20;53;low;CZ;affluent
+C100279;22.06.2024;online;N;individual;116000,00;233322,79;19;59;low;SK;affluent
+C100280;01.05.2017;online;N;individual;98000,00;217055,71;13;56;low;DE;retail
+C100281;30.03.2025;online;N;sole trader;57000,00;137143,28;26;64;low;CZ;affluent
+C100282;03.06.2018;branch;N;legal entity;3139000,00;6567593,56;51;145;high;SK;SME
+C100283;02.04.2025;branch;N;individual;49000,00;144137,99;21;55;high;SK;affluent
+C100284;28.05.2017;online;N;individual;62000,00;183407,89;18;68;low;CZ;retail
+C100285;27.08.2020;branch;Y;individual;58000,00;138281,66;32;70;low;CZ;affluent
+C100286;10.03.2019;branch;N;individual;29000,00;407937,12;22;69;low;CZ;retail
+C100287;14.01.2020;branch;N;individual;95000,00;199709,83;19;64;low;CZ;retail
+C100288;16.02.2026;online;N;individual;54000,00;5039265,72;19;65;medium;CZ;retail
+C100289;14.11.2018;broker;N;individual;49000,00;178269,25;21;69;low;CZ;retail
+C100290;05.02.2024;branch;N;individual;47000,00;161275,79;28;66;low;CZ;retail
+C100291;01.05.2025;branch;N;sole trader;32000,00;128187,66;15;47;low;CZ;affluent
+C100292;25.02.2023;branch;N;individual;80000,00;180133,05;14;59;high;SK;affluent
+C100293;24.09.2023;online;N;individual;46000,00;148746,26;18;48;low;CZ;retail
+C100294;10.04.2016;online;N;individual;38000,00;145952,65;22;51;medium;CZ;retail
+C100295;30.12.2019;online;N;individual;92000,00;199403,89;24;54;medium;CZ;retail
+C100296;26.05.2017;online;N;legal entity;1549000,00;5973629,06;60;148;low;SK;corporate
+C100297;14.08.2016;online;N;individual;40000,00;168732,91;20;46;low;CZ;retail
+C100298;09.02.2025;branch;N;individual;27000,00;112704,13;27;67;low;CZ;affluent
+C100299;21.01.2026;online;N;sole trader;44000,00;124824,86;15;53;low;CZ;retail
+C100300;31.07.2019;broker;N;individual;56000,00;223304,57;18;46;low;CZ;retail
+C100301;06.02.2020;branch;N;individual;66000,00;140683,57;21;53;low;CZ;retail
+C100302;07.05.2023;branch;N;individual;62000,00;150111,63;14;57;low;CZ;affluent
+C100303;06.04.2023;online;N;individual;61000,00;145403,24;22;48;low;CZ;retail
+C100304;30.12.2023;online;N;individual;42000,00;133436,61;17;54;low;CZ;retail
+C100305;22.02.2023;branch;N;sole trader;35000,00;145836,62;29;71;low;DE;retail
+C100306;26.04.2025;online;N;individual;70000,00;156395,16;11;50;low;CZ;retail
+C100307;16.03.2025;online;N;individual;91000,00;218682,17;15;56;medium;CZ;affluent
+C100308;16.01.2023;online;N;individual;39000,00;91616,02;13;52;medium;CZ;retail
+C100309;13.05.2016;branch;N;individual;57000,00;188460,81;19;55;medium;CZ;retail
+C100310;22.05.2021;online;N;individual;61000,00;137968,14;21;55;low;CZ;affluent
+C100311;30.09.2017;broker;N;individual;48000,00;141590,20;26;67;low;VN;retail
+C100312;21.07.2018;online;N;individual;48000,00;7106594,46;18;98;medium;CZ;retail
+C100313;26.11.2023;online;N;individual;45000,00;165635,54;21;59;low;CZ;retail
+C100314;24.06.2016;branch;N;individual;49000,00;153567,43;21;58;low;CZ;retail
+C100315;08.02.2018;online;N;individual;48000,00;144123,27;12;49;low;CZ;affluent
+C100316;08.08.2021;branch;N;sole trader;51000,00;162179,72;20;80;low;CZ;retail
+C100317;28.08.2023;branch;N;individual;70000,00;202930,91;21;54;high;CZ;retail
+C100318;06.08.2017;online;N;individual;42000,00;130393,33;17;57;low;CZ;retail
+C100319;09.12.2023;online;N;individual;76000,00;208245,42;12;46;medium;CZ;affluent
+C100320;19.11.2019;branch;N;individual;69000,00;149146,83;26;59;low;CZ;retail
+C100321;08.03.2025;online;N;individual;54000,00;160221,71;15;56;low;CZ;affluent
+C100322;11.11.2019;broker;N;individual;98000,00;202560,11;23;65;medium;CZ;affluent
+C100323;08.07.2024;online;N;sole trader;27000,00;106896,68;18;49;low;CZ;affluent
+C100324;09.09.2016;branch;N;individual;63000,00;176745,31;20;63;low;CZ;affluent
+C100325;26.07.2017;online;N;individual;44000,00;157432,32;18;60;medium;SK;affluent
+C100326;15.05.2019;branch;N;individual;40000,00;135496,88;10;44;high;CZ;affluent
+C100327;18.03.2020;broker;N;sole trader;66000,00;198577,65;16;63;medium;CZ;retail
+C100328;28.02.2026;branch;N;individual;69000,00;183697,99;13;48;low;CZ;retail
+C100329;16.09.2023;branch;N;individual;67000,00;178599,95;13;56;medium;CZ;retail
+C100330;08.08.2019;branch;N;individual;52000,00;185968,34;26;64;high;SK;affluent
+C100331;17.05.2022;branch;N;individual;62000,00;135066,21;15;59;low;SK;retail
+C100332;18.01.2024;branch;N;individual;50000,00;109682,57;26;60;low;CZ;retail
+C100333;09.12.2017;broker;N;individual;49000,00;148473,38;18;51;low;CZ;affluent
+C100334;21.12.2024;online;N;individual;50000,00;141598,88;10;42;low;CZ;retail
+C100335;21.12.2022;branch;N;individual;102000,00;275355,97;15;61;low;CZ;retail
+C100336;18.01.2023;broker;N;individual;35000,00;104948,82;14;54;low;CZ;retail
+C100337;20.11.2018;broker;N;individual;64000,00;153556,66;17;50;low;CZ;affluent
+C100338;23.10.2018;online;N;individual;90000,00;228065,38;22;65;low;CZ;retail
+C100339;08.10.2021;broker;N;individual;59000,00;244804,87;14;52;low;UA;retail
+C100340;14.10.2021;online;N;individual;82000,00;167387,45;16;58;low;CZ;retail
+C100341;06.05.2020;online;N;sole trader;40000,00;154149,89;25;55;low;SK;retail
+C100342;16.09.2024;online;N;individual;30000,00;124748,06;13;50;low;CZ;retail
+C100343;01.11.2016;online;N;individual;63000,00;178252,43;24;60;low;CZ;retail
+C100344;20.07.2016;online;N;individual;53000,00;190544,54;21;55;medium;CZ;affluent
+C100345;11.01.2020;online;N;individual;106000,00;235703,76;23;58;low;CZ;affluent
+C100346;26.01.2018;online;N;individual;50000,00;102445,34;18;49;medium;CZ;affluent
+C100347;08.12.2022;online;N;legal entity;3232000,00;6691929,18;59;165;medium;CZ;retail
+C100348;15.10.2021;online;Y;individual;68000,00;170164,16;24;76;low;CZ;affluent
+C100349;23.04.2022;branch;N;individual;65000,00;141663,32;17;54;low;CZ;retail
+C100350;18.01.2025;online;N;sole trader;48000,00;117398,54;13;39;medium;CZ;affluent
+C100351;13.10.2023;online;N;individual;71000,00;143967,98;19;60;low;UA;affluent
+C100352;04.03.2026;online;N;individual;41000,00;5744441,90;14;88;medium;SK;affluent
+C100353;30.05.2024;branch;N;legal entity;1954000,00;4042486,57;55;170;low;CZ;affluent
+C100354;14.08.2019;online;N;individual;75000,00;158590,63;27;66;low;CZ;retail
+C100355;15.11.2021;broker;N;individual;71000,00;178642,59;22;56;low;DE;retail
+C100356;02.11.2024;branch;N;individual;66000,00;233674,83;10;42;low;CZ;retail
+C100357;08.06.2025;online;N;individual;93000,00;238199,32;26;62;medium;CZ;affluent
+C100358;23.04.2022;online;N;sole trader;43000,00;116064,88;23;51;low;CZ;retail
+C100359;12.03.2026;online;N;legal entity;2746000,00;8562636,30;71;165;low;CZ;corporate
+C100360;27.04.2023;broker;N;individual;61000,00;164463,75;17;67;medium;SK;retail
+C100361;11.04.2021;branch;N;individual;72000,00;165466,66;28;62;low;CZ;retail
+C100362;13.12.2023;online;N;legal entity;1683000,00;4627941,44;49;174;low;CZ;SME
+C100363;21.01.2017;online;N;individual;84000,00;215103,06;17;50;low;CZ;retail
+C100364;29.01.2018;branch;N;individual;46000,00;145842,89;13;51;medium;CZ;affluent
+C100365;19.08.2025;branch;N;individual;48000,00;154664,54;22;60;low;CZ;retail
+C100366;20.08.2019;branch;N;individual;52000,00;130193,87;16;48;low;CZ;retail
+C100367;19.04.2020;online;N;individual;99000,00;251237,16;21;59;high;CZ;retail
+C100368;09.08.2024;branch;Y;legal entity;2454000,00;6085124,37;45;176;medium;UA;affluent
+C100369;14.04.2016;online;N;individual;49000,00;206854,57;17;55;medium;CZ;retail
+C100370;28.01.2019;branch;N;individual;82000,00;194407,92;19;63;low;CZ;retail
+C100371;11.11.2022;online;N;individual;58000,00;179464,76;18;61;high;CZ;retail
+C100372;27.04.2023;broker;Y;individual;83000,00;168222,11;22;72;high;CZ;affluent
+C100373;28.06.2024;branch;N;legal entity;1621000,00;5513647,42;55;150;low;CZ;retail
+C100374;12.04.2017;online;N;sole trader;49000,00;102070,75;17;54;low;CZ;retail
+C100375;25.03.2023;online;N;individual;68000,00;235952,52;17;51;low;CZ;retail
+C100376;10.11.2023;branch;N;sole trader;71000,00;618075,84;17;66;low;SK;affluent
+C100377;26.12.2023;online;Y;individual;74000,00;206108,87;29;65;low;CZ;affluent
+C100378;12.06.2021;online;N;sole trader;35000,00;120173,97;13;40;medium;CZ;affluent
+C100379;06.07.2024;broker;N;individual;35000,00;146209,87;19;53;high;CZ;retail
+C100380;24.02.2017;online;N;individual;44000,00;6719499,50;18;91;low;CZ;retail
+C100381;02.07.2021;branch;N;individual;68000,00;177262,41;16;47;low;CZ;retail
+C100382;10.02.2020;online;N;individual;54000,00;183200,30;13;47;low;CZ;retail
+C100383;14.04.2016;online;N;individual;91000,00;206840,98;22;59;medium;CZ;affluent
+C100384;20.09.2020;branch;N;legal entity;4212000,00;9185860,24;36;158;low;CZ;affluent
+C100385;17.10.2016;online;N;individual;49000,00;122196,22;18;50;medium;CZ;affluent
+C100386;16.12.2020;online;N;individual;63000,00;141286,33;23;55;medium;CZ;affluent
+C100387;05.12.2018;online;N;individual;63000,00;150340,14;23;67;low;CZ;retail
+C100388;25.10.2022;branch;N;individual;55000,00;168495,13;17;55;low;CZ;affluent
+C100389;08.09.2023;online;N;individual;61000,00;155410,55;19;58;low;CZ;retail
+C100390;12.05.2024;branch;N;sole trader;49000,00;152877,89;17;53;low;CZ;retail
+C100391;30.10.2019;broker;N;individual;73000,00;161995,24;22;55;low;CZ;retail
+C100392;24.08.2020;branch;N;individual;66000,00;197045,38;17;64;low;DE;retail
+C100393;02.06.2023;online;N;individual;39000,00;154834,77;13;50;medium;CZ;retail
+C100394;30.03.2020;online;N;individual;77000,00;189560,37;14;63;low;VN;retail
+C100395;06.07.2021;broker;N;legal entity;2157000,00;6640149,51;72;163;low;SK;retail
+C100396;09.05.2018;branch;N;individual;59000,00;127489,39;16;52;low;CZ;affluent
+C100397;20.01.2023;branch;N;individual;27000,00;109530,21;14;58;low;CZ;affluent
+C100398;17.04.2024;branch;N;individual;111000,00;261540,45;22;58;low;CZ;retail
+C100399;17.08.2021;broker;N;individual;61000,00;125433,19;15;50;low;CZ;affluent
+C100400;15.04.2024;online;N;legal entity;1690000,00;6751794,28;73;167;medium;DE;SME
+C100401;10.07.2023;broker;N;individual;34000,00;139652,34;15;60;low;CZ;affluent
+C100402;20.01.2023;online;N;sole trader;96000,00;334958,58;18;61;medium;UA;affluent
+C100403;14.09.2022;branch;N;individual;76000,00;196431,26;19;58;low;CZ;retail
+C100404;13.03.2020;branch;N;individual;69000,00;178410,77;24;66;low;CZ;retail
+C100405;12.01.2021;branch;N;individual;95000,00;286861,27;17;57;medium;DE;retail
+C100406;02.04.2017;branch;N;individual;45000,00;166727,01;22;65;low;DE;affluent
+C100407;25.03.2024;online;N;individual;41000,00;116132,17;22;50;low;CZ;retail
+C100408;16.02.2026;online;N;individual;67000,00;166717,24;19;53;high;CZ;retail
+C100409;05.02.2017;branch;N;sole trader;86000,00;211059,56;27;59;low;CZ;affluent
+C100410;11.01.2023;branch;N;individual;62000,00;156692,63;14;58;medium;CZ;affluent
+C100411;05.08.2017;online;N;individual;68000,00;182665,63;19;57;medium;CZ;retail
+C100412;13.06.2024;branch;N;individual;33000,00;136821,58;14;57;low;SK;affluent
+C100413;19.10.2025;online;N;individual;101000,00;214448,01;16;45;low;CZ;retail
+C100414;09.12.2021;online;N;individual;64000,00;131670,15;23;53;low;CZ;affluent
+C100415;17.01.2018;online;N;individual;65000,00;229914,30;14;48;low;CZ;retail
+C100416;23.04.2018;online;N;individual;45000,00;137043,45;13;48;low;CZ;affluent
+C100417;18.05.2018;branch;N;individual;98000,00;227016,75;13;56;medium;SK;affluent
+C100418;26.04.2018;online;N;individual;74000,00;152781,55;15;50;low;CZ;retail
+C100419;01.01.2025;online;N;individual;55000,00;119458,67;15;47;high;CZ;retail
+C100420;08.10.2024;online;N;individual;34000,00;121149,46;29;69;medium;CZ;affluent
+C100421;05.12.2022;online;N;individual;22000,00;91521,27;14;64;medium;CZ;retail
+C100422;07.07.2018;branch;N;individual;56000,00;186548,78;24;57;medium;CZ;affluent
+C100423;11.10.2019;online;N;individual;35000,00;133706,94;18;58;low;CZ;affluent
+C100424;21.01.2023;online;N;sole trader;42000,00;133103,00;17;56;high;CZ;retail
+C100425;09.10.2023;branch;N;individual;80000,00;161464,62;16;47;low;CZ;affluent
+C100426;17.05.2024;online;N;individual;64000,00;166391,24;15;62;medium;CZ;retail
+C100427;21.06.2024;branch;N;individual;55000,00;227531,42;20;54;low;CZ;retail
+C100428;04.07.2023;online;N;individual;44000,00;181686,53;15;48;low;CZ;retail
+C100429;06.01.2024;broker;N;individual;89000,00;206799,11;29;67;low;CZ;retail
+C100430;18.10.2025;branch;N;legal entity;7690000,00;20089104,57;68;167;high;CZ;affluent
+C100431;26.10.2021;online;N;individual;46000,00;5621676,71;18;78;high;CZ;retail
+C100432;23.04.2017;online;N;sole trader;107000,00;244957,89;23;52;low;CZ;affluent
+C100433;07.08.2023;branch;N;individual;81000,00;183791,20;23;53;low;CZ;affluent
+C100434;20.01.2022;online;N;individual;55000,00;204395,08;16;56;medium;CZ;affluent
+C100435;17.03.2026;online;N;individual;53000,00;330552,92;22;71;medium;CZ;retail
+C100436;13.03.2026;online;N;individual;14000,00;1148920,46;4;10;high;CZ;affluent
+C100437;23.02.2020;online;N;legal entity;1792000,00;5597775,83;61;167;low;CZ;SME
+C100438;18.10.2016;online;N;individual;42000,00;169835,99;16;58;low;CZ;affluent
+C100439;02.01.2017;online;N;sole trader;65000,00;208265,38;14;53;medium;CZ;retail
+C100440;14.12.2023;online;N;individual;61000,00;167093,78;17;54;medium;CZ;affluent
+C100441;22.10.2020;online;N;individual;59000,00;138208,23;27;68;high;CZ;retail
+C100442;05.08.2018;online;N;legal entity;1755000,00;4559601,14;68;149;low;CZ;affluent
+C100443;19.04.2016;branch;N;individual;47000,00;127517,16;11;49;low;CZ;affluent
+C100444;02.10.2016;branch;N;individual;96000,00;255787,83;23;59;low;CZ;retail
+C100445;31.07.2019;online;N;individual;58000,00;132678,52;19;66;low;CZ;retail
+C100446;04.04.2020;branch;N;individual;63000,00;211636,28;22;53;low;CZ;retail
+C100447;08.03.2024;online;N;individual;55000,00;211654,39;23;63;low;CZ;affluent
+C100448;05.11.2024;branch;N;sole trader;85000,00;237134,12;17;68;medium;CZ;affluent
+C100449;18.09.2016;online;N;individual;65000,00;168765,81;17;52;low;DE;retail
+C100450;01.09.2020;branch;N;individual;70000,00;164185,79;20;50;low;DE;affluent
+C100451;05.11.2024;branch;N;individual;61000,00;158163,39;22;61;low;CZ;retail
+C100452;14.03.2026;online;N;individual;94000,00;199078,43;17;59;medium;CZ;affluent
+C100453;11.10.2024;branch;N;individual;82000,00;199248,14;13;49;low;CZ;retail
+C100454;22.10.2018;branch;N;individual;55000,00;187661,87;23;58;low;CZ;retail
+C100455;28.04.2017;branch;N;individual;69000,00;198371,91;22;54;low;VN;retail
+C100456;12.06.2017;online;N;individual;53000,00;179021,29;27;68;low;CZ;affluent
+C100457;09.12.2018;online;N;individual;41000,00;139916,29;21;55;low;CZ;retail
+C100458;06.12.2024;branch;N;individual;63000,00;169169,27;23;65;low;CZ;retail
+C100459;04.04.2022;online;N;individual;68000,00;174038,51;28;67;low;CZ;affluent
+C100460;08.03.2024;online;N;individual;88000,00;3222716,69;15;65;medium;CZ;retail
+C100461;06.12.2018;branch;N;legal entity;11360000,00;27020404,25;78;178;low;CZ;retail
+C100462;11.02.2022;online;N;sole trader;51000,00;144157,74;13;55;high;CZ;affluent
+C100463;15.12.2025;online;N;individual;58000,00;248637,65;12;47;low;CZ;retail
+C100464;05.07.2023;branch;N;individual;46000,00;157902,62;25;60;low;SK;retail
+C100465;06.12.2017;online;N;individual;84000,00;172908,66;17;57;low;CZ;retail
+C100466;20.08.2017;online;N;individual;93000,00;208625,56;17;49;low;VN;retail
+C100467;29.09.2019;branch;N;individual;102000,00;212060,44;21;57;low;CZ;retail
+C100468;06.08.2019;online;N;individual;73000,00;204766,17;18;50;low;CZ;affluent
+C100469;24.08.2018;broker;N;individual;51000,00;186206,98;16;55;low;CZ;retail
+C100470;30.11.2017;online;N;individual;84000,00;205493,48;27;70;low;CZ;retail
+C100471;24.06.2023;branch;N;individual;58000,00;119032,76;18;59;medium;UA;retail
+C100472;04.12.2022;online;N;individual;79000,00;168918,99;13;53;low;CZ;affluent
+C100473;10.05.2017;online;N;individual;99000,00;230324,86;21;58;low;CZ;retail
+C100474;08.10.2017;branch;N;individual;91000,00;183784,34;24;59;low;CZ;affluent
+C100475;06.03.2024;branch;N;individual;53000,00;176748,13;22;57;low;CZ;retail
+C100476;11.03.2022;online;N;individual;35000,00;114116,99;12;50;low;CZ;affluent
+C100477;17.12.2024;online;N;sole trader;53000,00;173298,34;29;65;low;CZ;affluent
+C100478;29.06.2020;online;N;individual;55000,00;118692,57;15;55;low;CZ;retail
+C100479;29.01.2020;online;N;legal entity;1851000,00;5910677,76;40;165;high;DE;affluent
+C100480;24.11.2021;broker;N;individual;40000,00;117835,95;21;55;low;CZ;retail
+C100481;24.05.2016;online;N;sole trader;39000,00;133994,43;21;67;low;DE;affluent
+C100482;12.02.2019;online;N;sole trader;37000,00;108978,88;16;63;low;CZ;retail
+C100483;21.08.2018;branch;N;legal entity;5619000,00;17922215,79;64;182;low;CZ;SME
+C100484;04.04.2023;branch;N;individual;44000,00;140392,31;15;58;low;UA;affluent
+C100485;23.08.2020;online;N;individual;49000,00;150179,13;22;51;low;SK;retail
+C100486;07.04.2025;online;N;individual;74000,00;210080,88;17;57;low;CZ;affluent
+C100487;22.06.2023;branch;N;individual;83000,00;178387,51;19;47;low;CZ;retail
+C100488;08.08.2020;broker;N;individual;37000,00;154126,67;13;57;medium;CZ;retail
+C100489;06.07.2025;branch;N;sole trader;57000,00;182223,95;19;74;low;CZ;retail
+C100490;04.12.2016;online;N;individual;57000,00;160894,81;16;53;low;CZ;retail
+C100491;29.03.2018;branch;N;legal entity;2030000,00;4451214,52;62;143;low;CZ;SME
+C100492;30.10.2023;online;N;individual;36000,00;98027,39;18;51;medium;CZ;affluent
+C100493;21.08.2023;branch;N;individual;80000,00;184094,58;16;70;low;CZ;retail
+C100494;20.07.2017;online;N;legal entity;6623000,00;27987213,69;52;177;low;CZ;retail
+C100495;17.11.2018;branch;N;sole trader;50000,00;129125,91;21;62;low;CZ;retail
+C100496;16.09.2025;online;N;individual;97000,00;207423,44;21;59;high;CZ;retail
+C100497;19.09.2023;online;N;legal entity;2789000,00;8781385,46;57;165;medium;CZ;affluent
+C100498;08.02.2017;branch;N;individual;53000,00;223555,89;14;60;low;CZ;retail
+C100499;17.02.2026;online;N;individual;76000,00;158360,61;17;67;medium;CZ;affluent
+C100500;01.07.2025;branch;N;individual;47000,00;140555,00;13;52;medium;CZ;affluent
+C100501;17.03.2018;online;N;individual;70000,00;164890,44;13;53;low;UA;retail
+C100502;17.07.2018;branch;N;individual;49000,00;151029,75;18;64;medium;CZ;affluent
+C100503;23.10.2019;online;N;individual;66000,00;154359,47;23;62;medium;CZ;retail
+C100504;27.03.2026;online;N;individual;60000,00;621156,57;15;56;medium;CZ;affluent
+C100505;17.07.2025;branch;N;individual;41000,00;134261,31;23;63;low;CZ;retail
+C100506;21.03.2026;online;N;legal entity;946000,00;6649582,09;90;209;low;CZ;retail
+C100507;05.01.2021;online;N;individual;52000,00;156739,92;20;72;low;DE;retail
+C100508;01.04.2025;online;N;individual;57000,00;224284,05;16;63;medium;CZ;affluent
+C100509;02.11.2023;online;N;individual;52000,00;175658,94;13;46;medium;CZ;retail
+C100510;11.09.2020;broker;N;sole trader;96000,00;204270,98;20;65;low;CZ;affluent
+C100511;31.10.2024;online;N;individual;31000,00;118700,73;24;70;high;CZ;retail
+C100512;03.11.2020;online;N;sole trader;49000,00;114286,75;26;60;high;CZ;retail
+C100513;20.08.2019;branch;N;individual;42000,00;145687,50;22;55;low;UA;retail
+C100514;09.12.2022;online;Y;individual;41000,00;122041,69;21;50;low;CZ;retail
+C100515;16.07.2019;branch;Y;individual;55000,00;185300,77;16;60;low;CZ;affluent
+C100516;08.02.2025;online;N;individual;65000,00;163579,24;19;54;medium;CZ;affluent
+C100517;10.08.2023;online;N;individual;68000,00;163358,62;27;73;high;CZ;retail
+C100518;05.03.2017;broker;N;individual;69000,00;192294,95;17;61;low;CZ;retail
+C100519;25.02.2017;online;N;sole trader;68000,00;162664,18;16;50;low;SK;retail
+C100520;02.08.2022;online;N;individual;60000,00;196255,39;15;64;low;CZ;retail
+C100521;23.04.2021;branch;N;individual;73000,00;192789,06;21;64;low;CZ;retail
+C100522;29.06.2017;online;N;individual;30000,00;115278,87;13;52;low;DE;retail
+C100523;29.12.2023;online;N;individual;54000,00;136773,42;24;57;low;CZ;retail
+C100524;23.04.2023;online;N;individual;70000,00;221563,84;18;62;low;CZ;retail
+C100525;02.10.2017;online;N;individual;46000,00;156004,55;20;47;medium;CZ;retail
+C100526;15.10.2017;branch;N;individual;77000,00;220949,33;15;54;low;CZ;retail
+C100527;15.06.2025;branch;N;individual;39000,00;162119,00;24;63;medium;CZ;affluent
+C100528;27.02.2017;broker;N;individual;57000,00;229547,18;20;58;low;VN;retail
+C100529;28.12.2018;branch;N;individual;53000,00;121460,39;18;47;high;CZ;retail
+C100530;01.08.2025;branch;N;legal entity;2163000,00;5646669,92;48;162;low;CZ;SME
+C100531;22.03.2026;branch;N;individual;35000,00;110042,59;27;60;low;CZ;retail
+C100532;19.04.2020;online;N;individual;100000,00;205393,32;26;57;low;CZ;retail
+C100533;17.04.2018;online;N;individual;56000,00;119126,31;15;49;medium;DE;retail
+C100534;14.08.2018;online;N;legal entity;1912000,00;6459834,87;75;163;low;CZ;retail
+C100535;12.09.2016;online;N;individual;45000,00;120832,09;25;57;low;UA;retail
+C100536;09.01.2025;branch;N;individual;74000,00;200745,54;21;66;high;CZ;retail
+C100537;09.04.2022;online;N;individual;46000,00;120475,39;19;57;low;CZ;retail
+C100538;10.11.2022;branch;N;individual;35000,00;140772,02;26;71;low;CZ;retail
+C100539;25.05.2024;branch;N;sole trader;85000,00;193737,03;13;50;high;CZ;retail
+C100540;23.12.2018;online;N;individual;59000,00;193257,50;18;52;low;VN;affluent
+C100541;29.06.2022;branch;N;legal entity;1344000,00;5277346,33;59;155;low;CZ;retail
+C100542;07.10.2019;branch;N;individual;120000,00;265975,47;15;62;high;CZ;retail
+C100543;07.04.2024;branch;N;individual;55000,00;146795,43;22;56;medium;CZ;retail
+C100544;16.02.2018;branch;N;individual;67000,00;198467,29;29;80;low;UA;affluent
+C100545;19.04.2020;online;N;legal entity;3589000,00;9986595,17;71;167;low;CZ;corporate
+C100546;14.09.2022;online;N;individual;75000,00;210039,41;21;71;low;CZ;retail
+C100547;13.08.2018;online;N;individual;96000,00;235384,12;22;58;low;CZ;retail
+C100548;30.10.2017;online;N;individual;91000,00;200735,12;25;55;low;VN;retail
+C100549;12.04.2021;branch;N;individual;71000,00;175680,72;18;69;medium;CZ;retail
+C100550;25.12.2023;branch;N;individual;97000,00;198251,16;21;60;low;CZ;retail
+C100551;06.09.2024;branch;N;individual;49000,00;192934,02;24;61;low;CZ;affluent
+C100552;30.10.2020;online;N;individual;73000,00;174284,08;22;67;low;SK;retail
+C100553;10.11.2025;branch;N;individual;37000,00;145036,44;22;54;medium;CZ;retail
+C100554;05.10.2023;online;N;individual;74000,00;212076,98;22;56;low;CZ;retail
+C100555;19.11.2016;branch;N;individual;53000,00;126525,41;26;56;low;CZ;retail
+C100556;26.11.2021;branch;N;individual;77000,00;205179,71;19;52;medium;CZ;retail
+C100557;25.06.2022;branch;N;legal entity;2747000,00;6320216,01;55;158;low;CZ;retail
+C100558;19.09.2025;branch;N;individual;44000,00;101371,14;16;49;low;SK;retail
+C100559;21.08.2024;branch;N;individual;67000,00;157402,24;27;64;low;CZ;retail
+C100560;09.11.2017;branch;N;individual;62000,00;150807,10;16;66;medium;CZ;affluent
+C100561;05.01.2022;branch;N;legal entity;2237000,00;6855152,60;82;179;medium;CZ;retail
+C100562;17.03.2017;branch;N;individual;39000,00;93191,59;27;67;low;CZ;affluent
+C100563;02.09.2023;online;N;legal entity;6487000,00;13156045,91;43;170;low;CZ;corporate
+C100564;02.04.2018;broker;N;individual;84000,00;214249,84;17;59;low;CZ;retail
+C100565;08.05.2024;online;N;sole trader;102000,00;217053,15;15;56;low;CZ;retail
+C100566;17.08.2022;broker;N;individual;53000,00;132535,11;25;63;medium;CZ;retail
+C100567;09.08.2024;branch;N;individual;68000,00;141476,61;14;56;low;CZ;affluent
+C100568;26.10.2025;online;Y;individual;53000,00;155850,82;21;61;medium;CZ;retail
+C100569;23.05.2019;online;N;individual;49000,00;174774,39;25;65;low;VN;affluent
+C100570;13.10.2016;online;N;individual;51000,00;171298,96;12;48;medium;DE;affluent
+C100571;21.07.2019;broker;N;individual;60000,00;143804,74;17;54;low;CZ;retail
+C100572;19.06.2019;online;N;individual;85000,00;190787,13;21;63;high;CZ;affluent
+C100573;02.04.2025;online;N;legal entity;524000,00;1365122,31;43;145;low;VN;retail
+C100574;01.01.2024;branch;N;sole trader;74000,00;181099,80;22;57;low;SK;retail
+C100575;03.06.2017;online;N;individual;95000,00;193010,04;20;58;medium;CZ;retail
+C100576;06.08.2025;online;N;individual;39000,00;135378,61;12;46;medium;CZ;retail
+C100577;10.04.2019;branch;N;sole trader;88000,00;235654,01;20;50;low;CZ;retail
+C100578;03.07.2020;online;N;individual;35000,00;101016,41;18;48;low;VN;retail
+C100579;05.12.2021;broker;N;individual;33000,00;139951,53;20;60;low;CZ;retail
+C100580;26.11.2025;branch;N;individual;62000,00;164314,20;19;68;low;CZ;retail
+C100581;23.09.2017;online;N;legal entity;936000,00;1929898,23;68;184;medium;CZ;affluent
+C100582;28.06.2020;branch;N;legal entity;1974000,00;7340997,93;53;162;medium;CZ;affluent
+C100583;13.06.2020;branch;N;individual;61000,00;146970,84;18;56;low;CZ;retail
+C100584;26.09.2023;online;N;individual;84000,00;278155,83;17;62;medium;UA;retail
+C100585;16.09.2022;branch;N;sole trader;68000,00;184861,35;23;52;medium;CZ;affluent
+C100586;28.09.2023;branch;N;sole trader;70000,00;163780,23;25;68;low;SK;affluent
+C100587;28.03.2024;online;N;individual;49000,00;171534,77;23;64;low;CZ;retail
+C100588;31.07.2019;branch;N;individual;90000,00;278443,73;20;66;low;CZ;retail
+C100589;29.12.2017;online;N;individual;113000,00;231111,33;23;62;medium;CZ;retail
+C100590;20.11.2023;branch;N;individual;62000,00;153881,10;23;51;low;CZ;retail
+C100591;03.02.2026;branch;N;sole trader;52000,00;142316,67;24;61;low;SK;retail
+C100592;29.12.2024;online;N;individual;70000,00;200009,67;15;68;low;CZ;retail
+C100593;17.06.2021;branch;N;individual;104000,00;222749,91;19;54;low;UA;affluent
+C100594;16.05.2023;online;N;individual;38000,00;129112,38;18;65;low;CZ;retail
+C100595;11.05.2025;branch;N;individual;37000,00;143296,82;17;53;low;UA;retail
+C100596;08.10.2024;branch;N;legal entity;2337000,00;5518820,73;51;180;low;CZ;corporate
+C100597;25.10.2019;branch;N;sole trader;54000,00;165797,24;12;54;low;CZ;retail
+C100598;30.01.2026;branch;N;individual;46000,00;173675,92;20;59;low;CZ;affluent
+C100599;05.09.2023;online;N;individual;62000,00;178999,77;18;53;low;CZ;affluent
+C100600;14.11.2021;branch;N;individual;43000,00;158616,14;16;59;medium;CZ;retail
+C100601;12.12.2022;branch;N;individual;64000,00;179460,68;14;61;low;CZ;affluent
+C100602;06.10.2017;online;N;sole trader;55000,00;201195,18;24;56;medium;CZ;retail
+C100603;08.03.2018;branch;N;individual;49000,00;120289,13;15;54;low;CZ;affluent
+C100604;10.08.2024;branch;N;individual;50000,00;121283,37;18;56;medium;CZ;retail
+C100605;14.07.2019;online;N;individual;49000,00;208609,96;14;62;medium;CZ;affluent
+C100606;04.01.2020;branch;N;individual;89000,00;221258,57;24;56;medium;CZ;retail
+C100607;30.07.2017;branch;N;individual;71000,00;176934,59;27;61;low;CZ;retail
+C100608;04.01.2025;branch;N;individual;67000,00;136885,36;32;74;low;VN;affluent
+C100609;10.02.2026;online;N;sole trader;97000,00;211854,82;12;48;low;CZ;affluent
+C100610;18.05.2025;online;N;individual;48000,00;175137,52;23;51;low;CZ;affluent
+C100611;30.09.2024;branch;N;individual;72000,00;168217,17;27;59;medium;CZ;retail
+C100612;06.10.2017;online;N;sole trader;26000,00;111021,50;11;46;low;CZ;retail
+C100613;23.04.2016;branch;N;individual;43000,00;166020,13;14;54;low;CZ;retail
+C100614;14.09.2024;online;N;individual;61000,00;151117,02;17;63;medium;CZ;retail
+C100615;06.09.2024;online;N;individual;75000,00;210850,32;13;49;low;CZ;affluent
+C100616;04.07.2016;branch;N;legal entity;2531000,00;8332796,42;55;172;low;UA;affluent
+C100617;30.09.2019;online;N;individual;93000,00;205256,15;16;59;low;CZ;retail
+C100618;16.07.2023;online;N;sole trader;33000,00;139698,46;17;60;low;CZ;retail
+C100619;26.08.2016;branch;Y;sole trader;62000,00;169139,93;22;64;medium;CZ;affluent
+C100620;07.08.2024;online;N;individual;70000,00;156577,50;14;38;medium;CZ;retail
+C100621;29.12.2017;broker;N;individual;39000,00;135258,58;28;62;high;CZ;retail
+C100622;25.12.2019;online;N;individual;56000,00;164294,88;18;57;low;CZ;affluent
+C100623;09.11.2018;online;N;legal entity;2664000,00;5576135,77;62;145;low;CZ;SME
+C100624;12.07.2018;branch;N;legal entity;12027000,00;27842818,66;42;179;high;CZ;SME
+C100625;24.12.2020;branch;N;individual;43000,00;120069,10;16;52;low;SK;affluent
+C100626;20.06.2024;branch;N;legal entity;1470000,00;6995385,44;43;165;low;CZ;SME
+C100627;01.10.2018;online;N;individual;93000,00;252605,37;25;64;low;CZ;retail
+C100628;11.07.2018;online;N;individual;69000,00;226007,98;15;54;low;CZ;affluent
+C100629;03.12.2016;branch;N;individual;60000,00;129834,62;14;58;low;CZ;retail
+C100630;20.06.2019;online;N;individual;42000,00;99136,65;16;42;low;CZ;retail
+C100631;15.03.2024;branch;N;individual;62000,00;173824,01;18;47;low;CZ;retail
+C100632;03.09.2018;branch;Y;individual;63000,00;182513,11;16;61;low;CZ;affluent
+C100633;29.05.2025;branch;N;sole trader;54000,00;148468,78;22;59;high;CZ;affluent
+C100634;16.02.2018;online;N;individual;36000,00;137625,44;14;54;low;CZ;affluent
+C100635;09.02.2023;branch;N;sole trader;62000,00;151681,46;17;57;medium;CZ;retail
+C100636;05.09.2023;branch;N;individual;43000,00;133339,38;16;56;medium;CZ;retail
+C100637;30.12.2021;branch;N;individual;36000,00;122660,95;24;57;low;CZ;retail
+C100638;29.11.2018;online;N;legal entity;1386000,00;5558784,22;71;178;low;VN;retail
+C100639;17.09.2025;branch;N;individual;68000,00;148531,67;17;54;high;CZ;retail
+C100640;22.10.2017;branch;N;sole trader;51000,00;156201,57;15;65;medium;CZ;retail
+C100641;04.11.2019;online;N;individual;61000,00;176342,51;15;62;high;CZ;retail
+C100642;13.01.2020;branch;N;individual;69000,00;185026,70;24;56;low;CZ;retail
+C100643;28.05.2022;branch;N;individual;74000,00;170876,58;23;69;low;VN;affluent
+C100644;15.12.2022;online;N;individual;86000,00;325157,45;30;66;low;CZ;affluent
+C100645;27.07.2025;branch;N;individual;29000,00;113975,03;14;50;low;CZ;retail
+C100646;09.08.2019;online;N;individual;95000,00;206801,19;18;44;low;CZ;affluent
+C100647;18.09.2016;online;N;individual;67000,00;222587,23;12;53;low;CZ;affluent
+C100648;26.06.2017;online;N;individual;40000,00;166832,13;27;71;low;CZ;affluent
+C100649;12.06.2022;branch;N;individual;62000,00;293521,38;25;59;medium;SK;retail
+C100650;06.11.2023;online;N;individual;29000,00;102807,59;21;60;low;CZ;retail
+C100651;03.09.2022;broker;N;legal entity;728000,00;1550256,78;60;165;low;CZ;corporate
+C100652;30.05.2022;online;N;individual;72000,00;143517,67;16;63;medium;CZ;affluent
+C100653;09.07.2022;branch;N;sole trader;60000,00;145325,66;19;48;low;CZ;affluent
+C100654;25.07.2018;branch;N;individual;55000,00;196282,81;17;59;medium;CZ;retail
+C100655;07.04.2019;online;N;individual;80000,00;205371,00;22;59;medium;CZ;affluent
+C100656;03.12.2022;online;N;individual;107000,00;313167,99;18;43;medium;CZ;retail
+C100657;11.05.2020;online;N;sole trader;71000,00;203642,40;23;63;low;CZ;retail
+C100658;13.12.2024;branch;N;individual;71000,00;156631,68;15;51;medium;CZ;retail
+C100659;03.11.2023;online;N;sole trader;102000,00;248465,78;24;60;medium;CZ;retail
+C100660;06.04.2023;branch;N;individual;61000,00;199521,55;28;68;low;CZ;affluent
+C100661;28.02.2026;online;N;individual;96000,00;3878811,79;17;72;low;CZ;retail
+C100662;30.09.2022;broker;N;legal entity;2250000,00;5635878,31;83;184;high;CZ;retail
+C100663;27.04.2019;branch;N;individual;52000,00;182946,35;20;61;low;CZ;affluent
+C100664;11.07.2025;branch;N;individual;85000,00;215570,21;24;64;medium;CZ;retail
+C100665;13.06.2023;online;N;sole trader;49000,00;165719,51;22;56;low;UA;affluent
+C100666;15.04.2022;branch;N;individual;43000,00;161368,06;23;51;low;SK;affluent
+C100667;02.04.2025;online;N;legal entity;2343000,00;7056184,17;65;187;low;CZ;SME
+C100668;18.03.2025;online;N;individual;62000,00;162512,43;20;56;low;CZ;retail
+C100669;19.06.2022;branch;N;sole trader;37000,00;139847,49;21;50;low;CZ;retail
+C100670;04.06.2019;branch;N;individual;84000,00;186773,42;25;58;medium;DE;affluent
+C100671;14.12.2024;online;N;individual;71000,00;217397,24;13;54;low;CZ;retail
+C100672;30.10.2025;branch;N;individual;83000,00;184803,16;16;43;low;CZ;retail
+C100673;29.02.2024;online;N;individual;75000,00;225264,49;26;67;low;CZ;retail
+C100674;05.06.2021;online;N;individual;85000,00;178641,28;21;56;low;CZ;retail
+C100675;22.08.2017;online;N;legal entity;2958000,00;11586109,77;63;204;low;VN;affluent
+C100676;20.12.2020;broker;N;sole trader;92000,00;226537,09;14;48;high;CZ;retail
+C100677;08.01.2018;online;N;legal entity;3041000,00;11110520,02;69;164;low;CZ;affluent
+C100678;22.05.2022;online;N;individual;87000,00;299663,94;14;59;high;DE;retail
+C100679;23.07.2022;online;N;individual;48000,00;161883,01;23;62;low;CZ;affluent
+C100680;26.08.2021;online;N;individual;50000,00;182994,37;20;61;low;CZ;retail
+C100681;06.04.2024;online;N;individual;84000,00;168225,86;28;65;low;CZ;retail
+C100682;17.03.2023;branch;N;sole trader;49000,00;145484,65;18;61;low;CZ;retail
+C100683;15.03.2018;branch;N;sole trader;71000,00;222075,37;21;71;low;CZ;retail
+C100684;01.07.2019;online;N;individual;32000,00;136042,13;12;40;low;CZ;retail
+C100685;04.05.2024;online;N;individual;51000,00;165087,30;19;46;medium;CZ;retail
+C100686;23.12.2018;branch;N;individual;39000,00;116549,68;24;56;low;CZ;affluent
+C100687;20.08.2025;online;N;individual;27000,00;101093,18;13;48;medium;CZ;affluent
+C100688;02.09.2025;branch;N;individual;77000,00;260462,82;28;62;low;CZ;affluent
+C100689;29.12.2025;branch;N;individual;90000,00;189567,59;20;69;medium;CZ;affluent
+C100690;27.03.2020;branch;N;individual;59000,00;251003,78;26;63;low;CZ;retail
+C100691;07.09.2016;branch;N;individual;87000,00;181090,98;20;55;medium;CZ;retail
+C100692;18.08.2022;branch;N;individual;46000,00;140774,71;19;47;low;CZ;retail
+C100693;29.10.2017;branch;N;individual;61000,00;129847,03;18;60;low;CZ;retail
+C100694;08.02.2025;branch;N;individual;100000,00;212310,67;22;59;low;CZ;affluent
+C100695;07.06.2023;online;N;individual;99000,00;212392,66;14;59;low;CZ;retail
+C100696;03.11.2018;online;N;legal entity;1560000,00;3870167,98;66;164;low;CZ;corporate
+C100697;29.06.2022;branch;N;individual;72000,00;181055,74;23;57;low;CZ;affluent
+C100698;01.11.2022;branch;N;legal entity;523000,00;2255149,73;39;161;medium;CZ;corporate
+C100699;15.07.2021;branch;N;individual;75000,00;176159,60;23;53;low;CZ;affluent
+C100700;30.12.2024;online;N;individual;70000,00;143504,01;23;62;low;DE;affluent
+C100701;30.10.2016;online;N;individual;41000,00;146827,38;24;59;low;CZ;affluent
+C100702;06.01.2021;branch;N;sole trader;64000,00;130523,01;17;48;low;CZ;affluent
+C100703;14.07.2016;branch;N;individual;52000,00;123636,43;20;54;low;CZ;retail
+C100704;17.11.2024;branch;N;individual;45000,00;158688,43;19;47;medium;CZ;affluent
+C100705;15.07.2016;branch;N;individual;68000,00;174505,10;29;63;high;DE;affluent
+C100706;19.10.2022;broker;N;legal entity;1649000,00;6768200,42;58;174;medium;CZ;retail
+C100707;18.05.2020;online;N;individual;43000,00;114709,46;24;69;low;CZ;retail
+C100708;06.11.2018;online;N;individual;57000,00;163762,19;20;47;low;CZ;retail
+C100709;21.07.2025;online;N;individual;64000,00;188933,94;21;47;low;CZ;affluent
+C100710;10.10.2023;broker;N;individual;75000,00;151722,02;20;49;medium;CZ;retail
+C100711;03.09.2023;online;N;sole trader;56000,00;171041,03;20;59;medium;CZ;retail
+C100712;23.04.2019;branch;N;sole trader;53000,00;151752,04;15;61;low;CZ;affluent
+C100713;08.02.2018;online;N;individual;47000,00;155954,47;15;62;low;CZ;retail
+C100714;11.01.2025;branch;N;individual;35000,00;124989,41;14;50;low;CZ;retail
+C100715;22.12.2019;branch;N;individual;52000,00;171715,83;27;65;low;CZ;retail
+C100716;09.10.2025;online;N;individual;61000,00;171128,64;17;61;low;CZ;retail
+C100717;16.03.2021;online;N;individual;63000,00;144051,17;24;52;medium;CZ;retail
+C100718;24.01.2021;online;N;individual;37000,00;125664,75;16;55;low;CZ;retail
+C100719;28.04.2021;online;N;sole trader;75000,00;176258,36;16;62;low;CZ;retail
+C100720;29.11.2025;online;N;legal entity;632000,00;2433684,83;44;166;low;CZ;SME
+C100721;10.07.2019;online;N;individual;61000,00;127828,67;18;49;low;CZ;retail
+C100722;10.06.2021;branch;N;individual;36000,00;126786,26;19;55;low;CZ;retail
+C100723;17.12.2018;branch;N;sole trader;39000,00;134140,55;23;64;low;CZ;retail
+C100724;10.04.2024;branch;N;individual;43000,00;178006,22;13;54;low;CZ;retail
+C100725;31.05.2017;online;N;individual;65000,00;175533,43;32;73;low;CZ;affluent
+C100726;08.09.2019;branch;N;sole trader;44000,00;111390,62;22;59;low;DE;retail
+C100727;03.03.2026;online;N;individual;13000,00;1472731,98;2;13;high;VN;retail
+C100728;01.12.2024;branch;N;individual;86000,00;187573,34;15;57;low;CZ;affluent
+C100729;26.03.2018;branch;N;sole trader;44000,00;4711516,56;27;95;medium;UA;retail
+C100730;13.05.2017;online;N;individual;90000,00;203987,71;22;62;low;CZ;retail
+C100731;20.02.2026;online;N;individual;69000,00;4100646,91;25;76;high;CZ;affluent
+C100732;24.05.2019;online;N;individual;84000,00;218413,15;13;53;medium;CZ;retail
+C100733;27.02.2025;branch;N;legal entity;1163000,00;4431498,27;56;194;medium;CZ;corporate
+C100734;23.04.2019;online;N;individual;36000,00;122404,39;16;57;low;CZ;retail
+C100735;20.01.2020;online;N;individual;59000,00;180768,69;17;54;low;CZ;affluent
+C100736;17.09.2024;branch;N;individual;59000,00;146008,08;18;43;low;CZ;affluent
+C100737;14.07.2019;online;N;individual;43000,00;142550,97;25;59;low;CZ;affluent
+C100738;02.03.2026;online;N;sole trader;42000,00;7125311,89;13;90;low;CZ;retail
+C100739;13.02.2020;online;N;individual;59000,00;157281,69;13;51;low;CZ;retail
+C100740;03.12.2019;branch;N;individual;89000,00;227320,87;16;41;low;SK;retail
+C100741;17.11.2025;branch;N;individual;63000,00;131488,74;14;54;high;CZ;retail
+C100742;15.04.2016;online;N;sole trader;35000,00;146762,73;15;44;high;CZ;retail
+C100743;06.06.2017;branch;N;individual;50000,00;176284,10;16;52;low;DE;retail
+C100744;20.10.2025;branch;N;individual;51000,00;191533,78;22;63;low;CZ;retail
+C100745;09.07.2023;online;N;individual;36000,00;111315,13;16;60;medium;CZ;affluent
+C100746;07.04.2018;branch;N;individual;51000,00;188422,84;16;50;low;CZ;affluent
+C100747;12.06.2018;online;N;individual;69000,00;150590,45;17;45;medium;VN;retail
+C100748;12.03.2023;branch;N;legal entity;1662000,00;5710635,50;71;160;low;DE;affluent
+C100749;03.10.2023;online;N;individual;73000,00;202729,12;16;64;low;CZ;retail
+C100750;09.02.2022;broker;N;individual;77000,00;5070681,14;18;71;medium;CZ;retail
+C100751;01.12.2019;branch;Y;individual;50000,00;138930,52;17;51;medium;CZ;retail
+C100752;06.09.2018;online;N;individual;89000,00;179080,91;16;60;low;CZ;retail
+C100753;26.05.2020;branch;N;legal entity;2199000,00;4972752,54;76;174;low;CZ;corporate
+C100754;27.06.2017;branch;N;individual;58000,00;125254,24;13;51;medium;CZ;retail
+C100755;01.03.2021;branch;N;sole trader;65000,00;233435,95;21;64;high;CZ;retail
+C100756;16.10.2016;online;N;individual;38000,00;143906,90;14;52;low;CZ;retail
+C100757;28.01.2026;online;Y;individual;114000,00;256749,75;19;55;low;CZ;affluent
+C100758;01.02.2023;branch;N;individual;54000,00;124403,75;18;52;low;CZ;affluent
+C100759;23.03.2026;online;N;individual;15000,00;1997915,19;4;14;medium;CZ;affluent
+C100760;15.10.2018;branch;N;individual;56000,00;160436,60;17;60;low;VN;retail
+C100761;12.10.2019;branch;N;sole trader;59000,00;152799,26;21;50;low;CZ;retail
+C100762;01.06.2022;online;N;individual;60000,00;155730,71;25;64;low;DE;retail
+C100763;29.03.2022;online;N;individual;56000,00;123664,69;14;51;low;CZ;retail
+C100764;13.08.2017;broker;N;individual;65000,00;135681,98;26;66;high;CZ;retail
+C100765;07.04.2024;branch;N;individual;53000,00;180331,51;20;62;low;CZ;retail
+C100766;10.10.2017;branch;N;individual;49000,00;160616,73;23;65;low;CZ;retail
+C100767;23.03.2023;branch;N;individual;46000,00;117851,80;19;60;medium;CZ;retail
+C100768;03.12.2018;online;N;legal entity;1298000,00;3312517,63;49;180;low;CZ;corporate
+C100769;05.08.2016;online;N;individual;62000,00;150049,20;17;53;low;CZ;retail
+C100770;13.01.2026;online;N;sole trader;79000,00;172473,42;24;57;low;CZ;retail
+C100771;28.11.2024;branch;N;individual;77000,00;179581,29;14;63;low;CZ;affluent
+C100772;11.03.2018;branch;N;sole trader;46000,00;182738,28;13;49;low;CZ;retail
+C100773;20.09.2022;branch;N;legal entity;4799000,00;9658585,36;55;168;low;CZ;retail
+C100774;16.07.2022;online;N;individual;74000,00;188537,17;19;63;low;CZ;retail
+C100775;25.12.2021;online;N;legal entity;1855000,00;6845808,58;75;168;high;CZ;affluent
+C100776;05.05.2025;online;N;sole trader;79000,00;202422,82;11;46;low;CZ;retail
+C100777;23.04.2017;branch;N;sole trader;43000,00;169079,92;20;68;low;CZ;retail
+C100778;15.06.2022;broker;N;individual;49000,00;167943,64;27;59;low;CZ;retail
+C100779;18.09.2022;online;N;legal entity;1092000,00;3785883,47;70;155;low;CZ;affluent
+C100780;09.04.2021;online;N;individual;85000,00;4741828,04;12;67;medium;VN;affluent
+C100781;18.02.2018;branch;N;individual;78000,00;6282882,01;20;96;low;CZ;retail
+C100782;14.07.2024;online;N;individual;32000,00;131633,38;22;62;low;CZ;affluent
+C100783;27.12.2017;branch;N;sole trader;58000,00;131782,09;18;47;medium;CZ;retail
+C100784;18.06.2019;broker;N;individual;92000,00;191178,88;15;55;low;CZ;retail
+C100785;25.12.2020;branch;N;individual;65000,00;5559593,53;11;70;high;CZ;affluent
+C100786;18.08.2019;branch;N;individual;110000,00;221103,66;22;55;low;DE;retail
+C100787;08.03.2026;online;N;individual;39000,00;1654345,87;22;83;high;VN;retail
+C100788;19.05.2020;branch;N;legal entity;1687000,00;3691192,71;44;176;low;CZ;retail
+C100789;12.10.2019;online;N;individual;52000,00;158859,04;23;63;low;SK;retail
+C100790;28.11.2019;online;Y;sole trader;71000,00;214824,91;25;66;low;SK;retail
+C100791;08.02.2017;branch;N;individual;59000,00;157936,29;24;58;low;CZ;retail
+C100792;03.08.2019;branch;N;individual;50000,00;159744,22;11;42;high;UA;retail
+C100793;08.01.2018;online;N;individual;37000,00;123204,79;16;60;high;CZ;retail
+C100794;27.08.2019;branch;N;legal entity;3133000,00;13338839,34;57;155;high;DE;affluent
+C100795;15.02.2026;branch;N;individual;57000,00;198737,19;26;60;low;CZ;retail
+C100796;28.06.2019;branch;N;individual;78000,00;212242,15;18;69;low;CZ;retail
+C100797;23.07.2018;online;N;individual;39000,00;390249,30;14;66;low;CZ;affluent
+C100798;06.10.2019;online;N;individual;87000,00;176367,57;16;66;low;VN;retail
+C100799;17.09.2024;branch;N;individual;71000,00;169554,62;21;51;low;CZ;retail
+C100800;30.10.2019;branch;N;individual;73000,00;186531,08;30;68;medium;CZ;retail
+C100801;06.06.2017;online;N;individual;63000,00;212903,95;20;65;low;CZ;retail
+C100802;12.07.2020;online;N;individual;65000,00;163239,18;19;68;medium;VN;retail
+C100803;14.10.2023;branch;N;individual;72000,00;182480,01;15;49;low;CZ;affluent
+C100804;30.04.2017;online;N;individual;58000,00;147517,49;15;55;low;CZ;affluent
+C100805;21.07.2020;online;N;individual;31000,00;117921,29;16;58;medium;CZ;retail
+C100806;22.01.2022;branch;N;individual;90000,00;203299,40;20;52;low;CZ;retail
+C100807;03.12.2017;online;N;individual;54000,00;163101,63;25;57;low;CZ;retail
+C100808;22.03.2024;online;N;individual;38000,00;155340,43;20;64;low;CZ;retail
+C100809;02.06.2024;branch;N;sole trader;41000,00;174484,16;14;52;low;SK;affluent
+C100810;12.11.2025;broker;N;individual;57000,00;145758,23;23;58;medium;CZ;retail
+C100811;04.12.2017;branch;N;individual;73000,00;184335,23;18;62;medium;CZ;retail
+C100812;05.01.2017;online;N;individual;52000,00;153339,57;21;64;medium;CZ;retail
+C100813;10.09.2020;branch;N;individual;57000,00;198187,26;15;53;low;CZ;affluent
+C100814;12.03.2024;branch;N;legal entity;1036000,00;2139521,55;63;136;low;CZ;SME
+C100815;13.09.2023;online;N;individual;41000,00;131567,82;22;51;low;CZ;retail
+C100816;16.07.2024;online;N;individual;59000,00;180048,47;33;74;medium;CZ;retail
+C100817;05.01.2021;branch;N;legal entity;1520000,00;3099054,41;55;178;medium;CZ;affluent
+C100818;25.12.2024;branch;N;individual;85000,00;193821,17;24;53;low;CZ;retail
+C100819;06.09.2021;branch;N;individual;56000,00;162174,64;10;37;low;VN;retail
+C100820;06.06.2023;broker;N;individual;32000,00;129922,92;17;53;high;CZ;retail
+C100821;11.06.2020;online;N;individual;67000,00;137688,17;21;55;medium;CZ;retail
+C100822;19.12.2025;online;N;individual;69000,00;139975,99;21;51;high;CZ;retail
+C100823;29.11.2021;online;N;legal entity;749000,00;2372244,13;52;180;medium;CZ;SME
+C100824;27.05.2018;online;N;individual;61000,00;141823,65;23;54;low;CZ;retail
+C100825;25.12.2020;branch;N;individual;85000,00;172292,09;26;69;low;CZ;affluent
+C100826;02.11.2016;online;N;individual;49000,00;105695,36;21;52;low;CZ;retail
+C100827;14.09.2016;branch;N;individual;77000,00;170265,99;12;43;medium;CZ;retail
+C100828;10.04.2018;broker;Y;legal entity;2186000,00;8083098,06;76;165;low;CZ;SME
+C100829;11.04.2017;online;N;individual;69000,00;154354,89;12;49;low;DE;retail
+C100830;28.01.2025;branch;N;individual;37000,00;135518,72;20;50;low;CZ;retail
+C100831;21.03.2026;online;N;individual;94000,00;332868,30;19;61;high;CZ;retail
+C100832;29.04.2017;branch;N;individual;69000,00;144195,87;20;66;medium;CZ;retail
+C100833;06.12.2024;online;N;sole trader;95000,00;203671,83;26;61;low;CZ;retail
+C100834;20.06.2020;branch;N;individual;45000,00;148901,53;30;67;low;CZ;affluent
+C100835;05.06.2021;branch;N;individual;63000,00;152111,42;25;61;low;CZ;retail
+C100836;04.07.2025;branch;N;individual;40000,00;170284,47;19;58;low;CZ;affluent
+C100837;21.05.2016;branch;N;individual;32000,00;127538,28;23;56;low;CZ;retail
+C100838;28.10.2022;online;N;legal entity;635000,00;2139740,29;66;151;medium;CZ;affluent
+C100839;08.04.2018;branch;N;individual;74000,00;5474660,97;14;91;medium;CZ;affluent
+C100840;20.05.2021;online;N;individual;58000,00;165966,30;14;61;low;CZ;retail
+C100841;15.05.2023;branch;N;legal entity;2014000,00;7714248,83;47;150;high;CZ;corporate
+C100842;15.08.2024;branch;N;legal entity;3081000,00;6962397,97;51;171;medium;CZ;affluent
+C100843;04.04.2024;online;Y;individual;80000,00;185664,56;15;56;medium;CZ;retail
+C100844;24.03.2019;online;N;legal entity;1326000,00;4723706,39;68;171;low;CZ;corporate
+C100845;07.10.2018;online;N;sole trader;42000,00;149231,89;27;61;low;CZ;retail
+C100846;04.12.2021;branch;N;individual;117000,00;255213,17;19;65;high;CZ;retail
+C100847;01.06.2020;online;N;individual;61000,00;166503,66;14;55;low;CZ;retail
+C100848;03.12.2020;branch;N;individual;38000,00;116800,79;15;61;high;CZ;affluent
+C100849;28.11.2017;branch;N;individual;63000,00;179187,90;19;55;low;CZ;retail
+C100850;13.12.2020;online;N;sole trader;42000,00;105659,96;12;51;low;CZ;retail
+C100851;15.12.2016;online;N;sole trader;93000,00;200681,75;16;56;low;CZ;retail
+C100852;28.12.2024;broker;N;individual;91000,00;222846,36;30;72;low;CZ;retail
+C100853;13.11.2016;branch;N;sole trader;87000,00;206798,39;19;54;medium;CZ;retail
+C100854;23.08.2021;branch;N;individual;67000,00;136991,96;12;48;low;CZ;affluent
+C100855;22.02.2018;branch;N;sole trader;53000,00;155748,81;17;54;high;CZ;retail
+C100856;21.06.2017;branch;N;individual;73000,00;161467,45;19;67;low;CZ;retail
+C100857;18.03.2021;branch;N;individual;45000,00;189812,50;26;59;high;CZ;retail
+C100858;20.06.2022;broker;N;sole trader;68000,00;180473,96;16;60;high;CZ;retail
+C100859;07.05.2021;branch;N;individual;57000,00;173279,43;22;66;medium;CZ;retail
+C100860;21.01.2025;online;N;individual;50000,00;168276,53;21;57;medium;CZ;affluent
+C100861;09.04.2019;branch;N;individual;102000,00;237251,25;16;49;medium;UA;retail
+C100862;20.01.2023;online;N;legal entity;1264000,00;3120953,91;37;158;low;CZ;corporate
+C100863;17.10.2025;online;N;sole trader;71000,00;203472,01;14;56;low;CZ;retail
+C100864;28.12.2024;branch;N;individual;74000,00;155489,36;27;68;high;UA;retail
+C100865;21.11.2016;branch;N;individual;57000,00;175153,63;15;58;low;CZ;affluent
+C100866;25.09.2025;branch;N;individual;55000,00;162429,77;23;69;high;DE;retail
+C100867;12.07.2025;branch;N;individual;55000,00;117677,79;17;45;low;CZ;affluent
+C100868;25.03.2021;online;N;individual;133000,00;281006,53;15;48;low;CZ;affluent
+C100869;26.06.2022;branch;N;individual;92000,00;244467,04;25;58;high;CZ;retail
+C100870;10.03.2025;branch;N;individual;78000,00;169632,70;12;52;medium;CZ;affluent
+C100871;27.09.2023;online;N;individual;81000,00;204066,67;16;62;low;CZ;affluent
+C100872;10.03.2022;branch;N;individual;118000,00;247859,84;12;48;low;CZ;affluent
+C100873;16.10.2017;online;N;individual;83000,00;186620,95;27;71;low;UA;affluent
+C100874;25.10.2025;branch;N;individual;61000,00;160089,67;17;67;low;CZ;affluent
+C100875;06.10.2019;branch;N;individual;65000,00;137684,99;27;62;medium;CZ;retail
+C100876;08.04.2017;online;N;individual;46000,00;122274,19;23;62;high;UA;affluent
+C100877;10.01.2024;online;N;sole trader;46000,00;168224,95;27;59;low;CZ;retail
+C100878;03.05.2022;branch;N;sole trader;51000,00;130571,65;15;63;low;CZ;affluent
+C100879;13.09.2022;online;Y;individual;54000,00;132073,77;23;55;low;CZ;retail
+C100880;15.08.2019;online;N;sole trader;98000,00;238386,23;20;61;low;CZ;retail
+C100881;10.04.2021;branch;N;individual;43000,00;163387,70;11;48;low;UA;retail
+C100882;27.11.2024;branch;N;individual;104000,00;215370,09;19;56;low;CZ;retail
+C100883;03.08.2025;online;N;individual;41000,00;166359,94;22;61;low;CZ;retail
+C100884;27.09.2023;broker;Y;individual;54000,00;181537,52;14;56;medium;DE;affluent
+C100885;08.03.2018;online;N;individual;43000,00;164912,50;23;72;low;CZ;affluent
+C100886;16.07.2016;online;N;individual;32000,00;104101,98;14;50;low;CZ;retail
+C100887;22.07.2017;branch;N;individual;128000,00;266232,56;17;66;low;VN;retail
+C100888;15.03.2018;online;N;individual;75000,00;167928,08;24;64;low;CZ;affluent
+C100889;14.03.2023;branch;N;sole trader;59000,00;153103,33;25;56;low;CZ;affluent
+C100890;25.02.2024;online;N;individual;63000,00;175710,27;24;62;low;DE;affluent
+C100891;26.05.2019;online;N;individual;68000,00;173722,92;18;54;medium;CZ;affluent
+C100892;09.05.2022;broker;N;individual;61000,00;133856,01;23;68;medium;CZ;retail
+C100893;18.07.2018;online;N;individual;68000,00;168595,23;24;67;low;CZ;retail
+C100894;06.03.2024;online;Y;sole trader;87000,00;224382,20;24;54;low;DE;retail
+C100895;30.04.2025;branch;N;individual;123000,00;280276,66;26;65;medium;SK;retail
+C100896;22.09.2019;branch;N;individual;51000,00;173378,58;18;53;low;CZ;retail
+C100897;06.10.2021;broker;N;individual;93000,00;213714,68;25;65;high;CZ;retail
+C100898;16.10.2022;branch;N;individual;39000,00;150227,45;14;53;low;SK;retail
+C100899;06.05.2020;branch;N;sole trader;50000,00;168607,01;15;53;medium;CZ;affluent
+C100900;22.07.2016;online;N;individual;66000,00;189767,67;16;63;low;DE;retail
+C100901;24.06.2018;online;N;individual;41000,00;149047,33;15;64;low;CZ;retail
+C100902;03.12.2024;online;N;individual;58000,00;2043075,89;16;89;low;CZ;retail
+C100903;15.11.2022;online;N;individual;73000,00;184505,70;17;55;medium;CZ;affluent
+C100904;11.08.2019;branch;N;individual;40000,00;164922,64;15;63;low;CZ;retail
+C100905;20.12.2023;branch;N;individual;69000,00;161543,24;15;55;medium;CZ;retail
+C100906;01.06.2024;online;N;sole trader;60000,00;135026,18;18;51;medium;CZ;affluent
+C100907;01.06.2018;branch;N;sole trader;54000,00;117970,32;22;72;medium;UA;retail
+C100908;17.03.2023;online;N;individual;45000,00;176100,63;25;65;medium;CZ;retail
+C100909;20.08.2025;branch;N;individual;41000,00;139427,84;20;49;low;CZ;affluent
+C100910;15.12.2016;broker;N;legal entity;8713000,00;18859120,21;75;182;low;VN;retail
+C100911;30.08.2022;broker;N;legal entity;1339000,00;4755726,68;45;149;medium;CZ;affluent
+C100912;22.12.2021;online;N;sole trader;43000,00;168140,18;20;48;low;CZ;affluent
+C100913;08.06.2024;online;N;individual;64000,00;166716,18;14;59;high;CZ;retail
+C100914;14.07.2019;online;N;individual;66000,00;198739,87;22;61;low;CZ;affluent
+C100915;09.11.2023;branch;N;sole trader;32000,00;88025,69;22;56;low;CZ;retail
+C100916;09.02.2023;branch;N;individual;38000,00;153423,83;18;55;high;VN;retail
+C100917;27.04.2017;branch;N;individual;98000,00;242692,20;27;76;low;CZ;retail
+C100918;17.11.2022;online;N;sole trader;76000,00;175080,63;14;50;low;UA;affluent
+C100919;07.12.2022;online;N;sole trader;72000,00;229500,37;27;65;low;CZ;affluent
+C100920;05.03.2025;online;N;sole trader;36000,00;144270,42;23;66;low;CZ;retail
+C100921;10.03.2026;online;N;individual;66000,00;260115,57;16;68;low;DE;retail
+C100922;30.11.2021;online;N;individual;65000,00;192135,75;21;61;medium;CZ;retail
+C100923;31.03.2020;branch;N;individual;74000,00;163200,16;19;59;low;CZ;retail
+C100924;08.01.2024;online;N;individual;90000,00;208277,70;23;56;low;CZ;affluent
+C100925;06.05.2018;online;N;individual;41000,00;124533,63;15;62;low;CZ;retail
+C100926;11.11.2022;online;Y;individual;75000,00;261978,71;25;71;low;CZ;affluent
+C100927;25.01.2018;branch;N;sole trader;70000,00;266850,11;16;44;low;CZ;retail
+C100928;30.07.2021;branch;N;individual;90000,00;203058,48;20;54;low;CZ;affluent
+C100929;04.01.2025;branch;N;individual;59000,00;172019,65;20;63;low;CZ;retail
+C100930;15.11.2017;broker;N;individual;83000,00;201792,23;23;56;low;CZ;retail
+C100931;15.04.2018;online;N;individual;77000,00;201846,29;24;66;low;CZ;retail
+C100932;15.01.2022;branch;N;individual;59000,00;138339,04;21;60;high;CZ;affluent
+C100933;27.10.2022;online;N;sole trader;50000,00;130292,55;18;48;low;CZ;affluent
+C100934;28.05.2022;online;N;individual;60000,00;201590,22;29;66;low;CZ;affluent
+C100935;14.06.2024;online;N;sole trader;71000,00;198499,99;17;63;medium;CZ;affluent
+C100936;24.03.2026;online;N;individual;79000,00;443179,59;11;48;low;CZ;retail
+C100937;29.05.2019;branch;N;individual;99000,00;206253,97;20;64;low;CZ;affluent
+C100938;15.11.2023;online;N;individual;52000,00;159674,56;20;56;low;CZ;retail
+C100939;14.09.2016;branch;N;individual;71000,00;215986,70;19;55;low;CZ;affluent
+C100940;15.08.2024;online;Y;individual;53000,00;158277,92;19;71;medium;CZ;affluent
+C100941;23.05.2023;online;N;individual;75000,00;178518,42;25;64;high;CZ;affluent
+C100942;24.02.2021;branch;N;legal entity;768000,00;1689960,94;57;144;medium;CZ;SME
+C100943;14.08.2021;online;N;individual;66000,00;208079,73;26;70;low;CZ;affluent
+C100944;15.11.2021;branch;N;individual;75000,00;153530,53;21;53;low;CZ;affluent
+C100945;05.08.2024;online;N;legal entity;1114000,00;2554417,17;61;154;low;CZ;retail
+C100946;14.09.2020;branch;N;individual;53000,00;140293,90;20;57;low;CZ;affluent
+C100947;21.04.2020;online;N;individual;107000,00;215713,30;35;77;low;CZ;retail
+C100948;21.05.2024;branch;N;individual;117000,00;282991,85;23;66;low;CZ;retail
+C100949;18.10.2018;online;N;sole trader;47000,00;131644,63;13;43;low;CZ;retail
+C100950;27.02.2025;online;N;individual;93000,00;269026,02;15;51;low;CZ;retail
+C100951;28.04.2019;branch;N;individual;33000,00;123012,34;25;57;low;CZ;retail
+C100952;30.03.2022;branch;N;individual;50000,00;161849,50;28;62;medium;VN;affluent
+C100953;26.02.2022;branch;N;individual;46000,00;155223,09;28;72;low;CZ;affluent
+C100954;12.01.2021;branch;N;individual;79000,00;162134,34;17;53;low;CZ;affluent
+C100955;24.08.2017;branch;N;individual;46000,00;163033,34;21;61;medium;CZ;retail
+C100956;30.11.2021;broker;N;individual;78000,00;180710,10;19;59;low;CZ;retail
+C100957;27.09.2017;branch;N;individual;48000,00;154516,37;26;61;low;CZ;retail
+C100958;19.08.2024;branch;N;individual;76000,00;3246972,23;15;62;low;CZ;retail
+C100959;12.08.2021;online;N;individual;78000,00;171195,49;20;68;high;SK;retail
+C100960;31.03.2022;broker;N;individual;82000,00;170828,89;22;55;medium;CZ;retail
+C100961;04.11.2022;branch;N;individual;69000,00;141895,99;28;63;low;CZ;retail
+C100962;14.03.2019;broker;N;individual;50000,00;4109875,09;13;62;low;VN;retail
+C100963;12.02.2018;broker;N;individual;49000,00;125277,97;19;50;low;CZ;retail
+C100964;02.04.2023;branch;N;individual;64000,00;187046,97;19;57;low;SK;retail
+C100965;01.11.2018;online;N;individual;46000,00;110244,00;16;49;low;CZ;retail
+C100966;11.08.2016;online;N;individual;84000,00;194281,10;24;71;medium;CZ;affluent
+C100967;14.04.2023;online;N;individual;102000,00;221740,67;16;67;low;VN;retail
+C100968;07.06.2023;branch;N;legal entity;1501000,00;6371827,51;37;147;high;CZ;corporate
+C100969;27.06.2019;online;N;individual;48000,00;133750,19;24;59;low;CZ;affluent
+C100970;29.06.2017;online;N;individual;69000,00;154907,46;18;48;low;DE;retail
+C100971;21.06.2016;branch;N;individual;76000,00;183352,05;15;54;low;CZ;retail
+C100972;07.10.2017;branch;N;individual;50000,00;196212,90;24;68;low;CZ;retail
+C100973;10.06.2021;branch;N;individual;85000,00;175088,88;21;50;low;CZ;affluent
+C100974;04.07.2019;online;Y;individual;54000,00;159473,54;18;57;low;UA;affluent
+C100975;14.11.2021;branch;N;individual;73000,00;217340,39;18;54;medium;CZ;retail
+C100976;16.10.2021;online;N;sole trader;46000,00;158859,57;24;63;low;CZ;retail
+C100977;15.02.2022;online;N;individual;98000,00;209829,95;24;61;low;UA;retail
+C100978;06.01.2019;online;N;individual;40000,00;162137,64;14;62;low;CZ;retail
+C100979;16.02.2021;branch;N;individual;39000,00;147957,68;22;55;medium;CZ;retail
+C100980;29.10.2021;branch;N;individual;86000,00;195608,14;19;49;low;CZ;retail
+C100981;01.11.2020;branch;N;individual;50000,00;149328,10;21;65;high;CZ;retail
+C100982;01.03.2026;branch;N;individual;129000,00;260610,98;18;54;high;CZ;affluent
+C100983;29.06.2016;branch;N;individual;36000,00;127064,44;20;52;low;CZ;retail
+C100984;21.07.2023;broker;N;legal entity;1444000,00;4673215,02;67;178;low;CZ;SME
+C100985;16.12.2016;broker;N;individual;42000,00;156996,82;11;50;low;VN;affluent
+C100986;08.02.2018;branch;N;individual;96000,00;255640,41;15;58;low;CZ;affluent
+C100987;20.08.2019;online;N;individual;94000,00;324695,23;16;65;low;CZ;retail
+C100988;02.01.2026;branch;N;individual;48000,00;159999,01;14;56;low;CZ;retail
+C100989;17.02.2023;branch;N;individual;84000,00;174273,35;20;58;medium;CZ;retail
+C100990;24.10.2025;online;N;individual;83000,00;199415,24;21;57;low;CZ;retail
+C100991;01.07.2023;online;N;legal entity;3350000,00;7842066,40;68;177;low;CZ;affluent
+C100992;22.03.2025;online;N;individual;42000,00;149619,82;11;49;low;CZ;retail
+C100993;29.01.2019;online;N;individual;111000,00;260699,50;15;51;low;CZ;affluent
+C100994;30.09.2019;branch;N;individual;57000,00;146347,56;17;61;low;CZ;retail
+C100995;01.11.2017;branch;N;individual;44000,00;138032,16;18;48;low;CZ;retail
+C100996;29.06.2017;online;N;individual;71000,00;147832,12;15;55;low;CZ;retail
+C100997;08.03.2020;broker;Y;individual;27000,00;111418,04;14;47;medium;VN;retail
+C100998;27.05.2025;branch;N;individual;54000,00;111639,42;15;57;low;CZ;retail
+C100999;27.08.2017;branch;N;individual;71000,00;2082218,62;25;89;high;VN;retail
+C101000;07.03.2019;branch;N;individual;78000,00;167433,88;21;49;low;CZ;affluent
+C101001;29.03.2017;branch;N;sole trader;102000,00;204989,10;17;55;low;CZ;retail
+C101002;18.07.2016;online;N;individual;47000,00;577225,14;13;52;high;CZ;retail
+C101003;17.02.2017;online;N;individual;58000,00;170378,33;16;59;low;CZ;retail
+C101004;21.06.2017;branch;N;individual;52000,00;159242,35;14;55;high;CZ;affluent
+C101005;21.10.2022;online;N;sole trader;54000,00;382428,99;16;72;medium;CZ;retail
+C101006;19.01.2020;online;N;individual;50000,00;156267,18;19;63;low;CZ;retail
+C101007;29.08.2018;branch;Y;individual;120000,00;245015,92;21;59;low;CZ;affluent
+C101008;22.04.2023;branch;N;individual;56000,00;144084,76;13;53;medium;CZ;affluent
+C101009;06.07.2016;online;N;individual;67000,00;175193,30;14;56;low;CZ;affluent
+C101010;08.02.2024;broker;N;individual;66000,00;133894,93;13;56;low;VN;retail
+C101011;20.09.2022;online;N;individual;70000,00;187498,34;11;43;low;CZ;retail
+C101012;03.04.2022;branch;N;sole trader;51000,00;188272,76;16;51;low;CZ;retail
+C101013;29.09.2025;online;N;individual;85000,00;181527,71;26;69;low;CZ;retail
+C101014;14.02.2025;branch;N;individual;65000,00;191345,41;26;62;low;CZ;retail
+C101015;25.08.2021;online;N;individual;69000,00;194420,42;21;54;low;CZ;retail
+C101016;07.06.2021;online;N;legal entity;1027000,00;3278382,62;56;175;low;DE;corporate
+C101017;23.08.2016;branch;N;individual;70000,00;5499793,51;19;88;low;SK;retail
+C101018;29.06.2022;online;N;sole trader;61000,00;148385,32;25;57;low;CZ;affluent
+C101019;08.04.2021;online;N;individual;69000,00;236050,78;13;59;low;CZ;retail
+C101020;03.01.2026;online;N;individual;55000,00;154963,28;14;47;low;CZ;retail
+C101021;05.06.2023;branch;N;legal entity;1739000,00;4349893,08;44;153;low;CZ;affluent
+C101022;22.08.2024;branch;N;individual;115000,00;229711,19;21;70;low;CZ;retail
+C101023;09.07.2025;online;N;individual;43000,00;179151,65;15;59;medium;UA;retail
+C101024;16.11.2020;branch;N;individual;50000,00;205576,39;14;57;low;CZ;retail
+C101025;06.06.2019;online;N;individual;69000,00;158445,23;15;58;low;UA;affluent
+C101026;03.10.2016;branch;N;individual;65000,00;187281,22;20;49;low;CZ;affluent
+C101027;16.12.2025;online;N;individual;114000,00;246671,59;27;74;high;UA;retail
+C101028;12.07.2023;branch;N;individual;30000,00;113500,00;25;55;low;CZ;retail
+C101029;04.12.2022;branch;N;individual;101000,00;211855,58;28;65;medium;SK;retail
+C101030;18.10.2020;broker;N;individual;63000,00;135115,72;22;65;low;UA;affluent
+C101031;18.10.2022;branch;N;individual;68000,00;191182,43;18;61;medium;UA;affluent
+C101032;20.01.2025;branch;Y;individual;50000,00;173917,23;21;69;medium;CZ;affluent
+C101033;18.09.2023;online;N;sole trader;47000,00;190573,34;19;46;medium;SK;retail
+C101034;21.05.2024;branch;N;individual;59000,00;214166,40;28;63;low;CZ;retail
+C101035;14.02.2020;online;N;individual;32000,00;124770,29;12;52;high;CZ;affluent
+C101036;24.02.2024;branch;N;sole trader;34000,00;135149,02;15;45;low;CZ;retail
+C101037;24.04.2018;branch;N;individual;57000,00;239205,82;16;67;medium;CZ;affluent
+C101038;22.11.2021;online;N;sole trader;78000,00;186864,54;20;63;low;CZ;affluent
+C101039;11.09.2022;branch;N;individual;42000,00;140217,14;14;60;low;CZ;retail
+C101040;22.06.2019;broker;N;individual;44000,00;118143,22;19;64;low;CZ;retail
+C101041;15.04.2021;online;N;individual;88000,00;7389210,41;20;109;low;CZ;retail
+C101042;30.03.2023;online;N;sole trader;31000,00;118866,39;19;48;low;CZ;affluent
+C101043;22.12.2017;online;N;individual;29000,00;111422,29;22;58;medium;CZ;retail
+C101044;17.01.2026;branch;N;individual;49000,00;122211,86;16;51;low;CZ;retail
+C101045;02.01.2018;online;N;sole trader;82000,00;186370,04;11;46;low;CZ;affluent
+C101046;18.05.2022;branch;N;individual;38000,00;112659,00;26;57;medium;CZ;retail
+C101047;27.10.2021;online;N;individual;65000,00;164958,30;32;71;low;CZ;retail
+C101048;19.07.2021;branch;N;individual;79000,00;163416,81;13;52;medium;CZ;retail
+C101049;06.07.2024;online;N;individual;49000,00;175642,36;19;61;low;CZ;retail
+C101050;12.02.2025;branch;N;individual;70000,00;168836,64;20;63;low;CZ;retail
+C101051;22.06.2019;online;N;sole trader;69000,00;252717,65;12;54;medium;CZ;affluent
+C101052;30.03.2022;branch;N;individual;59000,00;173183,57;22;56;low;CZ;retail
+C101053;02.03.2022;branch;N;legal entity;1037000,00;2196663,03;70;175;low;CZ;corporate
+C101054;26.09.2024;branch;N;legal entity;1426000,00;2854857,85;52;180;low;CZ;corporate
+C101055;19.10.2023;branch;N;individual;66000,00;226733,10;24;54;low;CZ;affluent
+C101056;06.08.2025;branch;N;sole trader;46000,00;391912,88;19;68;low;CZ;retail
+C101057;02.09.2024;branch;N;individual;80000,00;185159,17;25;69;low;CZ;affluent
+C101058;20.06.2025;branch;N;individual;55000,00;189810,96;12;52;low;CZ;affluent
+C101059;02.01.2019;branch;N;individual;42000,00;143983,11;16;51;low;CZ;retail
+C101060;08.06.2023;broker;N;individual;46000,00;169599,02;14;51;low;CZ;retail
+C101061;10.08.2023;broker;N;individual;59000,00;174581,58;15;58;low;CZ;retail
+C101062;26.03.2020;branch;N;sole trader;53000,00;148837,93;21;50;low;CZ;retail
+C101063;01.11.2022;branch;N;individual;81000,00;177532,66;25;55;low;CZ;affluent
+C101064;30.11.2023;online;N;individual;81000,00;227074,02;15;51;low;CZ;retail
+C101065;04.04.2024;branch;N;individual;62000,00;167946,44;27;66;medium;DE;affluent
+C101066;10.03.2024;online;N;individual;45000,00;151898,18;13;53;low;CZ;retail
+C101067;22.03.2021;branch;N;individual;80000,00;186654,50;22;55;low;CZ;retail
+C101068;09.11.2018;branch;N;individual;47000,00;192969,30;18;61;low;CZ;retail
+C101069;18.02.2024;online;N;individual;69000,00;143138,79;18;49;medium;SK;retail
+C101070;22.09.2020;online;N;individual;72000,00;237368,11;14;51;medium;CZ;retail
+C101071;30.01.2018;online;N;sole trader;85000,00;171310,28;24;61;low;CZ;retail
+C101072;05.02.2020;branch;N;individual;39000,00;158727,01;20;56;low;CZ;retail
+C101073;31.12.2025;online;N;individual;58000,00;179666,32;21;64;low;CZ;affluent
+C101074;04.07.2025;online;N;individual;55000,00;201392,79;18;65;low;UA;retail
+C101075;18.06.2018;online;N;individual;38000,00;5549189,29;25;92;low;CZ;retail
+C101076;11.08.2019;branch;N;sole trader;45000,00;160238,43;20;49;high;CZ;affluent
+C101077;18.10.2019;online;N;individual;69000,00;146250,10;18;53;low;CZ;retail
+C101078;05.09.2017;broker;N;sole trader;62000,00;129585,61;15;54;low;CZ;retail
+C101079;02.04.2024;online;N;individual;86000,00;181518,36;22;77;high;CZ;retail
+C101080;20.05.2020;online;N;individual;58000,00;126975,09;25;59;low;CZ;retail
+C101081;17.06.2024;online;N;individual;50000,00;123214,33;23;52;low;CZ;retail
+C101082;05.02.2024;branch;N;individual;56000,00;205991,26;13;54;medium;CZ;retail
+C101083;07.07.2016;online;N;individual;78000,00;200569,98;26;63;low;CZ;retail
+C101084;13.01.2018;branch;N;individual;73000,00;198422,85;18;55;low;CZ;retail
+C101085;19.12.2017;online;N;individual;41000,00;130103,33;16;51;medium;CZ;affluent
+C101086;07.06.2023;online;N;individual;39000,00;166089,55;18;50;low;UA;retail
+C101087;19.12.2024;online;N;individual;60000,00;142946,54;19;47;medium;CZ;retail
+C101088;10.08.2020;branch;N;legal entity;2361000,00;8509435,80;77;173;medium;CZ;SME
+C101089;28.06.2020;online;N;sole trader;55000,00;155568,63;28;65;low;CZ;retail
+C101090;19.09.2016;branch;Y;individual;70000,00;146900,89;23;60;low;CZ;affluent
+C101091;08.05.2025;online;N;sole trader;66000,00;159637,46;19;60;medium;CZ;affluent
+C101092;15.02.2021;branch;N;individual;70000,00;150713,77;19;54;low;CZ;retail
+C101093;19.04.2021;broker;N;legal entity;4610000,00;13260878,04;72;169;low;CZ;retail
+C101094;28.10.2021;branch;N;individual;48000,00;124081,22;18;56;low;CZ;retail
+C101095;09.04.2018;broker;N;individual;30000,00;105795,58;13;39;high;CZ;retail
+C101096;01.01.2020;online;N;individual;58000,00;174040,78;21;69;low;CZ;retail
+C101097;04.01.2025;branch;N;individual;93000,00;204405,45;15;60;low;CZ;retail
+C101098;15.04.2022;branch;N;legal entity;2428000,00;8332022,61;41;152;low;CZ;affluent
+C101099;05.08.2020;online;N;individual;34000,00;115854,17;17;57;low;CZ;retail
+C101100;30.09.2021;branch;N;sole trader;76000,00;174696,22;20;73;low;CZ;retail
+C101101;22.08.2018;branch;N;legal entity;1267000,00;2559541,60;53;183;low;CZ;corporate
+C101102;31.01.2018;online;N;individual;59000,00;167773,31;23;63;low;CZ;retail
+C101103;20.06.2024;online;N;individual;75000,00;220605,68;26;65;low;CZ;retail
+C101104;15.01.2021;broker;N;sole trader;53000,00;175366,77;14;51;low;CZ;retail
+C101105;27.04.2022;branch;N;legal entity;3079000,00;10815075,07;57;162;medium;DE;retail
+C101106;08.03.2026;branch;N;individual;70000,00;166012,40;23;59;high;CZ;retail
+C101107;10.09.2024;branch;N;individual;58000,00;151439,49;21;60;low;CZ;affluent
+C101108;07.02.2026;online;N;sole trader;12000,00;1591614,43;2;13;high;CZ;affluent
+C101109;24.08.2018;branch;N;individual;50000,00;137034,11;25;61;medium;CZ;retail
+C101110;01.03.2026;broker;N;individual;80000,00;196641,71;16;53;medium;CZ;retail
+C101111;15.05.2022;branch;N;individual;32000,00;126192,85;18;67;low;CZ;retail
+C101112;28.05.2018;online;N;individual;74000,00;187700,31;20;53;low;CZ;retail
+C101113;07.09.2023;online;N;individual;64000,00;140534,92;16;58;low;UA;retail
+C101114;01.09.2020;online;N;sole trader;69000,00;141866,34;18;52;low;CZ;affluent
+C101115;14.12.2022;online;N;individual;68000,00;135953,54;12;50;low;VN;retail
+C101116;12.10.2023;branch;N;individual;40000,00;107568,35;24;54;medium;CZ;retail
+C101117;25.03.2017;branch;N;individual;112000,00;233357,84;26;60;low;CZ;retail
+C101118;27.06.2020;branch;N;individual;61000,00;167038,39;23;61;medium;DE;retail
+C101119;17.05.2019;online;N;individual;41000,00;168054,75;20;51;low;CZ;retail
+C101120;05.01.2024;online;N;individual;88000,00;214998,31;21;63;low;CZ;retail
+C101121;13.05.2021;online;N;individual;42000,00;124288,25;21;59;low;CZ;retail
+C101122;25.04.2022;online;N;sole trader;49000,00;113527,73;19;51;low;CZ;affluent
+C101123;23.12.2021;branch;N;individual;37000,00;120418,79;17;58;low;CZ;retail
+C101124;24.11.2022;online;N;individual;67000,00;190944,84;15;56;low;CZ;retail
+C101125;21.08.2017;branch;N;sole trader;43000,00;122520,67;18;40;low;CZ;retail
+C101126;17.09.2020;branch;N;individual;48000,00;155673,03;25;57;low;CZ;retail
+C101127;21.02.2024;online;N;individual;65000,00;193240,73;20;46;low;CZ;affluent
+C101128;17.03.2019;branch;N;individual;52000,00;168699,89;18;56;low;CZ;affluent
+C101129;27.07.2024;online;N;sole trader;68000,00;152250,99;16;46;low;SK;affluent
+C101130;07.07.2025;broker;Y;legal entity;2800000,00;7510910,78;60;165;medium;CZ;retail
+C101131;15.03.2026;online;N;individual;15000,00;969814,50;4;9;medium;CZ;affluent
+C101132;13.06.2024;branch;N;legal entity;1532000,00;3951202,03;78;170;low;CZ;retail
+C101133;16.02.2024;branch;N;individual;38000,00;152879,97;22;61;high;CZ;retail
+C101134;14.05.2019;online;N;legal entity;1993000,00;5299222,21;77;190;medium;CZ;SME
+C101135;08.07.2016;broker;N;individual;60000,00;142111,73;25;63;low;CZ;affluent
+C101136;13.05.2021;online;N;individual;54000,00;140901,76;19;61;high;DE;affluent
+C101137;05.02.2024;branch;N;individual;71000,00;211542,42;13;50;low;CZ;retail
+C101138;19.12.2025;online;N;sole trader;52000,00;182259,99;14;58;low;CZ;retail
+C101139;25.05.2021;branch;N;individual;54000,00;110209,91;15;51;low;CZ;retail
+C101140;30.01.2026;branch;N;individual;48000,00;164685,08;18;52;low;CZ;affluent
+C101141;30.11.2018;branch;N;individual;41000,00;171797,04;14;61;low;CZ;retail
+C101142;11.10.2020;branch;N;sole trader;56000,00;171669,06;13;58;low;CZ;retail
+C101143;15.02.2022;online;N;individual;49000,00;175412,54;17;66;medium;CZ;affluent
+C101144;10.03.2023;online;N;individual;42000,00;145772,53;17;39;low;CZ;retail
+C101145;10.08.2024;broker;N;individual;31000,00;115924,34;13;53;low;CZ;retail
+C101146;22.08.2021;online;N;individual;62000,00;130323,94;15;38;low;CZ;affluent
+C101147;03.10.2017;online;N;individual;50000,00;132974,48;12;50;medium;VN;retail
+C101148;13.06.2016;branch;N;individual;40000,00;116783,45;19;65;low;CZ;retail
+C101149;18.10.2024;branch;N;legal entity;1652000,00;5153277,91;47;149;low;CZ;affluent
+C101150;30.11.2024;branch;N;individual;51000,00;126089,38;16;65;medium;CZ;retail
+C101151;21.12.2023;branch;N;individual;57000,00;212398,77;20;55;low;CZ;retail
+C101152;01.10.2016;branch;N;individual;41000,00;120609,10;15;39;low;CZ;affluent
+C101153;20.10.2022;branch;N;individual;98000,00;212008,05;17;58;low;DE;affluent
+C101154;12.12.2022;branch;N;legal entity;3191000,00;10384426,37;47;158;low;CZ;corporate
+C101155;04.08.2021;branch;N;legal entity;8285000,00;17045434,20;64;172;low;SK;corporate
+C101156;09.06.2024;broker;N;individual;35000,00;134541,74;20;52;low;CZ;retail
+C101157;11.02.2019;branch;N;sole trader;47000,00;133311,83;14;56;low;CZ;affluent
+C101158;26.08.2025;online;N;sole trader;54000,00;183850,62;29;67;low;CZ;affluent
+C101159;10.10.2019;broker;N;individual;74000,00;281186,11;18;58;medium;CZ;retail
+C101160;30.11.2024;online;N;individual;67000,00;216708,48;16;63;low;UA;retail
+C101161;18.03.2017;online;N;individual;88000,00;225973,23;24;59;low;CZ;retail
+C101162;01.12.2018;online;N;individual;42000,00;148735,83;13;56;medium;CZ;retail
+C101163;25.10.2017;online;N;individual;44000,00;137225,78;14;58;low;CZ;retail
+C101164;06.07.2018;branch;N;individual;52000,00;224387,72;18;47;low;CZ;retail
+C101165;26.03.2024;online;N;individual;109000,00;224568,06;23;62;low;CZ;retail
+C101166;28.10.2021;branch;N;individual;45000,00;131960,93;31;71;low;CZ;retail
+C101167;02.03.2022;online;N;legal entity;1323000,00;4432313,02;69;163;low;CZ;SME
+C101168;07.04.2018;branch;N;individual;64000,00;165864,09;18;64;low;CZ;retail
+C101169;03.04.2024;online;N;sole trader;62000,00;143623,83;15;46;high;CZ;affluent
+C101170;26.05.2021;online;Y;individual;65000,00;132424,57;22;55;high;CZ;retail
+C101171;15.03.2024;online;N;individual;42000,00;1335367,02;27;90;low;CZ;affluent
+C101172;11.02.2021;broker;N;individual;32000,00;122932,82;26;58;low;DE;retail
+C101173;01.05.2020;online;N;individual;59000,00;189555,70;18;73;medium;CZ;affluent
+C101174;03.10.2024;broker;N;individual;78000,00;229172,55;14;63;high;VN;affluent
+C101175;27.07.2024;online;N;legal entity;1213000,00;2974341,00;52;181;low;CZ;retail
+C101176;06.08.2021;branch;N;individual;101000,00;311582,25;23;53;low;CZ;retail
+C101177;08.03.2018;branch;N;individual;30000,00;120399,65;14;54;low;CZ;affluent
+C101178;06.05.2020;branch;N;sole trader;59000,00;151804,33;16;48;low;CZ;affluent
+C101179;28.02.2017;online;N;legal entity;2195000,00;5301466,75;51;166;low;DE;retail
+C101180;30.11.2022;online;N;individual;30000,00;87270,59;16;50;low;CZ;retail
+C101181;16.02.2017;broker;N;individual;81000,00;170462,74;24;70;low;CZ;retail
+C101182;27.07.2016;broker;N;individual;47000,00;170315,55;13;54;high;CZ;retail
+C101183;07.10.2019;broker;N;individual;87000,00;175157,73;26;68;medium;CZ;retail
+C101184;02.07.2022;branch;N;individual;102000,00;308218,26;13;55;low;CZ;retail
+C101185;25.03.2021;online;Y;individual;52000,00;132357,93;11;44;low;CZ;affluent
+C101186;21.07.2023;broker;N;individual;24000,00;4767379,45;17;84;medium;CZ;retail
+C101187;12.11.2016;branch;N;legal entity;1580000,00;3812866,80;57;164;low;VN;retail
+C101188;22.12.2023;branch;N;sole trader;50000,00;166970,79;23;55;low;SK;retail
+C101189;23.08.2017;online;N;individual;56000,00;142860,48;22;60;low;CZ;retail
+C101190;06.03.2024;branch;N;individual;72000,00;209802,34;28;63;low;CZ;retail
+C101191;22.06.2025;online;N;individual;92000,00;198643,73;26;64;low;CZ;retail
+C101192;03.06.2020;online;N;individual;90000,00;218564,44;26;64;low;CZ;retail
+C101193;08.05.2016;branch;N;individual;32000,00;126503,12;26;57;low;CZ;affluent
+C101194;09.05.2022;branch;N;sole trader;58000,00;197539,03;25;64;low;CZ;retail
+C101195;05.12.2020;online;N;individual;58000,00;172974,84;20;50;high;VN;retail
+C101196;03.03.2020;online;Y;individual;52000,00;134467,33;30;70;low;UA;retail
+C101197;19.01.2026;online;N;individual;53000,00;153093,79;30;75;low;CZ;retail
+C101198;10.08.2018;online;N;individual;53000,00;209950,15;22;50;low;DE;affluent
+C101199;10.12.2023;branch;N;individual;82000,00;168082,91;18;55;medium;CZ;retail
