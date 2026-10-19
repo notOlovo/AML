@@ -68,6 +68,25 @@ st.markdown(
         padding: 0;
         border-radius: 999px;
     }
+    [data-testid="stHorizontalBlock"]:has(div[data-testid="stPopover"]) {
+        align-items: center;
+    }
+    [data-testid="stHorizontalBlock"]:has(div[data-testid="stPopover"]) > [data-testid="column"]:has(div[data-testid="stPopover"]) {
+        display: flex;
+        justify-content: flex-end;
+        margin-left: auto;
+    }
+    [data-testid="column"]:has(div[data-testid="stPopover"]) > div {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+    [data-testid="column"]:has(div[data-testid="stPopover"]) div[data-testid="stPopover"] {
+        margin-left: auto;
+    }
+    [data-testid="stFileUploaderDropzoneInstructions"] small {
+        display: none;
+    }
     .aml-header {
         align-items: center;
         display: flex;
@@ -339,6 +358,40 @@ bars = alt.Chart(bd).mark_bar().encode(
 )
 st.altair_chart(bars, width="stretch", theme=None)
 
+with st.expander("Evidence & score factors", expanded=False):
+    st.dataframe(
+        bd[["attribute", "raw_value", "normalized_score", "weight", "weighted_points"]],
+        hide_index=True,
+        width="stretch",
+        row_height=38,
+        column_config={
+            "attribute": st.column_config.TextColumn("Attribute", width="medium"),
+            "raw_value": st.column_config.TextColumn("Fact", width="large"),
+            "normalized_score": st.column_config.NumberColumn("xᵢ", format="%.2f", width="small"),
+            "weight": st.column_config.NumberColumn("wᵢ", format="%.1f", width="small"),
+            "weighted_points": st.column_config.NumberColumn("Points", format="%.1f", width="small"),
+        },
+    )
+
+with st.expander("Largest transactions · top 10", expanded=False):
+    t = txns[txns["client_id"] == client].nlargest(10, "amount")
+    st.dataframe(
+        t[["txn_id", "ts", "amount", "currency", "txn_type", "counterparty_country", "counterparty_account"]],
+        hide_index=True,
+        width="stretch",
+        row_height=35,
+        column_config={
+            "txn_id": st.column_config.TextColumn("Transaction ID", width="medium"),
+            "ts": st.column_config.DatetimeColumn("Time", format="YYYY-MM-DD HH:mm", width="medium"),
+            "amount": st.column_config.NumberColumn("Amount", width="medium"),
+            "currency": st.column_config.TextColumn("Currency", width="small"),
+            "txn_type": st.column_config.TextColumn("Type", width="medium"),
+            "counterparty_country": st.column_config.TextColumn("Country", width="small"),
+            "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
+        },
+    )
+
+
 st.markdown("#### Case explanation")
 st.markdown(f'<div class="aml-detail">{explain.template(d)}</div>', unsafe_allow_html=True)
 model = st.radio("Claude model", ["haiku", "sonnet"], horizontal=True)
@@ -382,36 +435,3 @@ for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
             w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"), folder, client, d.action_status,
                         d.risk_score, decision, note.strip() + attachment_path])
         st.success(f"Saved to {DECISIONS.relative_to(ROOT)}")
-
-with st.expander("Evidence & score factors", expanded=False):
-    st.dataframe(
-        bd[["attribute", "raw_value", "normalized_score", "weight", "weighted_points"]],
-        hide_index=True,
-        width="stretch",
-        row_height=38,
-        column_config={
-            "attribute": st.column_config.TextColumn("Attribute", width="medium"),
-            "raw_value": st.column_config.TextColumn("Fact", width="large"),
-            "normalized_score": st.column_config.NumberColumn("xᵢ", format="%.2f", width="small"),
-            "weight": st.column_config.NumberColumn("wᵢ", format="%.1f", width="small"),
-            "weighted_points": st.column_config.NumberColumn("Points", format="%.1f", width="small"),
-        },
-    )
-
-with st.expander("Largest transactions · top 10", expanded=False):
-    t = txns[txns["client_id"] == client].nlargest(10, "amount")
-    st.dataframe(
-        t[["txn_id", "ts", "amount", "currency", "txn_type", "counterparty_country", "counterparty_account"]],
-        hide_index=True,
-        width="stretch",
-        row_height=35,
-        column_config={
-            "txn_id": st.column_config.TextColumn("Transaction ID", width="medium"),
-            "ts": st.column_config.DatetimeColumn("Time", format="YYYY-MM-DD HH:mm", width="medium"),
-            "amount": st.column_config.NumberColumn("Amount", format="CZK %,.0f", width="medium"),
-            "currency": st.column_config.TextColumn("Currency", width="small"),
-            "txn_type": st.column_config.TextColumn("Type", width="medium"),
-            "counterparty_country": st.column_config.TextColumn("Country", width="small"),
-            "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
-        },
-    )
