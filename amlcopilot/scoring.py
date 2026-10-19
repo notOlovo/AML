@@ -176,6 +176,6 @@ REASONS = {
     "structuring": _struct,
     "pep": lambda r, f: ("PEP" if r["pep"] else "not a PEP", "Politically exposed person"),
     "new_account": lambda r, f: (f"account {int(r['account_age_days'])} days old", "New business relationship"),
-    "bank_risk_rating": lambda r, f: (f"bank rating {r['bank_risk']}", "Bank's own AML risk rating"),
+    "bank_risk_rating": lambda r, f: (f"the bank rates this client {r['bank_risk']}", "Bank's own AML risk rating"),
     "remote_onboarding": lambda r, f: (f"contract concluded {r['channel']}", "Non-face-to-face onboarding"),
 }

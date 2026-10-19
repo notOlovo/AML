@@ -25,9 +25,9 @@ labelled cases and measure on clients the fit never saw: precision from 0.45 to 
 0.90." Then: "We don't quote accuracy: flagging nobody already gives 95 %." Click "Use calibrated weights";
 the sliders move.
 
-**3:10 The person decides.** Type a reason and click Escalate: it lands in the decision log. If Bedrock works,
-click "Explain with Claude" and point at the check under the text: "every number Claude writes is checked
-against the facts."
+**3:10 The person decides.** Type a reason and click Escalate: it lands in the decision log. Then click
+"Explain with Claude" and point at the line under the text: "every number Claude writes is checked against the
+facts, and it costs USD 0.0016 a note, so explaining the whole review queue of 78 clients costs 16 cents."
 
 **3:40 Close.** "Hard rules stop, the vector score ranks, a person decides, Claude explains. Next step:
 calibrate on the analysts' own decisions."

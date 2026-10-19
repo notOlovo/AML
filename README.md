@@ -117,7 +117,13 @@ python -m pytest -q                 # 15 tests, about 15 s
 python -m amlcopilot score data/real        # both stages for every client -> data/real/results.csv
 python -m amlcopilot calibrate data/sample  # fit the weights on ground_truth.csv, print test metrics
 python -m amlcopilot synth data/sample      # regenerate the synthetic sample
+python -m amlcopilot explain data/sample    # one case note from Claude on Bedrock
 ```
+
+`explain` is the quickest way to check the Bedrock setup: it prints the template note, then Claude's note with
+its source and cost, and when the call did not go through it exits with the AWS error itself
+(`NoCredentialsError`, `AccessDeniedException`, `ExpiredToken`...). Options: `--client K000743`,
+`--model sonnet`, `--facts` to also print the JSON the model is given.
 
 ## Using the app
 
@@ -170,7 +176,8 @@ python -m amlcopilot synth data/sample      # regenerate the synthetic sample
 - Peers are all clients together; separate medians for natural persons and legal entities would be fairer.
 - Calibrate on real analyst decisions (`data/decisions.csv`) instead of synthetic labels.
 - Live sanctions lists (EU, UN, Czech national list) instead of the sample watchlist.
-- Claude explanations have not been tried on Bedrock yet (no AWS credentials in our environment so far).
+- Only Haiku 4.5 has been exercised on Bedrock (eu-central-1, about USD 0.002 per note); Sonnet 4.5 is
+  selectable in the app but has seen far less testing.
 
 ## Responsible AI
 
