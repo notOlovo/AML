@@ -170,8 +170,7 @@ def test_app_runs_on_the_bundled_sample(monkeypatch):
     at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=180).run()
     assert not at.exception
     assert [m.value for m in at.metric][0] == "2,000"
-    next(b for b in at.button if b.label.startswith("Calibrate")).click().run()
-    next(b for b in at.button if b.label.startswith("Use calibrated")).click().run()
+    assert not any(b.label.startswith("Calibrate") for b in at.button)
     assert not at.exception
     next(b for b in at.button if b.label.startswith("Reset")).click().run()
     assert not at.exception
