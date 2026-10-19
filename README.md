@@ -1,123 +1,185 @@
 # AML Triage Copilot
 
-🇷🇺 Russian version for the team: [README.ru.md](README.ru.md)
-
 **FinTechers Hackathon 2026 · Track 5 Compliance and RegTech copilots · FINREG PARTNERS / ČNB challenge
 "AML transaction monitoring: triage and red-flag escalation"**
 
-Most AML alerts are false positives, so analysts drown in noise. This copilot reads the full ČNB synthetic
-transaction stream (about 400,000 payments, 5,500 clients), turns it into a short, ranked queue of client
-cases, and explains every case with numbers an analyst (and later a regulator) can check line by line.
-Claude writes the case narrative and a draft suspicious transaction report, but a guard verifies every number
-it writes against the evidence, and a human makes every decision.
+A simple, explainable prototype. It reads the ČNB synthetic AML dataset (5,493 clients, 397,853 payments),
+decides for every client **BLOCK**, **HUMAN_REVIEW** or **AUTO_CLEAR**, and shows exactly why.
+Russian version for the team: [README.ru.md](README.ru.md).
+
+## How it decides: two stages
 
 ```
-transactions.csv ─┐                         ┌─ ranked case queue (1 case per client)
-clients.csv ──────┼─► 10 typology rules ───►│   score = Σ rule points × customer-risk multiplier
-Mostly Right ─────┘   (pandas, ~15 s/400k)  │   corroboration filter: one weak signal never alerts
-                                             └─► top cases only ─► evidence pack (E1..En + transactions)
-                                                                     │
-                                         Claude 4.5 on Bedrock ◄─────┘  (or deterministic template, free)
-                                                │
-                              number & citation verifier ─► analyst decision + reason ─► audit log
-                                                └─► draft STR for the MLRO (§18 Act 253/2008 Coll.)
+clients.csv + transactions.csv
+        │
+        ▼
+Stage 1  hard rules (screening.py): one hit is enough, nothing is added up
+         SANCTIONS .......... BLOCK         counterparty account on a sanctions list
+         WARNING_LIST ....... HUMAN_REVIEW  counterparty account on a regulator warning list
+         HIGH_RISK_COUNTRY .. HUMAN_REVIEW  payment with an EU high-risk third country
+         CASH_LIMIT ......... HUMAN_REVIEW  cash-funded remittance above CZK 270,000
+        │ no hit
+        ▼
+Stage 2  vector score (scoring.py)
+         x = (x1 … x8), every xi in [0, 1];  weights w sum to 100
+         risk = Σ xi · wi  (0 … 100)
+         ≥ 35 HUMAN_REVIEW (MEDIUM, HIGH from 50, CRITICAL from 75), below 35 AUTO_CLEAR
 ```
 
-## Why it is not a GPT wrapper
+A score never blocks on its own. Only a sanctions hit blocks; everything else that looks risky goes to a
+person, so no client is affected by a solely automated decision (GDPR Art. 22).
 
-- **Detection is deterministic and explainable.** Ten AML typologies (structuring, pass-through / mule,
-  profile deviation vs. the 2Q2026 expected volume and count, counterparty screening, high-risk jurisdictions,
-  risky MCCs, dormant reactivation, new account burst, velocity spike, round amounts). Each fires with the exact
-  facts and transaction ids behind it. The LLM never decides who is suspicious.
-- **Noise reduction is built in.** Rule hits collapse into one case per client, a corroboration filter
-  suppresses single weak signals, and a sensitivity panel lets the compliance officer trade queue size against
-  coverage with a live curve.
-- **The LLM is fenced.** It only sees an evidence pack, must cite evidence ids, and a verifier flags any amount,
-  count or date that does not trace back to the data. If Bedrock is down or over budget, a deterministic
-  narrative takes over, so the demo never breaks.
-- **Cheap by design.** Only the top-ranked cases are explained (Haiku 4.5 for drafts, Sonnet 4.5 for
-  sign-off narratives), the system prompt is cached, and results are cached on disk. Explaining 20 cases with
-  Sonnet costs about USD 0.50; the running spend is shown in the UI.
+### Stage 2 attributes
+
+| Attribute | Fact behind it | x = 1 when | Default weight |
+|---|---|---|---|
+| activity_vs_profile | July volume vs the declared monthly volume **and** vs the client's own 2Q2026 run-rate (the lower of the two) | 4× the typical client's ratio or more | 25 |
+| largest_payment_jump | largest July payment ÷ largest 2Q2026 payment | 4× the typical ratio or more | 15 |
+| pass_through | days when ≥ 85 % of the last 3 days' inflow (≥ CZK 50,000) left again | 5 such days | 15 |
+| structuring | remittances of CZK 21,250–24,999 within 7 days | 5 in one week | 15 |
+| pep | politically exposed person | PEP | 10 |
+| new_account | age of the contract | under 30 days (0.4 under 180) | 10 |
+| bank_risk_rating | the bank's own AML rating | high (medium 0.5) | 5 |
+| remote_onboarding | contract concluded at a distance | distant form | 5 |
+
+Why "the typical client": in the ČNB data the typical client already moves 2.1× its declared volume, so a raw
+ratio would flag half the bank. Why "the lower of the two": a client that outgrew a stale declaration long ago
+but behaves as it did in 2Q2026 is not suspicious. Weights set in the app are rescaled to sum to 100.
+
+## Results
+
+**ČNB data.** No labels, so no accuracy can be measured. The whole set runs in about 5 seconds.
+
+| Action | Clients |
+|---|---|
+| BLOCK | 0 (the dataset has no sanctions list) |
+| HUMAN_REVIEW | 78 (1.4 %): 69 by score, 9 by the CASH_LIMIT hard rule |
+| AUTO_CLEAR | 5,415 |
+
+All 69 score-based reviews are driven mainly by activity far above the client's profile. With the weights
+calibrated on the synthetic sample, the review queue shrinks to 21 clients.
+
+**Synthetic sample with planted cases** (`data/sample`, our generator in the ČNB layout: 2,000 clients,
+148,662 payments, 103 planted cases of 8 typologies plus legitimate look-alikes). Calibration fits the weights
+on 70 % of the clients and measures on the 30 % it never saw (600 clients, 31 planted):
+
+| Weights | Precision | Recall | F1 | Accuracy |
+|---|---|---|---|---|
+| default (expert guess) | 0.45 | 0.81 | 0.58 | 0.94 |
+| calibrated | 0.70 | 0.90 | 0.79 | 0.98 |
+
+Accuracy is in the table only to make a point: flagging nobody already scores 0.95 on this split (569 of 600
+are clean), so we judge by precision and recall. The sample comes from our own generator, so these numbers
+show that the method works, not how well it would do on a real bank's data.
+
+Calibrated weights: activity 18.7, largest payment jump 15.1, pass-through 5.3, structuring 35.2, PEP 6.5,
+new account 10.0, bank rating 5.1, remote onboarding 4.2.
 
 ## Run it
 
-```bash
-pip install -r requirements.txt
-python -m amlcopilot.cli generate --out data/sample      # synthetic stand-in with planted cases
-streamlit run app.py                                     # analyst UI on http://localhost:8501
-python -m pytest                                         # 11 tests, ~5 s
-```
+### Docker or Podman
 
-### In a container (Podman or Docker)
+Put the ČNB files `clients.csv` and `transactions.csv` into `data/real/` (they are not in the repository).
+Without them the app opens the synthetic sample.
 
 ```bash
-# put clients.csv and transactions.csv into data/real/ first
-scripts/run_container.sh            # ENGINE=docker scripts/run_container.sh for Docker
-# open http://localhost:8501
+# Docker
+docker build -t aml-copilot .
+docker run --rm -p 8501:8501 -v "$PWD/data:/app/data" aml-copilot
+
+# Podman (the :Z is for SELinux, e.g. Fedora)
+podman build -t aml-copilot .
+podman run --rm -p 8501:8501 -v "$PWD/data:/app/data:Z" aml-copilot
 ```
 
-### On the real ČNB data (team AWS account)
+Or with Compose: `docker compose up --build` (`podman compose up --build`). Then open http://localhost:8501
+and stop with Ctrl+C. The `data/` folder is mounted so analyst decisions (`data/decisions.csv`) outlive the
+container.
+
+- **Claude explanations (optional):** set up the AWS CLI once with `aws configure sso` (start URL from the
+  organisers' AWS guide, SSO region `eu-north-1`, role `ai-hackathon-TeamAdmin`, region `eu-central-1`, profile
+  name `hackathon`), sign in with `aws sso login --profile hackathon` (valid 12 hours), then add
+  `-v ~/.aws:/root/.aws -e AWS_PROFILE=hackathon` to the run command. Keep that mount writable: the SDK
+  refreshes the sign-in token there. Without credentials the app shows the template explanation instead.
+- **Tests in the container:** `docker run --rm aml-copilot python -m pytest -q`.
+
+### Without a container
 
 ```bash
-aws sso login --profile hackathon
-export AWS_PROFILE=hackathon AWS_REGION=eu-central-1
-scripts/fetch_data.sh                                    # copies CNB/ and MostlyRIght/ into data/real/
-python -m amlcopilot.cli inspect --data data/real        # check the column mapping first
-python -m amlcopilot.cli run --data data/real --top 20 --llm haiku
-AML_DATA=data/real streamlit run app.py
+pip install -r requirements.txt     # Python 3.11+
+streamlit run app.py                # http://localhost:8501
+python -m pytest -q                 # 15 tests, about 15 s
 ```
 
-The loader matches columns by keywords (English and Czech), handles the UTF-8 BOM, semicolons and decimal
-commas, and switches off any rule whose column is missing instead of crashing. If `inspect` maps a column
-wrongly, fix it in a JSON file and pass `--column-map map.json`:
+### Command line
 
-```json
-{"transactions": {"amount": "Amount CZK"}, "clients": {"exp_volume": "Expected volume 2Q2026"}}
+```bash
+python -m amlcopilot score data/real        # both stages for every client -> data/real/results.csv
+python -m amlcopilot calibrate data/sample  # fit the weights on ground_truth.csv, print test metrics
+python -m amlcopilot synth data/sample      # regenerate the synthetic sample
 ```
 
-## What the analyst sees
+## Using the app
 
-1. **Triage queue:** transactions → raw rule hits → cases, ranked by score, with typologies, AML risk and PEP.
-2. **Case:** score breakdown per evidence item, a timeline of the client's transactions with the flagged ones
-   in red, the narrative with a verification badge, mitigating factors, questions for the client, legal basis,
-   and a one-click draft STR.
-3. **Decision:** escalate to MLRO, request information, or close as false positive, with a mandatory reason.
-   Every decision is logged with the rules-config hash, evidence hash, model id and whether the human overrode
-   the AI.
-4. **Tuning:** open cases vs. threshold curve, and on synthetic data recall and precision per typology.
-
-## Results on the ČNB dataset
-
-5,493 clients and 397,853 transactions (July 2026), with each client's 2Q2026 history in `clients.csv`.
-End to end in about 10 seconds:
-
-- 407 rule hits on 382 clients become **21 cases (0.4% of clients)**, 1 for immediate escalation.
-- Every narrative passes the number check.
-- What the data has and lacks: there are no MCC codes and no counterparty names, so the risky-merchant and
-  list-screening rules switch themselves off. No counterparty is in an EU high-risk third country, so the
-  geography rule finds nothing. Amounts have the same distribution in every currency, so they are treated as
-  CZK equivalents.
-- What the data offers instead is history, so we added a rule for it: July is compared with the client's own
-  2Q2026 run-rate and its 2Q2026 largest payment, not only with the expectation declared at onboarding. Ratios
-  are peer-normalised, because the typical client already runs at about 2x its declared volume.
-
-The ČNB set has no labels, so precision on it is unknown. On our synthetic sample with planted cases (1,200
-clients, 83k transactions, 60 cases), 95% of planted cases are caught and 76% of cases are real.
+1. **Sidebar:** pick the dataset, move the eight weight sliders or the review threshold. The counts and the
+   table update at once.
+2. **Table:** the clients that need action, BLOCK first, then by score. Click a row.
+3. **Client:** the hard rules that fired, the points of every attribute (xi · wi) with the fact behind them,
+   a text explanation and the client's largest payments. "Explain with Claude" turns the same facts into a case
+   note through Amazon Bedrock (Claude Haiku 4.5 or Sonnet 4.5, eu-central-1); every number in Claude's text is
+   checked against the facts and unverified numbers are flagged.
+4. **Decision:** Escalate or Close as false positive, with a mandatory reason, saved to `data/decisions.csv`.
+   These decisions are the labels for calibrating on real cases later.
+5. **Calibration** (on `data/sample`): "Calibrate on ground_truth.csv" compares default and calibrated
+   weights; "Use calibrated weights" moves the sliders.
 
 ## Project layout
 
-| Path | What |
+| File | What it does |
 |---|---|
-| `amlcopilot/schema.py` | tolerant loader and column mapping |
-| `amlcopilot/typologies.py` | the 10 rules and their configuration |
-| `amlcopilot/scoring.py` | aggregation, corroboration, ranking, evaluation |
-| `amlcopilot/screening.py` | counterparty screening against Mostly Right warnings and sanctions |
-| `amlcopilot/explain.py` | evidence packs, template and Claude narratives, verifier, STR draft, spend tracking |
-| `amlcopilot/audit.py` | append-only decision log |
-| `amlcopilot/synth.py` | synthetic data generator with planted typologies |
-| `app.py` | Streamlit analyst UI |
-| `docs/MODEL_CARD.md` | responsible AI notes |
-| `docs/DEMO.md` | 4-minute demo script |
+| `amlcopilot/data.py` | loads the ČNB CSVs (exact column names, semicolon, UTF-8 BOM) |
+| `amlcopilot/features.py` | raw facts per client: volumes, ratios, pass-through days, structuring count |
+| `amlcopilot/screening.py` | stage 1 hard rules |
+| `amlcopilot/scoring.py` | stage 2 `VectorRiskEngine`: normalisation, weights, tiers, breakdown |
+| `amlcopilot/calibrate.py` | weight calibration and precision / recall / F1 |
+| `amlcopilot/explain.py` | template text, Claude on Bedrock, number check |
+| `amlcopilot/pipeline.py` | the whole flow in one function |
+| `amlcopilot/synth.py` | synthetic data in the ČNB layout with planted cases |
+| `app.py` | the one-page Streamlit app |
+| `tests/test_pipeline.py` | 15 tests |
+| `Dockerfile`, `compose.yaml` | the container |
+| `docs/` | model card, 4-minute demo script |
+
+## Data notes and assumptions
+
+- All transactions are from July 2026. `clients.csv` holds each client's 2Q2026 volume, count and largest
+  payment, which serve as the client's own baseline. The declared expected volume behaves like a monthly figure.
+- The ČNB data has no counterparty names, no MCC codes and no labels, and no counterparty from an EU high-risk
+  country. Amounts look already converted to CZK.
+- Remittances have no payer account, so we treat them as cash-funded. Whether the CZK 270,000 cash limit
+  (Act No. 254/2004 Coll.) applies to them is an assumption to confirm with the FINREG PARTNERS and ČNB mentors.
+- Sanctions and warning lists are matched on the counterparty account (`watchlist.csv` next to the data). The
+  sample has a fictional one; the ČNB data has none, so BLOCK never fires there.
+- The "fake document" stop factor from our original design needs document data, which the dataset lacks.
+
+## Limitations and next steps
+
+- One typology can add at most its own weight: with default weights a pure structuring case scores 15, below
+  the review threshold of 35. Calibration raises structuring to 35. We tried a "one strong signal is enough"
+  override, but on the ČNB data it added 259 reviews (mostly activity spikes), so it is off.
+- Peers are all clients together; separate medians for natural persons and legal entities would be fairer.
+- Calibrate on real analyst decisions (`data/decisions.csv`) instead of synthetic labels.
+- Live sanctions lists (EU, UN, Czech national list) instead of the sample watchlist.
+- Claude explanations have not been tried on Bedrock yet (no AWS credentials in our environment so far).
+
+## Responsible AI
+
+- **The LLM never decides.** Decisions come from rules and an additive score; Claude only rewords the facts,
+  and a checker flags any number that is not in them. See [docs/MODEL_CARD.md](docs/MODEL_CARD.md).
+- **Human oversight.** The score can only route a client to a person; only a sanctions hit blocks. Every
+  analyst decision needs a reason and is logged.
+- **Explainability.** Every point of the score maps to one attribute and one fact.
+- **Data.** Synthetic only: the ČNB synthetic set and our generator. No personal data.
 
 ## Built during the hackathon
 
@@ -127,13 +189,7 @@ Altair, boto3, pytest.
 
 ## AI use disclosure
 
-- **In the product:** Claude Sonnet 4.5 and Haiku 4.5 via Amazon Bedrock (eu-central-1, EU inference profiles)
-  draft case narratives from rule evidence. Detection, scoring and ranking use no LLM.
+- **In the product:** Claude Haiku 4.5 and Sonnet 4.5 via Amazon Bedrock (eu-central-1, EU inference profiles)
+  can word a case note from the facts of one decision. Rules, scoring and decisions use no LLM.
 - **In development:** the code was written with the help of Claude (Anthropic) as an AI coding assistant,
   reviewed and run by the team.
-
-## Data
-
-Only the ČNB synthetic dataset, the public Mostly Right table and our own generated data. No real personal
-data. Firm names in the bundled sample and warnings list are fictional. Regulatory references in the
-narratives are pointers for the analyst and are not legal advice.

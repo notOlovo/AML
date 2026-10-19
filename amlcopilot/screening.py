@@ -1,69 +1,47 @@
-"""Counterparty screening against the Mostly Right EU licences / warnings table.
+"""Stage 1: hard mandatory rules (stop factors).
 
-Exact match on a normalised name (legal-form suffixes stripped). Deliberately
-conservative: a fuzzy sanctions match that is wrong costs an analyst more time
-than it saves. A firm missing from the table is NOT proof it is safe.
+These are not added up. One hit is enough, and it decides the action on its own:
+BLOCK for a sanctions match (funds must be frozen), HUMAN_REVIEW for the rest.
+They run before the vector score and override it.
 """
 
 from __future__ import annotations
 
-import re
-import unicodedata
-from pathlib import Path
-
 import pandas as pd
 
-LEGAL_FORMS = r"\b(s ?r ?o|a ?s|ltd|llc|gmbh|ag|sa|sas|bv|nv|plc|inc|fze|fzco|limited|spol|k ?s|v ?o ?s|oy|ab|se)\b"
+# EU high-risk third countries (Delegated Regulation (EU) 2016/1675 as amended). Snapshot of countries that have
+# been on the list for years; check the current version before relying on it.
+EU_HIGH_RISK_COUNTRIES = {"AF", "BF", "CD", "HT", "IR", "KP", "ML", "MM", "MZ", "SS", "SY", "TZ", "YE"}
+
+# Cash payments above CZK 270,000 are prohibited (Act No. 254/2004 Coll.). In the ČNB data a remittance has no
+# payer account, so we treat it as cash-funded: an assumption to confirm with the ČNB mentors.
+CASH_LIMIT_CZK = 270_000
+
+RULES = {
+    "SANCTIONS": ("BLOCK", "Counterparty account on a sanctions list: freeze and report (Act No. 69/2006 Coll.)"),
+    "WARNING_LIST": ("HUMAN_REVIEW", "Counterparty account on a regulator warning list"),
+    "HIGH_RISK_COUNTRY": ("HUMAN_REVIEW", "Payment with an EU high-risk third country: enhanced due diligence is "
+                                          "mandatory (§9a Act No. 253/2008 Coll.)"),
+    "CASH_LIMIT": ("HUMAN_REVIEW", f"Cash-funded remittance above CZK {CASH_LIMIT_CZK:,} "
+                                   "(Czech cash payment limit, Act No. 254/2004 Coll.): check the source of funds"),
+}
 
 
-def norm_name(s: str) -> str:
-    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().lower()
-    s = re.sub(r"[^a-z0-9 ]+", " ", s)
-    s = re.sub(LEGAL_FORMS, " ", s)
-    return re.sub(r"\s+", " ", s).strip()
+def _hits(txns: pd.DataFrame, mask: pd.Series, rule: str) -> list[dict]:
+    action, reason = RULES[rule]
+    return [{"client_id": cid, "rule": rule, "action": action, "reason": reason,
+             "txn_ids": list(g["txn_id"])[:20], "amount": float(g["amount"].sum())}
+            for cid, g in txns[mask].groupby("client_id")]
 
 
-def _pick(cols, *keys):
-    for k in keys:
-        for c in cols:
-            if k in c.lower():
-                return c
-    return None
-
-
-class Screener:
-    def __init__(self, table: pd.DataFrame):
-        cols = list(table.columns)
-        name = _pick(cols, "entity name", "name", "entity", "firm")
-        rtype = _pick(cols, "record type", "type", "category", "list")
-        src = _pick(cols, "source", "authority", "register")
-        if name is None:
-            raise ValueError(f"screening table: no name column in {cols}")
-        t = pd.DataFrame({
-            "matched_entity": table[name].astype(str),
-            "record_type": table[rtype].astype(str) if rtype else "record",
-            "source": table[src].astype(str) if src else "",
-        })
-        # licences are not red flags; only warnings and sanctions are screened
-        risky = t["record_type"].str.contains("warn|sanction|blacklist|non.?compliant|unauthori", case=False)
-        t = t[risky]
-        t["key"] = t["matched_entity"].map(norm_name)
-        self.table = t[t["key"].str.len() >= 4].drop_duplicates("key")
-
-    @classmethod
-    def from_path(cls, path: str | Path) -> "Screener":
-        path = Path(path)
-        if path.is_dir():
-            frames = [pd.read_csv(p, sep=None, engine="python", encoding="utf-8-sig", dtype=str)
-                      for p in sorted(path.glob("*.csv"))]
-            return cls(pd.concat(frames, ignore_index=True))
-        return cls(pd.read_csv(path, sep=None, engine="python", encoding="utf-8-sig", dtype=str))
-
-    def screen(self, names: pd.Series) -> pd.DataFrame:
-        """Index-aligned hits for a Series of counterparty names."""
-        names = names.fillna("")
-        uniq = pd.Series(names.unique())
-        keys = names.map(dict(zip(uniq, uniq.map(norm_name))))
-        lut = self.table.set_index("key")
-        hit = keys[keys.isin(lut.index)]
-        return lut.loc[hit.values, ["matched_entity", "record_type", "source"]].set_index(hit.index)
+def run(txns: pd.DataFrame, watchlist: pd.DataFrame | None = None) -> pd.DataFrame:
+    """One row per (client, rule) that fired."""
+    rows = []
+    if watchlist is not None and not watchlist.empty:
+        lists = watchlist.assign(list=watchlist["list"].str.lower()).set_index("account")["list"]
+        hit = txns["counterparty_account"].map(lists)
+        rows += _hits(txns, hit.eq("sanctions"), "SANCTIONS")
+        rows += _hits(txns, hit.eq("warning"), "WARNING_LIST")
+    rows += _hits(txns, txns["counterparty_country"].isin(EU_HIGH_RISK_COUNTRIES), "HIGH_RISK_COUNTRY")
+    rows += _hits(txns, txns["txn_type"].eq("remittance") & (txns["amount"] > CASH_LIMIT_CZK), "CASH_LIMIT")
+    return pd.DataFrame(rows, columns=["client_id", "rule", "action", "reason", "txn_ids", "amount"])

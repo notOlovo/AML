@@ -1,27 +1,51 @@
-### Model card and responsible AI
+# Model card and responsible AI
 
-**Purpose.** Prioritise and explain AML transaction-monitoring alerts for a human analyst. It does not file
-reports, block payments, or make any decision about a client.
+**Purpose.** Triage for AML transaction monitoring: decide which clients a human analyst should look at
+first, and explain why. The tool files no reports and changes no accounts; its output is a recommendation
+with the facts behind it.
 
-**Human in the loop.** Every case needs an analyst decision with a written reason. The AI recommendation is
-shown next to it, and overrides are counted, not hidden.
+**How it decides.** Two stages, both deterministic.
 
-**Explainability.** Scores are additive: each evidence item (E1..En) adds visible points, multiplied by a
-visible customer-risk factor (PEP ×1.3, AML risk high ×1.25 / medium ×1.1). The narrative can only quote the
-evidence pack, and a verifier flags any number or evidence id that does not trace back to it.
+1. *Hard rules* (`screening.py`): a counterparty account on a sanctions list (BLOCK, since freezing is a legal
+   duty under Act No. 69/2006 Coll.), on a regulator warning list, a payment with an EU high-risk third country,
+   or a cash-funded remittance above CZK 270,000 (all three HUMAN_REVIEW). One hit decides on its own.
+2. *Vector score* (`scoring.py`): eight attributes, each normalised to [0, 1], times weights that sum to 100.
+   A score of 35 or more sends the client to HUMAN_REVIEW; below that the client is cleared.
 
-**Fairness.** Nationality and residence are not inputs to any rule. Counterparty jurisdiction is used, as the
-law requires for high-risk third countries. The prompt forbids citing nationality as a reason on its own.
+**Human oversight.** The score can only route a client to a person, never block. Every analyst decision
+(escalate or close) needs a written reason and is appended to `data/decisions.csv` with the system's
+recommendation and score, so disagreements stay visible.
 
-**Data handling.** Synthetic and public data only. Inference runs on Amazon Bedrock in eu-central-1 through
-EU cross-region inference profiles, so data stays in the EU. Only the top-ranked cases are sent to the model,
-as aggregates plus at most 12 transactions.
+**Explainability.** The score is a plain sum: every point belongs to one attribute and one fact
+("CZK 5,718,589/month vs CZK 497,555/month expected at onboarding (11.5x, typical client 2.1x)"). The app
+shows the breakdown as a chart and a table. The optional Claude text only rewords these facts; a checker flags
+any number in it that is not in the facts, and without AWS access the app falls back to a fixed template.
 
-**Regulatory awareness.** Indicators follow §6 of Act No. 253/2008 Coll. and the EBA ML/TF risk factor
-guidelines; escalation leads to a draft report under §18 for the MLRO. Under the EU AI Act, AML monitoring is
-not listed as high-risk in Annex III, but the tool follows high-risk practices anyway: logging (Art. 12 style),
-human oversight (Art. 14 style) and documented configuration (rules hash, prompt hash).
+**Calibration and metrics.** Weights can be fitted on labelled cases with a logistic regression whose
+weights may not go below zero (a risk factor never lowers risk), on 70 % of the clients; precision, recall
+and F1 are measured on the other 30 %. The ČNB data has no labels, so the reported numbers come from our own
+synthetic sample (precision 0.45 → 0.70, recall 0.81 → 0.90 on 600 held-out clients). They show that the
+method works, not how well it would do in a real bank. Accuracy is not used to judge: flagging nobody already
+scores 0.95 there.
 
-**Known limits.** Thresholds are tuned on synthetic data and must be recalibrated on the real dataset.
-Screening is exact-name matching and can miss transliterations or flag namesakes. Measured recall and precision
-are on planted synthetic cases only.
+**Fairness.** The client's own country is not an input. Counterparty country is used only for the EU
+high-risk list, which the AML law requires. PEP status, the bank's rating and remote onboarding are risk
+factors named by AML rules; together they add at most 20 points by default, so they cannot send anyone to
+review on their own.
+
+**Data handling.** Synthetic data only: the ČNB synthetic set and our generator. Claude runs on Amazon
+Bedrock in eu-central-1 through EU inference profiles and receives only the facts of one decision.
+
+**Regulation.** Indicators follow §6 of Act No. 253/2008 Coll. (unusual transactions) and §9a (enhanced due
+diligence for high-risk third countries). Under the EU AI Act, AML monitoring is not listed as high-risk in
+Annex III, but the tool follows high-risk practices anyway: human oversight, logging of decisions and
+documented, explainable logic.
+
+**Known limits.**
+- One attribute can add at most its own weight, so a pure structuring case needs calibrated weights to reach
+  review.
+- Peers are all clients together, not separate groups for natural persons and legal entities.
+- Treating remittances as cash and applying the CZK 270,000 cash limit to them are assumptions to confirm with
+  the FINREG PARTNERS and ČNB mentors.
+- Sanctions and warning lists match exact account numbers only.
+- The Claude explanations have not yet been tried on Bedrock.

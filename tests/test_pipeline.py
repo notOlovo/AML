@@ -1,138 +1,178 @@
-import json
+"""Tests on a small synthetic dataset in the ČNB layout.   python -m pytest"""
+
 from pathlib import Path
 
+import boto3
 import pandas as pd
 import pytest
 
-from amlcopilot import explain, schema, scoring, synth
-from amlcopilot.screening import Screener
-from amlcopilot.typologies import Config
+from amlcopilot import __main__ as cli
+from amlcopilot import calibrate, data, explain, pipeline, screening, synth
+from amlcopilot.scoring import DEFAULT_WEIGHTS, VectorRiskEngine, normalize
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture(scope="module")
-def data(tmp_path_factory):
-    d = tmp_path_factory.mktemp("data")
-    synth.main(["--out", str(d), "--clients", "400", "--case-rate", "0.08", "--seed", "3"])
-    ds = schema.load(d / "clients.csv", d / "transactions.csv")
-    scr = Screener.from_path(d / "mostly_right_sample.csv")
-    queue, hits, status = scoring.triage(ds, Config(), scr)
-    truth = pd.read_csv(d / "ground_truth.csv", sep=";", encoding="utf-8-sig", dtype=str)
-    return ds, queue, hits, status, truth
+def folder(tmp_path_factory):
+    d = tmp_path_factory.mktemp("sample")
+    synth.write(d, n_clients=1000, seed=5)
+    return d
 
 
-def test_column_matching_tolerates_other_headers():
-    m = schema.match_columns(["Client_ID", "Datum transakce", "Částka", "Směr", "MCC kód"], schema.TXN_ALIASES)
-    assert m["client_id"] == "Client_ID" and m["ts"] == "Datum transakce"
-    assert m["amount"] == "Částka" and m["direction"] == "Směr" and m["mcc"] == "MCC kód"
+@pytest.fixture(scope="module")
+def run(folder):
+    return pipeline.analyse(folder) | {"truth": pipeline.ground_truth(folder)}
 
 
-def test_number_parsing():
-    s = schema.to_number(pd.Series(["1 234,56", "1,234.56", "1.234,56", "-50", "CZK 7"]))
-    assert s.tolist() == [1234.56, 1234.56, 1234.56, -50.0, 7.0]
+@pytest.fixture(scope="module")
+def decision(run):
+    return run["engine"].explain(run["features"], run["results"].iloc[0]["client_id"], run["hard"])
 
 
-def test_all_rules_run(data):
-    _, _, _, status, _ = data
-    # max_jump needs a separate history period (ČNB layout), which the synthetic sample does not have
-    assert all(v.startswith("ok") for k, v in status.items() if k != "max_jump"), status
+# --- data ------------------------------------------------------------------------------------------
+
+def test_loader_reads_the_cnb_layout(run):
+    t = run["txns"]
+    assert set(t["direction"]) == {"in", "out"}
+    incoming, outgoing = t[t["direction"].eq("in")], t[t["direction"].eq("out")]
+    assert (incoming["counterparty_account"] == incoming["payer_account"]).all()
+    assert (outgoing["counterparty_country"] == outgoing["payee_country"]).all()
 
 
-def test_recall_and_precision_on_planted_cases(data):
-    _, queue, _, _, truth = data
-    ev = scoring.evaluate(queue, truth)
-    assert ev["recall"] >= 0.85, ev
-    assert ev["precision"] >= 0.6, ev
+def test_loader_names_missing_columns(tmp_path):
+    (tmp_path / "clients.csv").write_text("client ID;PEP\nK1;N\n", encoding="utf-8")
+    (tmp_path / "transactions.csv").write_text("transaction ID\nT1\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="missing columns"):
+        data.load(tmp_path)
 
 
-def test_corroboration_reduces_noise(data):
-    ds, _, hits, _, _ = data
-    on = scoring.score_clients(ds, hits, Config(corroboration=True))["alert"].sum()
-    off = scoring.score_clients(ds, hits, Config(corroboration=False))["alert"].sum()
-    assert on <= off
+# --- stage 1: hard rules ---------------------------------------------------------------------------
+
+def test_hard_rules_on_hand_made_payments():
+    t = pd.DataFrame({
+        "client_id": ["A", "B", "C", "D"], "txn_id": ["1", "2", "3", "4"],
+        "txn_type": ["remittance", "remittance", "outgoing payment", "incoming payment"],
+        "amount": [300_000.0, 200_000.0, 10_000.0, 5_000.0],
+        "counterparty_account": ["x", "y", "BAD1", "z"], "counterparty_country": ["SK", "SK", "DE", "IR"]})
+    watch = pd.DataFrame({"account": ["BAD1"], "list": ["Sanctions"], "source": ["test"]})
+    hits = screening.run(t, watch).set_index("client_id")
+    assert hits.loc["A", "rule"] == "CASH_LIMIT" and hits.loc["A", "action"] == "HUMAN_REVIEW"
+    assert "B" not in hits.index
+    assert hits.loc["C", "rule"] == "SANCTIONS" and hits.loc["C", "action"] == "BLOCK"
+    assert hits.loc["D", "rule"] == "HIGH_RISK_COUNTRY"
 
 
-def test_template_narrative_is_fully_verified(data):
-    ds, queue, hits, _, _ = data
-    for cid in queue[queue["alert"]]["client_id"].head(15):
-        pack = explain.evidence_pack(cid, ds, queue, hits)
-        nar = explain.explain(pack, "template")
-        assert nar["verification"]["ok"], (cid, nar["verification"])
-        assert "Draft suspicious transaction report" in explain.str_draft(pack, nar)
+def test_only_sanctions_block_and_other_hard_rules_force_review(run):
+    res, hard = run["results"], run["hard"]
+    sanctioned = set(hard.loc[hard["rule"].eq("SANCTIONS"), "client_id"])
+    assert sanctioned, "the sample plants payments to sanctioned accounts"
+    assert set(res.loc[res["action_status"].eq("BLOCK"), "client_id"]) == sanctioned
+    others = set(hard["client_id"]) - sanctioned
+    assert res.loc[res["client_id"].isin(others), "action_status"].eq("HUMAN_REVIEW").all()
+    # the score alone never blocks
+    assert res.loc[res["stage"].eq("2 vector score"), "action_status"].ne("BLOCK").all()
 
 
-def test_verifier_catches_invented_numbers(data):
-    ds, queue, hits, _, _ = data
-    cid = queue[queue["alert"]]["client_id"].iloc[0]
-    pack = explain.evidence_pack(cid, ds, queue, hits)
-    fake = explain.template_narrative(pack)
-    fake["narrative"] += " The client also received CZK 9,876,543 from an unknown source."
-    fake["red_flags"].append({"evidence_id": "E99", "finding": "made up", "why_it_matters": ""})
-    v = explain.verify(fake, pack)
-    assert not v["ok"] and 9876543.0 in v["unverified_numbers"] and v["invalid_evidence_ids"] == ["E99"]
+# --- stage 2: vector score -------------------------------------------------------------------------
+
+def test_vector_is_in_unit_interval_and_score_in_0_100(run):
+    x = normalize(run["features"])
+    assert list(x.columns) == list(DEFAULT_WEIGHTS)
+    assert ((x >= 0) & (x <= 1)).all().all()
+    assert run["results"]["risk_score"].between(0, 100).all()
 
 
-def test_llm_path_with_mocked_bedrock(data, monkeypatch, tmp_path):
-    ds, queue, hits, _, _ = data
-    cid = queue[queue["alert"]]["client_id"].iloc[0]
-    pack = explain.evidence_pack(cid, ds, queue, hits)
-    body = explain.template_narrative(pack) | {"confidence": "high"}
-
-    class Fake:
-        def converse(self, **kw):
-            assert kw["modelId"].startswith("eu.anthropic.claude-")
-            assert any("cachePoint" in b for b in kw["system"])
-            return {"output": {"message": {"content": [{"text": "```json\n" + json.dumps(body) + "\n```"}]}},
-                    "usage": {"inputTokens": 3000, "outputTokens": 800, "cacheReadInputTokens": 1200}}
-
-    monkeypatch.setattr(explain, "_client", lambda: Fake())
-    monkeypatch.setattr(explain, "CACHE_DIR", tmp_path)
-    budget = explain.Budget(tmp_path / "spend.json")
-    out = explain.explain(pack, "haiku", budget)
-    assert out["generated_by"].startswith("eu.anthropic.claude-haiku-4-5")
-    assert out["verification"]["ok"] and out["cost_usd"] > 0
+def test_weights_are_rescaled_to_sum_100():
+    w = VectorRiskEngine({k: 1.0 for k in DEFAULT_WEIGHTS}).weights
+    assert w.sum() == pytest.approx(100)
+    assert w.iloc[0] == pytest.approx(100 / len(DEFAULT_WEIGHTS))
 
 
-def test_llm_failure_falls_back_to_template(data, monkeypatch):
-    ds, queue, hits, _, _ = data
-    cid = queue[queue["alert"]]["client_id"].iloc[0]
-    pack = explain.evidence_pack(cid, ds, queue, hits)
+def test_breakdown_adds_up_to_the_score(run):
+    res = run["results"].set_index("client_id")
+    for cid in res.index[res["stage"].eq("2 vector score")][:5]:
+        d = run["engine"].explain(run["features"], cid, run["hard"])
+        assert d.risk_score == pytest.approx(res.loc[cid, "risk_score"], abs=0.05)
+        assert sum(p.weighted_points for p in d.breakdown) == pytest.approx(d.risk_score, abs=0.5)
+        assert d.action_status == res.loc[cid, "action_status"]
 
-    def boom():
+
+def test_two_stage_pipeline_finds_planted_cases(run):
+    res = run["results"]
+    m = calibrate.metrics(res["client_id"].isin(run["truth"]["client ID"]), res["action_status"].ne("AUTO_CLEAR"))
+    assert m["recall"] >= 0.75 and m["precision"] >= 0.35, m
+
+
+def test_calibration_returns_valid_weights(run):
+    cal = calibrate.calibrate(run["features"], run["hard"], run["truth"])
+    assert set(cal["weights"]) == set(DEFAULT_WEIGHTS)
+    assert min(cal["weights"].values()) >= 0
+    assert sum(cal["weights"].values()) == pytest.approx(100, abs=0.5)
+    assert cal["calibrated"]["f1"] >= cal["default"]["f1"] - 0.05, cal
+
+
+# --- explanations ----------------------------------------------------------------------------------
+
+def test_template_names_the_action(decision):
+    text = explain.template(decision)
+    assert decision.client_id in text and decision.action_status in text
+
+
+def test_verifier_flags_invented_numbers(decision):
+    assert explain.verify(explain.template(decision), decision) == []
+    assert explain.verify("It sent CZK 987,654,321 to Cyprus.", decision) == [987654321.0]
+
+
+class FakeBedrock:
+    def __init__(self, text):
+        self.text, self.kwargs = text, None
+
+    def client(self, *args, **kwargs):
+        return self
+
+    def converse(self, **kwargs):
+        self.kwargs = kwargs
+        return {"output": {"message": {"content": [{"text": self.text}]}},
+                "usage": {"inputTokens": 1000, "outputTokens": 200}}
+
+
+def test_claude_text_is_verified_and_priced(monkeypatch, decision):
+    fake = FakeBedrock(f"Look at {decision.client_id} first: it sent CZK 987,654,321 abroad.")
+    monkeypatch.delenv("AWS_PROFILE", raising=False)
+    monkeypatch.setattr(boto3, "Session", lambda **kw: fake)
+    out = explain.claude(decision, "haiku")
+    assert fake.kwargs["modelId"] == explain.MODELS["haiku"] and fake.kwargs["modelId"].startswith("eu.")
+    assert out["unverified"] == [987654321.0]
+    assert out["cost_usd"] == pytest.approx((1000 * 1.10 + 200 * 5.50) / 1e6, abs=1e-5)
+
+
+def test_claude_falls_back_to_the_template(monkeypatch, decision):
+    def no_credentials(**kw):
         raise RuntimeError("no credentials")
-
-    monkeypatch.setattr(explain, "_client", boom)
-    monkeypatch.setattr(explain, "CACHE_DIR", Path("/nonexistent-cache"))
-    out = explain.explain(pack, "sonnet", explain.Budget(Path("/tmp/aml-test-spend.json")))
-    assert out["generated_by"] == "template" and "llm_error" in out
-
-
-def test_missing_direction_disables_pass_through(data):
-    ds, *_ = data
-    t = ds.txns.drop(columns=["direction"]).assign(direction=None)
-    ds2 = schema.Dataset(ds.clients, t, ds.client_map, ds.txn_map)
-    _, _, status = scoring.triage(ds2, Config())
-    assert status["pass_through"].startswith("skipped")
+    monkeypatch.setattr(boto3, "Session", no_credentials)
+    out = explain.claude(decision)
+    assert out["source"] == "template" and out["text"] == explain.template(decision)
+    assert "no credentials" in out["error"]
 
 
-CNB_CLIENTS = """\ufeffclient ID;country of client;date of contract;contract concluded;PEP;type of client;expected volume of transactions at the time of contract conclusion [CZK];expected number of transactions at the time of contract conclusion;real volume of transactions in 2Q2026 [CZK];real number of transactions in 2Q2026;maximal volume of transaction in 2Q2026 [CZK];AML risk score
-K1;CZ;13.01.2020;in person;N;natural person;10000.00;10;30000.00;30;2000.00;low
-K2;CZ;14.01.2020;distant form;Y;legal entity;50000.00;20;150000.00;60;9000.00;high
-"""
-CNB_TXNS = """\ufefftransaction ID;client ID;date;time;volume;currency;country of payer;country of payee;account of payer;account of payee;type of transaction
-TX1;K1;01.07.2026;09:00:00;1500.50;CZK;CZ;CZ;K1;ACZ001;outgoing payment
-TX2;K1;02.07.2026;10:00:00;90000.00;EUR;AT;CZ;AAT001;K1;incoming payment
-TX3;K2;03.07.2026;11:30:00;2000.00;USD;CZ;US;;AUS001;remittance
-"""
+# --- command line and app ------------------------------------------------------------------------------
+
+def test_cli_score_writes_results(folder):
+    cli.main(["score", str(folder)])
+    res = pd.read_csv(folder / "results.csv")
+    assert len(res) == 1000 and {"risk_score", "action_status", "stage", "top_driver"} <= set(res.columns)
 
 
-def test_cnb_layout(tmp_path):
-    (tmp_path / "clients.csv").write_text(CNB_CLIENTS, encoding="utf-8")
-    (tmp_path / "transactions.csv").write_text(CNB_TXNS, encoding="utf-8")
-    ds = schema.load(tmp_path / "clients.csv", tmp_path / "transactions.csv")
-    t = ds.txns.set_index("txn_id")
-    assert t.loc["TX1", "ts"] == pd.Timestamp("2026-07-01 09:00:00")
-    assert t["direction"].to_dict() == {"TX1": "out", "TX2": "in", "TX3": "out"}
-    assert t.loc["TX2", "counterparty_country"] == "AT" and t.loc["TX3", "counterparty_account"] == "AUS001"
-    c = ds.clients.set_index("client_id")
-    assert c.loc["K2", "pep"] and c.loc["K2", "aml_risk"] == "high" and c.loc["K1", "max_txn"] == 2000.0
-    assert c.loc["K1", "act_volume"] == 30000.0 and c.loc["K1", "channel"] == "in person"
+def test_app_runs_on_the_bundled_sample(monkeypatch):
+    from streamlit.testing.v1 import AppTest
+    monkeypatch.setenv("AML_DATA", "data/sample")
+    at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=180).run()
+    assert not at.exception
+    assert [m.value for m in at.metric][0] == "2,000"
+    next(b for b in at.button if b.label.startswith("Calibrate")).click().run()
+    next(b for b in at.button if b.label.startswith("Use calibrated")).click().run()
+    assert not at.exception
+    next(b for b in at.button if b.label.startswith("Reset")).click().run()
+    assert not at.exception
+    assert at.slider[0].value == DEFAULT_WEIGHTS["activity_vs_profile"]

@@ -1,0 +1,19 @@
+# docker compose up --build      (or: podman compose up --build)
+# then open http://localhost:8501
+services:
+  app:
+    build: .
+    image: aml-copilot
+    container_name: aml-copilot
+    ports:
+      - "8501:8501"
+    volumes:
+      # data/real = the ČNB CSVs (put them there yourself), data/sample = synthetic data,
+      # data/decisions.csv = analyst decisions; mounted so the decisions survive the container.
+      # :Z relabels the folder for SELinux (Fedora with Podman); other systems ignore it.
+      - ./data:/app/data:Z
+      # Optional, for "Explain with Claude" via Amazon Bedrock: run `aws sso login --profile hackathon` first.
+      # Writable on purpose: the SDK refreshes the sign-in token cache in there.
+      # - ~/.aws:/root/.aws:Z
+    # environment:
+    #   AWS_PROFILE: hackathon

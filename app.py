@@ -1,232 +1,144 @@
-"""Analyst UI: streamlit run app.py"""
+"""AML Triage Copilot, simple prototype UI.   streamlit run app.py"""
 
 from __future__ import annotations
 
-import json
+import csv
 import os
-from dataclasses import replace
+from datetime import datetime, timezone
 from pathlib import Path
 
 import altair as alt
 import pandas as pd
 import streamlit as st
 
-from amlcopilot import audit, explain, scoring
-from amlcopilot.cli import load_all
-from amlcopilot.typologies import MCC_LABELS, RULES, Config
+from amlcopilot import calibrate, data, explain, features, pipeline, screening
+from amlcopilot.scoring import DEFAULT_WEIGHTS, VectorRiskEngine
 
 ROOT = Path(__file__).resolve().parent
+DECISIONS = ROOT / "data" / "decisions.csv"
 st.set_page_config(page_title="AML Triage Copilot", page_icon="⚖️", layout="wide")
 
 
-@st.cache_resource(show_spinner="Loading dataset…")
-def get_data(folder: str):
-    return load_all(folder)
+@st.cache_data(show_spinner="Loading data and computing features…")
+def prepare(folder: str):
+    clients, txns = data.load(folder)
+    return txns, features.build(clients, txns), screening.run(txns, data.load_watchlist(folder))
 
 
-@st.cache_data(show_spinner="Running typologies…")
-def get_triage(folder: str, cfg_json: str):
-    ds, scr = get_data(folder)
-    cfg = Config(**{k: (frozenset(v) if k == "high_risk_countries" else tuple(v) if k == "risky_mcc" else v)
-                    for k, v in json.loads(cfg_json).items()})
-    return scoring.triage(ds, cfg, scr)
+@st.cache_data(show_spinner="Calibrating weights on ground_truth.csv…")
+def calibration(folder: str):
+    _, feats, hard = prepare(folder)
+    return calibrate.calibrate(feats, hard, pipeline.ground_truth(folder))
 
 
-def cfg_to_json(cfg: Config) -> str:
-    d = cfg.__dict__.copy()
-    d["high_risk_countries"] = sorted(d["high_risk_countries"])
-    d["risky_mcc"] = list(d["risky_mcc"])
-    return json.dumps(d, sort_keys=True)
+def set_weights(w: dict):
+    # runs as a button callback, i.e. before the sliders are drawn again
+    for k, v in w.items():
+        st.session_state[f"w_{k}"] = float(v)
 
 
-# --- sidebar: data + sensitivity ------------------------------------------------
+# --- sidebar: data, weights, threshold -----------------------------------------------------------
+folders = sorted(str(p.relative_to(ROOT)) for p in (ROOT / "data").iterdir() if (p / "transactions.csv").exists())
 with st.sidebar:
     st.title("⚖️ AML Triage Copilot")
-    folders = [str(p.relative_to(ROOT)) for p in sorted((ROOT / "data").glob("*")) if (p / "transactions.csv").exists()]
-    default = os.environ.get("AML_DATA", "data/real" if "data/real" in folders else "data/sample")
-    folder = st.selectbox("Dataset", folders or [default], index=(folders.index(default) if default in folders else 0))
-    ds, screener = get_data(str(ROOT / folder))
-    for w in ds.warnings:
-        st.caption(f"⚠️ {w}")
+    default = os.environ.get("AML_DATA", "data/real")
+    folder = st.selectbox("Dataset", folders, index=folders.index(default) if default in folders else 0)
+    for k, v in DEFAULT_WEIGHTS.items():
+        st.session_state.setdefault(f"w_{k}", float(v))
 
-    st.subheader("Sensitivity")
-    base = Config()
-    alert_score = st.slider("Alert threshold (score)", 10, 90, int(base.alert_score), 5,
-                            help="Clients scoring at or above this open a case.")
-    corroboration = st.toggle("Require corroboration", True,
-                              help="A single weak signal never alerts on its own: needs 2 typologies or one strong one.")
-    with st.expander("Typology thresholds"):
-        threshold = st.number_input("Structuring threshold (CZK)", 10_000, 2_000_000, int(base.threshold_czk), 10_000)
-        profile_ratio = st.slider("Profile deviation: actual / expected ≥", 1.5, 10.0, base.profile_ratio, 0.5)
-        pt_ratio = st.slider("Pass-through: out / in within window ≥", 0.5, 1.0, base.pt_out_in_ratio, 0.05)
-        pt_window = st.slider("Pass-through window (days)", 1, 7, base.pt_window_days)
-    with st.expander("Rule weights"):
-        weights = {r.name: st.slider(r.title, 0.0, 2.0, 1.0, 0.25, key=f"w_{r.name}") for r in RULES}
-    cfg = replace(base, alert_score=float(alert_score), corroboration=corroboration, threshold_czk=float(threshold),
-                  profile_ratio=profile_ratio, pt_out_in_ratio=pt_ratio, pt_window_days=pt_window, weights=weights)
+    st.subheader("Stage 2 weights")
+    weights = {k: st.slider(k.replace("_", " "), 0.0, 50.0, step=0.5, key=f"w_{k}") for k in DEFAULT_WEIGHTS}
+    st.caption(f"Sum {sum(weights.values()):.1f}, rescaled to 100.")
+    st.button("Reset to default weights", on_click=set_weights, args=(DEFAULT_WEIGHTS,))
+    review_at = st.slider("Send to human review from score", 10, 80, 35)
 
-    st.subheader("Explanations")
-    llm = st.radio("Narrative engine", ["template", "haiku", "sonnet"], horizontal=True,
-                   help="template = deterministic, offline, free. haiku/sonnet = Claude 4.5 on Bedrock eu-central-1.")
-    analyst = st.text_input("Analyst name", value=os.environ.get("USER", ""))
-    budget = explain.Budget()
-    st.caption(f"Bedrock spend so far: **USD {budget.data['usd']:.3f}** in {budget.data['calls']} calls")
+    if pipeline.ground_truth(ROOT / folder) is not None:
+        st.subheader("Calibration")
+        st.caption("Fit the weights on labelled cases (ground_truth.csv), measure on 30 % held out.")
+        if st.button("Calibrate on ground_truth.csv"):
+            st.session_state[f"cal_{folder}"] = calibration(str(ROOT / folder))
+        cal = st.session_state.get(f"cal_{folder}")
+        if cal:
+            m = pd.DataFrame({"default weights": cal["default"], "calibrated": cal["calibrated"]}).loc[
+                ["precision", "recall", "f1", "tp", "fp", "fn", "threshold"]]
+            st.dataframe(m, width="stretch")
+            st.caption(f"Test split: {cal['test_clients']} clients, {cal['test_positives']} planted cases.")
+            st.button("Use calibrated weights", on_click=set_weights, args=(cal["weights"],))
 
-queue, hits, status = get_triage(str(ROOT / folder), cfg_to_json(cfg))
-summ = scoring.summary(ds, queue, hits)
-chash = scoring.config_hash(cfg)
+txns, feats, hard = prepare(str(ROOT / folder))
+tiers = [(max(75.0, review_at), "CRITICAL", "HUMAN_REVIEW"), (max(50.0, review_at), "HIGH", "HUMAN_REVIEW"),
+         (float(review_at), "MEDIUM", "HUMAN_REVIEW")]
+engine = VectorRiskEngine(weights, tiers)
+res = engine.score(feats, hard)
 
-tab_q, tab_case, tab_tune, tab_gov = st.tabs(["📋 Triage queue", "🔎 Case", "🎚️ Tuning", "🧾 Audit & governance"])
+# --- overview ---------------------------------------------------------------------------------------
+st.markdown("**Stage 1** hard rules (sanctions, high-risk country, cash limit) decide on their own. "
+            "**Stage 2** scores everyone else: risk = Σ xᵢ·wᵢ, each xᵢ in [0, 1], weights sum to 100.")
+counts = res["action_status"].value_counts()
+k = st.columns(4)
+k[0].metric("Clients", f"{len(res):,}")
+k[1].metric("BLOCK", int(counts.get("BLOCK", 0)))
+k[2].metric("HUMAN_REVIEW", int(counts.get("HUMAN_REVIEW", 0)))
+k[3].metric("AUTO_CLEAR", f"{int(counts.get('AUTO_CLEAR', 0)):,}")
 
-# --- queue -------------------------------------------------------------------------
-with tab_q:
-    k = st.columns(5)
-    k[0].metric("Transactions", f"{summ['transactions']:,}")
-    k[1].metric("Clients", f"{summ['clients']:,}")
-    k[2].metric("Raw rule hits", f"{summ['rule_hits']:,}")
-    k[3].metric("Cases opened", f"{summ['alerts']:,}",
-                f"{summ['alert_rate_clients']:.1%} of clients", delta_color="off")
-    k[4].metric("Escalate now", summ["escalate"])
-    st.caption(f"{summ['rule_hits']} rule hits on {summ['clients_with_any_hit']} clients became "
-               f"{summ['alerts']} cases: one case per client, ranked, {summ['suppressed']} single-signal hits suppressed.")
-    view = queue[queue["alert"]] if st.toggle("Only open cases", True) else queue
-    show = view[["client_id", "score", "risk_points", "band", "typologies", "aml_risk", "pep", "client_type", "multiplier"]].copy()
-    sel = st.dataframe(show, hide_index=True, width="stretch", on_select="rerun", selection_mode="single-row",
-                       column_config={"score": st.column_config.ProgressColumn("score", min_value=0, max_value=100,
-                                                                               format="%.0f"),
-                                      "multiplier": st.column_config.NumberColumn("customer risk ×", format="%.2f")})
-    if sel and sel.selection.rows:
-        st.session_state["case"] = show.iloc[sel.selection.rows[0]]["client_id"]
-        st.info(f"Selected {st.session_state['case']}: open the **Case** tab.")
-    with st.expander("Rule status on this dataset"):
-        st.json(status)
+only_action = st.toggle("Show only clients that need action", True)
+view = res[res["action_status"] != "AUTO_CLEAR"] if only_action else res
+picked = st.dataframe(view, hide_index=True, width="stretch", height=300, on_select="rerun",
+                      selection_mode="single-row",
+                      column_config={"risk_score": st.column_config.ProgressColumn(
+                          "risk score", min_value=0, max_value=100, format="%.1f")})
+if picked.selection.rows and picked.selection.rows[0] < len(view):
+    st.session_state["client"] = view.iloc[picked.selection.rows[0]]["client_id"]
+client = st.session_state.get("client")
+if client not in set(res["client_id"]):
+    client = view["client_id"].iloc[0] if len(view) else res["client_id"].iloc[0]
 
-# --- case ---------------------------------------------------------------------------
-with tab_case:
-    ids = list(queue["client_id"])
-    if not ids:
-        st.warning("No rule hits with the current settings.")
-    else:
-        cur = st.session_state.get("case", ids[0])
-        cid = st.selectbox("Client", ids, index=ids.index(cur) if cur in ids else 0)
-        pack = explain.evidence_pack(cid, ds, queue, hits)
-        row = queue[queue["client_id"] == cid].iloc[0]
-        left, right = st.columns([2, 3])
-        with left:
-            st.subheader(f"{cid} · {row['band']}")
-            st.metric("Score", f"{row['score']:.0f}/100", f"customer risk ×{row['multiplier']:.2f}", delta_color="off")
-            contrib = pd.DataFrame([{"evidence": f"{e['id']} {e['title']}", "points": e["points"]}
-                                    for e in pack["evidence"]])
-            st.altair_chart(alt.Chart(contrib).mark_bar().encode(
-                x=alt.X("points:Q", title="points (before customer-risk multiplier)"),
-                y=alt.Y("evidence:N", sort="-x", title=None), tooltip=["evidence", "points"]),
-                width="stretch")
-            st.caption("Client profile")
-            st.json(pack["client"], expanded=False)
-        with right:
-            t = ds.txns[ds.txns["client_id"] == cid].copy()
-            flagged = {x for e in hits[hits["client_id"] == cid]["txn_ids"] for x in e}
-            t["flagged"] = t["txn_id"].isin(flagged)
-            t["signed"] = t["amount"].where(t["direction"].ne("out"), -t["amount"])
-            st.altair_chart(alt.Chart(t).mark_circle(size=60).encode(
-                x=alt.X("ts:T", title=None), y=alt.Y("signed:Q", title="CZK (in + / out −)"),
-                color=alt.Color("flagged:N", scale=alt.Scale(domain=[False, True], range=["#9aa5b1", "#d64545"])),
-                tooltip=[c for c in ("txn_id", "ts", "amount", "direction", "txn_type", "mcc", "counterparty_country",
-                                     "counterparty_name") if c in t]).properties(height=260),
-                width="stretch")
-            with st.expander(f"Flagged transactions ({len(flagged)})"):
-                st.dataframe(t[t["flagged"]].drop(columns=["flagged", "signed"]), hide_index=True,
-                             width="stretch")
+# --- one client ---------------------------------------------------------------------------------------
+st.divider()
+d = engine.explain(feats, client, hard)
+st.subheader(f"{client}: {d.action_status} · score {d.risk_score:.1f} · {d.risk_factor}")
+for h in d.hard_rules:
+    st.error(f"Stage 1, {h['rule']}: {h['reason']} (CZK {h['amount']:,.0f}, transactions {', '.join(h['txn_ids'][:5])})")
 
-        st.divider()
-        st.subheader("Explanation")
-        key = f"nar_{cid}_{llm}_{explain.pack_hash(pack)}"
-        if st.button(f"Explain with {llm}", type="primary") or (llm == "template" and key not in st.session_state):
-            with st.spinner("Drafting case narrative…"):
-                st.session_state[key] = explain.explain(pack, llm, budget)
-        nar = st.session_state.get(key)
-        if nar:
-            v = nar["verification"]
-            if nar.get("llm_error"):
-                st.warning(f"LLM unavailable, showing the deterministic narrative. {nar['llm_error']}")
-            badge = "✅ every number traced to evidence" if v["ok"] else \
-                f"⚠️ unverified numbers: {v['unverified_numbers']} {v['invalid_evidence_ids'] or ''}"
-            st.markdown(f"**{nar.get('recommendation')}** · {badge} · by `{nar.get('generated_by')}`"
-                        + (f" · USD {nar['cost_usd']:.4f}" if nar.get("cost_usd") else "")
-                        + (" · cached" if nar.get("cached") else ""))
-            st.markdown(f"> {nar.get('headline', '')}")
-            for f in nar.get("red_flags", []):
-                st.markdown(f"- **{f.get('evidence_id')}** {f.get('finding')}  \n  *{f.get('why_it_matters')}*")
-            c1, c2 = st.columns(2)
-            with c1:
-                if nar.get("mitigating_factors"):
-                    st.markdown("**Mitigating factors**\n" + "\n".join(f"- {m}" for m in nar["mitigating_factors"]))
-                st.markdown("**Questions for the client**\n" + "\n".join(f"- {q}" for q in nar.get("questions_for_client", [])))
-            with c2:
-                st.markdown("**Regulatory basis**\n" + "\n".join(f"- {r}" for r in nar.get("regulatory_basis", [])))
-                if v["evidence_not_discussed"]:
-                    st.caption(f"Evidence not discussed by the narrative: {', '.join(v['evidence_not_discussed'])}")
-            with st.expander("Case narrative for sign-off"):
-                st.write(nar.get("narrative", ""))
-            st.download_button("⬇️ Draft STR (Markdown)", explain.str_draft(pack, nar, analyst),
-                               file_name=f"STR_draft_{cid}.md")
+left, right = st.columns([3, 2])
+with left:
+    bd = pd.DataFrame([vars(p) for p in d.breakdown])
+    bars = alt.Chart(bd).mark_bar().encode(
+        x=alt.X("weighted_points:Q", title="points (xᵢ · wᵢ)", scale=alt.Scale(domain=[0, max(bd["weight"].max(), 1)])),
+        y=alt.Y("attribute:N", sort="-x", title=None), tooltip=["attribute", "raw_value", "normalized_score", "weight"])
+    st.altair_chart(bars, width="stretch")
+    st.dataframe(bd[["attribute", "raw_value", "normalized_score", "weight", "weighted_points"]], hide_index=True,
+                 width="stretch", column_config={"raw_value": "fact", "normalized_score": "xᵢ", "weight": "wᵢ",
+                                                 "weighted_points": "points"})
+with right:
+    st.markdown("**Explanation**")
+    st.write(explain.template(d))
+    model = st.radio("Claude model", ["haiku", "sonnet"], horizontal=True)
+    if st.button("Explain with Claude (Amazon Bedrock)"):
+        st.session_state[f"ai_{client}"] = explain.claude(d, model)
+    ai = st.session_state.get(f"ai_{client}")
+    if ai:
+        if ai.get("error"):
+            st.warning(f"Claude unavailable, showing the template instead. {ai['error']}")
+        st.info(ai["text"])
+        st.caption(f"{ai['source']} · USD {ai['cost_usd']:.4f} · " + (
+            "every number found in the facts" if not ai["unverified"] else f"⚠️ unverified numbers: {ai['unverified']}"))
 
-        st.divider()
-        st.subheader("Analyst decision")
-        with st.form(f"decide_{cid}"):
-            decision = st.radio("Decision", audit.DECISIONS, horizontal=True,
-                                index=audit.DECISIONS.index(nar["recommendation"])
-                                if nar and nar.get("recommendation") in audit.DECISIONS else 1)
-            reason = st.text_area("Reason (mandatory, goes to the audit log)")
-            if st.form_submit_button("Record decision"):
-                try:
-                    e = audit.record(cid, decision, reason, analyst, float(row["score"]), row["rules"], chash,
-                                     explain.pack_hash(pack), nar)
-                    st.success(f"Logged at {e['ts_utc']}" + (" · you overrode the AI recommendation" if e["human_overrode_ai"] else ""))
-                except ValueError as exc:
-                    st.error(str(exc))
+    st.markdown("**Analyst decision**")
+    note = st.text_input("Reason (required)", key=f"note_{client}")
+    c1, c2 = st.columns(2)
+    for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
+        if col.button(decision.replace("_", " ").capitalize(), disabled=not note.strip()):
+            new = not DECISIONS.exists()
+            with open(DECISIONS, "a", newline="") as fh:
+                w = csv.writer(fh)
+                if new:
+                    w.writerow(["time_utc", "dataset", "client_id", "system_action", "risk_score", "decision", "reason"])
+                w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"), folder, client, d.action_status,
+                            d.risk_score, decision, note.strip()])
+            st.success(f"Saved to {DECISIONS.relative_to(ROOT)}")
 
-# --- tuning -------------------------------------------------------------------------
-with tab_tune:
-    st.markdown("How many cases would the team have to work at each threshold? Pick the point where the queue "
-                "fits analyst capacity without losing the cases that matter.")
-    cut = pd.DataFrame({"threshold": range(10, 95, 5)})
-    elig = queue[queue["corroborated"] | (not corroboration)] if len(queue) else queue
-    cut["cases"] = [int((elig["score"] >= th).sum()) for th in cut["threshold"]]
-    truth_path = ROOT / folder / "ground_truth.csv"
-    chart = alt.Chart(cut).mark_line(point=True).encode(x="threshold:Q", y=alt.Y("cases:Q", title="open cases"))
-    rule = alt.Chart(pd.DataFrame({"t": [alert_score]})).mark_rule(color="#d64545").encode(x="t:Q")
-    st.altair_chart(chart + rule, width="stretch")
-    if truth_path.exists():
-        truth = pd.read_csv(truth_path, sep=";", encoding="utf-8-sig", dtype=str)
-        ev = scoring.evaluate(queue, truth)
-        c = st.columns(3)
-        c[0].metric("Planted cases caught (recall)", f"{ev['recall']:.0%}")
-        c[1].metric("Cases that are real (precision)", f"{ev['precision']:.0%}" if ev["precision"] else "n/a")
-        c[2].metric("Open cases", ev["alerts"])
-        st.caption("Synthetic sample only: planted typologies are known, so we can measure. Recall by typology:")
-        st.json(ev["recall_by_typology"])
-    else:
-        st.caption("No ground truth in this dataset. As a sanity check, here is how cases split by the bank's own "
-                   "AML risk rating (a model that only re-finds 'high' clients adds little).")
-        if len(queue):
-            st.dataframe(pd.crosstab(queue["aml_risk"], queue["alert"]), width="stretch")
-    st.subheader("Hits per typology")
-    hc = hits.groupby("rule").size().rename("clients").reset_index()
-    st.altair_chart(alt.Chart(hc).mark_bar().encode(x="clients:Q", y=alt.Y("rule:N", sort="-x")),
-                    width="stretch")
-
-# --- governance ----------------------------------------------------------------------
-with tab_gov:
-    st.markdown(f"Rules configuration hash **`{chash}`** · narrative prompt hash "
-                f"**`{__import__('hashlib').sha256(explain.SYSTEM.encode()).hexdigest()[:12]}`**")
-    log = audit.read()
-    if log.empty:
-        st.info("No decisions recorded yet.")
-    else:
-        c = st.columns(3)
-        c[0].metric("Decisions", len(log))
-        c[1].metric("Human overrides of AI", int(log["human_overrode_ai"].sum()))
-        c[2].metric("Closed as false positive", int((log["decision"] == "CLOSE_FALSE_POSITIVE").sum()))
-        st.dataframe(log.sort_values("ts_utc", ascending=False), hide_index=True, width="stretch")
-    st.markdown((ROOT / "docs" / "MODEL_CARD.md").read_text() if (ROOT / "docs" / "MODEL_CARD.md").exists() else "")
+st.markdown("**Largest transactions of this client**")
+t = txns[txns["client_id"] == client].nlargest(10, "amount")
+st.dataframe(t[["txn_id", "ts", "amount", "currency", "txn_type", "counterparty_country", "counterparty_account"]],
+             hide_index=True, width="stretch")
