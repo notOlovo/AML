@@ -36,23 +36,79 @@ st.markdown(
         border-right: 1px solid var(--aml-border);
     }
     [data-testid="stSidebar"] > div:first-child {
-        padding: .25rem .9rem 1.75rem;
+        padding: 0 .9rem .25rem;
     }
     [data-testid="stSidebarHeader"] {
-        height: 2.25rem;
-        min-height: 2.25rem;
+        height: 1.5rem;
+        min-height: 1.5rem;
     }
     [data-testid="stSidebarCollapseButton"] {
-        top: .25rem;
-        right: .5rem;
-        width: 2rem;
-        height: 2rem;
+        top: 0;
+        right: .35rem;
+        width: 1.5rem;
+        height: 1.5rem;
         padding: 0;
     }
     [data-testid="stSidebarCollapseButton"] button {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         padding: 0;
+    }
+    [data-testid="stSidebar"] h1 {
+        margin-top: 0;
+        margin-bottom: .25rem;
+    }
+    [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+        margin-top: 0;
+    }
+    div[data-testid="stPopover"] > button {
+        min-width: 2.25rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        padding: 0;
+        border-radius: 999px;
+    }
+    .aml-header {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        padding: .35rem 0 .65rem;
+    }
+    .aml-header-title {
+        font-size: 1.55rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+    .aml-header-subtitle {
+        color: var(--aml-muted);
+        font-size: .9rem;
+        margin-top: .25rem;
+    }
+    .aml-full-divider {
+        background: var(--aml-border);
+        height: 1px;
+        margin: .25rem 0 1.1rem;
+        width: 100%;
+    }
+    .aml-settings-label {
+        border-bottom: 1px solid var(--aml-border);
+        color: var(--aml-muted);
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        margin: .25rem 0 .9rem;
+        padding-bottom: .55rem;
+        text-transform: uppercase;
+    }
+    .aml-user-hint {
+        background: var(--aml-surface);
+        border: 1px solid var(--aml-border);
+        border-radius: 8px;
+        color: var(--aml-muted);
+        font-size: .82rem;
+        line-height: 1.45;
+        margin-top: .75rem;
+        padding: .65rem .75rem;
     }
     [data-testid="stMetric"] {
         min-height: 108px;
@@ -141,16 +197,34 @@ def set_weights(w: dict):
         st.session_state[f"w_{k}"] = float(v)
 
 
+st.session_state.setdefault("role", "Supervisor")
+header_left, header_right = st.columns([1, .18], vertical_alignment="center")
+with header_left:
+    st.markdown(
+        '<div class="aml-header"><div>'
+        '<div class="aml-header-title">⚖️ AML Triage Copilot</div>'
+        '<div class="aml-header-subtitle">Explainable transaction monitoring</div>'
+        '</div></div>',
+        unsafe_allow_html=True,
+    )
+with header_right:
+    with st.popover("👤  " + st.session_state["role"], help="Choose application role"):
+        st.markdown("#### Application role")
+        st.radio("Access level", ["Supervisor", "User"], key="role")
+st.markdown('<div class="aml-full-divider"></div>', unsafe_allow_html=True)
+role = st.session_state["role"]
+
+
 # --- sidebar: data, weights, threshold -----------------------------------------------------------
 folders = sorted(str(p.relative_to(ROOT)) for p in (ROOT / "data").iterdir() if (p / "transactions.csv").exists())
 add_dataset = "➕ Add dataset"
 with st.sidebar:
-    st.title("⚖️ AML Triage Copilot")
-    st.caption("Explainable transaction monitoring")
+    st.markdown('<div class="aml-settings-label">Settings</div>', unsafe_allow_html=True)
     default = os.environ.get("AML_DATA", "data/real")
+    dataset_options = folders + [add_dataset]
     dataset_choice = st.selectbox(
         "Dataset",
-        folders + [add_dataset],
+        dataset_options,
         index=folders.index(default) if default in folders else 0,
     )
     if dataset_choice == add_dataset:
@@ -170,11 +244,19 @@ with st.sidebar:
     for k, v in DEFAULT_WEIGHTS.items():
         st.session_state.setdefault(f"w_{k}", float(v))
 
-    st.subheader("Stage 2 weights")
-    weights = {k: st.slider(k.replace("_", " "), 0.0, 50.0, step=0.5, key=f"w_{k}") for k in DEFAULT_WEIGHTS}
-    review_at = st.slider("Send to human review from score", 10, 80, 35)
-    st.button("Reset to default weights", on_click=set_weights, args=(DEFAULT_WEIGHTS,))
-    st.caption(f"Sum {sum(weights.values()):.1f}, rescaled to 100.")
+    if role == "Supervisor":
+        st.subheader("Stage 2 weights")
+        weights = {k: st.slider(k.replace("_", " "), 0.0, 50.0, step=0.5, key=f"w_{k}") for k in DEFAULT_WEIGHTS}
+        review_at = st.slider("Send to human review from score", 10, 80, 35)
+        st.button("Reset to default weights", on_click=set_weights, args=(DEFAULT_WEIGHTS,))
+        st.caption(f"Sum {sum(weights.values()):.1f}, rescaled to 100.")
+    else:
+        weights = {k: st.session_state[f"w_{k}"] for k in DEFAULT_WEIGHTS}
+        review_at = 35
+        st.markdown(
+            '<div class="aml-user-hint">User mode · choose an existing dataset or add a new CSV dataset.</div>',
+            unsafe_allow_html=True,
+        )
 
 if dataset_choice == add_dataset and (not clients_file or not transactions_file):
     st.info("Choose both clients.csv and transactions.csv in the sidebar to add a dataset.")
