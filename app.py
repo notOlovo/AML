@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from amlcopilot.scoring import DEFAULT_WEIGHTS, VectorRiskEngine
 
 ROOT = Path(__file__).resolve().parent
 DECISIONS = ROOT / "data" / "decisions.csv"
+ATTACHMENTS = ROOT / "data" / "decision_attachments"
 st.set_page_config(page_title="AML Triage Copilot", page_icon="⚖️", layout="wide")
 
 st.markdown(
@@ -34,7 +36,23 @@ st.markdown(
         border-right: 1px solid var(--aml-border);
     }
     [data-testid="stSidebar"] > div:first-child {
-        padding: 1.75rem 1.25rem 2.5rem;
+        padding: .25rem .9rem 1.75rem;
+    }
+    [data-testid="stSidebarHeader"] {
+        height: 2.25rem;
+        min-height: 2.25rem;
+    }
+    [data-testid="stSidebarCollapseButton"] {
+        top: .25rem;
+        right: .5rem;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+    }
+    [data-testid="stSidebarCollapseButton"] button {
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
     }
     [data-testid="stMetric"] {
         min-height: 108px;
@@ -57,6 +75,12 @@ st.markdown(
     [data-testid="stExpander"] {
         border-color: var(--aml-border);
         border-radius: 10px;
+    }
+    [data-testid="stExpander"] details summary {
+        padding: .65rem .85rem;
+    }
+    [data-testid="stExpander"] details div[data-testid="stExpanderDetails"] {
+        padding: .35rem .85rem .75rem;
     }
     .aml-eyebrow {
         margin: .25rem 0 .35rem;
@@ -82,6 +106,14 @@ st.markdown(
     }
     .aml-detail strong {
         color: inherit;
+    }
+    .aml-section-label {
+        margin: 1.2rem 0 .45rem;
+        color: var(--aml-muted);
+        font-size: .78rem;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
     }
     @media (max-width: 900px) {
         .block-container {
@@ -155,7 +187,8 @@ engine = VectorRiskEngine(weights, tiers)
 res = engine.score(feats, hard)
 
 # --- overview ---------------------------------------------------------------------------------------
-st.markdown('<div class="aml-eyebrow">Overview</div>', unsafe_allow_html=True)
+st.markdown('<div class="aml-eyebrow">Portfolio overview</div>', unsafe_allow_html=True)
+st.subheader("AML triage overview")
 st.markdown(
     '<p class="aml-intro"><strong>Stage 1</strong> hard rules (sanctions, high-risk country, cash limit) '
     'decide on their own. <strong>Stage 2</strong> scores everyone else: '
@@ -199,86 +232,104 @@ if client not in set(res["client_id"]):
 # --- one client ---------------------------------------------------------------------------------------
 st.divider()
 d = engine.explain(feats, client, hard)
-st.markdown('<div class="aml-eyebrow">Selected client</div>', unsafe_allow_html=True)
-st.subheader(f"{client} · {d.action_status} · score {d.risk_score:.1f}")
-st.caption(f"Risk factor: {d.risk_factor}")
+st.markdown('<div class="aml-eyebrow">Client review</div>', unsafe_allow_html=True)
+st.subheader(f"{client} · review details")
+summary = st.columns(3)
+summary[0].metric("Decision", d.action_status)
+summary[1].metric("Risk score", f"{d.risk_score:.1f} / 100")
+summary[2].metric("Risk factor", d.risk_factor.replace("_", " ").title())
 for h in d.hard_rules:
     st.error(
         f"Stage 1, {h['rule']}: {h['reason']} "
         f"(CZK {h['amount']:,.0f}, transactions {', '.join(h['txn_ids'][:5])})"
     )
 
-left, right = st.columns([1.15, 1], gap="large")
-with left:
-    st.markdown("#### Risk breakdown")
-    bd = pd.DataFrame([vars(p) for p in d.breakdown])
-    bars = alt.Chart(bd).mark_bar().encode(
-        x=alt.X(
-            "weighted_points:Q",
-            title="points (xᵢ · wᵢ)",
-            scale=alt.Scale(domain=[0, max(bd["weight"].max(), 1)]),
-        ),
-        y=alt.Y("attribute:N", sort="-x", title=None),
-        tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+st.markdown("#### Risk drivers")
+bd = pd.DataFrame([vars(p) for p in d.breakdown])
+bars = alt.Chart(bd).mark_bar().encode(
+    x=alt.X(
+        "weighted_points:Q",
+        title="points (xᵢ · wᵢ)",
+        scale=alt.Scale(domain=[0, max(bd["weight"].max(), 1)]),
+    ),
+    y=alt.Y("attribute:N", sort="-x", title=None),
+    tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+)
+st.altair_chart(bars, width="stretch", theme=None)
+
+st.markdown("#### Case explanation")
+st.markdown(f'<div class="aml-detail">{explain.template(d)}</div>', unsafe_allow_html=True)
+model = st.radio("Claude model", ["haiku", "sonnet"], horizontal=True)
+if st.button("Explain with Claude (Amazon Bedrock)"):
+    st.session_state[f"ai_{client}"] = explain.claude(d, model)
+ai = st.session_state.get(f"ai_{client}")
+if ai:
+    if ai.get("error"):
+        st.warning(f"Claude unavailable, showing the template instead. {ai['error']}")
+    st.info(ai["text"])
+    st.caption(f"{ai['source']} · USD {ai['cost_usd']:.4f} · " + (
+        "every number found in the facts" if not ai["unverified"] else f"⚠️ unverified numbers: {ai['unverified']}"))
+
+st.markdown("#### Analyst decision")
+attachment = st.file_uploader(
+    "Add supporting PDF",
+    type=["pdf"],
+    key=f"attachment_{client}",
+)
+note = st.text_input("Reason", key=f"note_{client}")
+c1, c2 = st.columns(2)
+for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
+    if col.button(
+        decision.replace("_", " ").capitalize(),
+        disabled=not note.strip(),
+        width="stretch",
+    ):
+        attachment_path = ""
+        if attachment is not None:
+            safe_client = re.sub(r"[^A-Za-z0-9_-]", "_", str(client))
+            safe_name = re.sub(r"[^A-Za-z0-9_.-]", "_", Path(attachment.name).name)
+            ATTACHMENTS.mkdir(parents=True, exist_ok=True)
+            target = ATTACHMENTS / f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}_{safe_client}_{safe_name}"
+            target.write_bytes(attachment.getbuffer())
+            attachment_path = f" [Attachment: {target.relative_to(ROOT)}]"
+        new = not DECISIONS.exists()
+        with open(DECISIONS, "a", newline="") as fh:
+            w = csv.writer(fh)
+            if new:
+                w.writerow(["time_utc", "dataset", "client_id", "system_action", "risk_score", "decision", "reason"])
+            w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"), folder, client, d.action_status,
+                        d.risk_score, decision, note.strip() + attachment_path])
+        st.success(f"Saved to {DECISIONS.relative_to(ROOT)}")
+
+with st.expander("Evidence & score factors", expanded=False):
+    st.dataframe(
+        bd[["attribute", "raw_value", "normalized_score", "weight", "weighted_points"]],
+        hide_index=True,
+        width="stretch",
+        row_height=38,
+        column_config={
+            "attribute": st.column_config.TextColumn("Attribute", width="medium"),
+            "raw_value": st.column_config.TextColumn("Fact", width="large"),
+            "normalized_score": st.column_config.NumberColumn("xᵢ", format="%.2f", width="small"),
+            "weight": st.column_config.NumberColumn("wᵢ", format="%.1f", width="small"),
+            "weighted_points": st.column_config.NumberColumn("Points", format="%.1f", width="small"),
+        },
     )
-    st.altair_chart(bars, width="stretch", theme=None)
-with right:
-    st.markdown("#### Explanation")
-    st.markdown(f'<div class="aml-detail">{explain.template(d)}</div>', unsafe_allow_html=True)
-    model = st.radio("Claude model", ["haiku", "sonnet"], horizontal=True)
-    if st.button("Explain with Claude (Amazon Bedrock)"):
-        st.session_state[f"ai_{client}"] = explain.claude(d, model)
-    ai = st.session_state.get(f"ai_{client}")
-    if ai:
-        if ai.get("error"):
-            st.warning(f"Claude unavailable, showing the template instead. {ai['error']}")
-        st.info(ai["text"])
-        st.caption(f"{ai['source']} · USD {ai['cost_usd']:.4f} · " + (
-            "every number found in the facts" if not ai["unverified"] else f"⚠️ unverified numbers: {ai['unverified']}"))
 
-    st.markdown("#### Analyst decision")
-    note = st.text_input("Reason (required)", key=f"note_{client}")
-    c1, c2 = st.columns(2)
-    for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
-        if col.button(decision.replace("_", " ").capitalize(), disabled=not note.strip()):
-            new = not DECISIONS.exists()
-            with open(DECISIONS, "a", newline="") as fh:
-                w = csv.writer(fh)
-                if new:
-                    w.writerow(["time_utc", "dataset", "client_id", "system_action", "risk_score", "decision", "reason"])
-                w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"), folder, client, d.action_status,
-                            d.risk_score, decision, note.strip()])
-            st.success(f"Saved to {DECISIONS.relative_to(ROOT)}")
-
-st.markdown("#### Evidence behind the score")
-st.dataframe(
-    bd[["attribute", "raw_value", "normalized_score", "weight", "weighted_points"]],
-    hide_index=True,
-    width="stretch",
-    row_height=38,
-    column_config={
-        "attribute": st.column_config.TextColumn("Attribute", width="medium"),
-        "raw_value": st.column_config.TextColumn("Fact", width="large"),
-        "normalized_score": st.column_config.NumberColumn("xᵢ", format="%.2f", width="small"),
-        "weight": st.column_config.NumberColumn("wᵢ", format="%.1f", width="small"),
-        "weighted_points": st.column_config.NumberColumn("Points", format="%.1f", width="small"),
-    },
-)
-
-st.markdown("#### Largest transactions of this client")
-t = txns[txns["client_id"] == client].nlargest(10, "amount")
-st.dataframe(
-    t[["txn_id", "ts", "amount", "currency", "txn_type", "counterparty_country", "counterparty_account"]],
-    hide_index=True,
-    width="stretch",
-    row_height=35,
-    column_config={
-        "txn_id": st.column_config.TextColumn("Transaction ID", width="medium"),
-        "ts": st.column_config.DatetimeColumn("Time", format="YYYY-MM-DD HH:mm", width="medium"),
-        "amount": st.column_config.NumberColumn("Amount", format="CZK %,.0f", width="medium"),
-        "currency": st.column_config.TextColumn("Currency", width="small"),
-        "txn_type": st.column_config.TextColumn("Type", width="medium"),
-        "counterparty_country": st.column_config.TextColumn("Country", width="small"),
-        "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
-    },
-)
+with st.expander("Largest transactions · top 10", expanded=False):
+    t = txns[txns["client_id"] == client].nlargest(10, "amount")
+    st.dataframe(
+        t[["txn_id", "ts", "amount", "currency", "txn_type", "counterparty_country", "counterparty_account"]],
+        hide_index=True,
+        width="stretch",
+        row_height=35,
+        column_config={
+            "txn_id": st.column_config.TextColumn("Transaction ID", width="medium"),
+            "ts": st.column_config.DatetimeColumn("Time", format="YYYY-MM-DD HH:mm", width="medium"),
+            "amount": st.column_config.NumberColumn("Amount", format="CZK %,.0f", width="medium"),
+            "currency": st.column_config.TextColumn("Currency", width="small"),
+            "txn_type": st.column_config.TextColumn("Type", width="medium"),
+            "counterparty_country": st.column_config.TextColumn("Country", width="small"),
+            "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
+        },
+    )
