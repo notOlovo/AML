@@ -48,4 +48,5 @@ documented, explainable logic.
 - Treating remittances as cash and applying the CZK 270,000 cash limit to them are assumptions to confirm with
   the FINREG PARTNERS and ČNB mentors.
 - Sanctions and warning lists match exact account numbers only.
-- The Claude explanations have not yet been tried on Bedrock.
+- Only Haiku 4.5 (`eu.anthropic.claude-haiku-4-5-20251001-v1:0`, eu-central-1, about USD 0.002 per note)
+  has been exercised on Bedrock; Sonnet 4.5 is selectable in the app but has seen far less testing.

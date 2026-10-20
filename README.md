@@ -117,7 +117,14 @@ python -m pytest -q                 # 15 tests, about 15 s
 python -m amlcopilot score data/real        # both stages for every client -> data/real/results.csv
 python -m amlcopilot calibrate data/sample  # fit the weights on ground_truth.csv, print test metrics
 python -m amlcopilot synth data/sample      # regenerate the synthetic sample
+python -m amlcopilot explain data/sample    # one case note from Claude on Bedrock
+python -m amlcopilot check data/sample      # can this folder be scored, and what is wrong with it
 ```
+
+`explain` is the quickest way to check the Bedrock setup: it prints the template note, then Claude's note with
+its source and cost, and when the call did not go through it exits with the AWS error itself
+(`NoCredentialsError`, `AccessDeniedException`, `ExpiredToken`...). Options: `--client K000743`,
+`--model sonnet`, `--facts` to also print the JSON the model is given.
 
 ## Using the app
 
@@ -135,18 +142,47 @@ python -m amlcopilot synth data/sample      # regenerate the synthetic sample
 
 ## Project layout
 
+The backend decides and the frontend draws: **nothing under `amlcopilot/` imports Streamlit**, so the rules,
+the score, the datasets and the decision log run, and are tested, with no UI at all. `app.py` is wiring only.
+
+**Backend — `amlcopilot/`**, split by what the code is for:
+
 | File | What it does |
 |---|---|
-| `amlcopilot/data.py` | loads the ČNB CSVs (exact column names, semicolon, UTF-8 BOM) |
-| `amlcopilot/features.py` | raw facts per client: volumes, ratios, pass-through days, structuring count |
-| `amlcopilot/screening.py` | stage 1 hard rules |
-| `amlcopilot/scoring.py` | stage 2 `VectorRiskEngine`: normalisation, weights, tiers, breakdown |
-| `amlcopilot/calibrate.py` | weight calibration and precision / recall / F1 |
-| `amlcopilot/explain.py` | template text, Claude on Bedrock, number check |
-| `amlcopilot/pipeline.py` | the whole flow in one function |
-| `amlcopilot/synth.py` | synthetic data in the ČNB layout with planted cases |
-| `app.py` | the one-page Streamlit app |
-| `tests/test_pipeline.py` | 15 tests |
+| `config.py` | the knobs turned from outside: weights, review threshold, Bedrock models and prices |
+| `io/csv_source.py` | loads the ČNB CSVs (exact column names, semicolon, UTF-8 BOM) |
+| `io/datasets.py` | which dataset folders are usable, adding and removing an uploaded one |
+| `io/decisions.py` | the analyst decision log and the documents attached to a decision |
+| `validation/schema.py` | can this folder be scored: missing columns, unparsable dates and amounts |
+| `validation/report.py` | what the check found, in one sentence for the UI and the command line |
+| `risk/features.py` | raw facts per client: volumes, ratios, pass-through days, structuring count |
+| `risk/screening.py` | stage 1 hard rules, and which way the money went |
+| `risk/scoring.py` | stage 2 `VectorRiskEngine`: normalisation, weights, tiers, breakdown |
+| `risk/reasons.py` | the fact behind each attribute, in the words the analyst reads |
+| `risk/calibrate.py` | weight calibration and precision / recall / F1 |
+| `ai/prompt.py` | what Claude is told before it sees a case |
+| `ai/facts.py` | the JSON one decision becomes, and the deterministic template note |
+| `ai/bedrock.py` | the call to Claude on Bedrock, its cost, and the fallback to the template |
+| `ai/verify.py` | the check that every number in the note is in the facts |
+| `pipeline.py` | the whole flow in one function |
+| `synth.py` | synthetic data in the ČNB layout with planted cases |
+| `__main__.py` | the command line: `score`, `calibrate`, `synth`, `explain`, `check` |
+
+**Frontend — `frontend/`**
+
+| File | What it does |
+|---|---|
+| `theme.py` | the stylesheet, the page frame, the role switch |
+| `sidebar.py` | dataset choice and upload, stage 2 weights, review threshold |
+| `overview.py` | the four counters and the queue table |
+| `client_view.py` | one client: drivers, evidence, payments, explanation, decision |
+
+**The rest**
+
+| File | What it does |
+|---|---|
+| `app.py` | wiring: sidebar → engine → overview → client view |
+| `tests/` | 25 tests: the pipeline, the backend the UI used to own, and the dataset checks |
 | `Dockerfile`, `compose.yaml` | the container |
 | `docs/` | model card, 4-minute demo script |
 
@@ -170,7 +206,8 @@ python -m amlcopilot synth data/sample      # regenerate the synthetic sample
 - Peers are all clients together; separate medians for natural persons and legal entities would be fairer.
 - Calibrate on real analyst decisions (`data/decisions.csv`) instead of synthetic labels.
 - Live sanctions lists (EU, UN, Czech national list) instead of the sample watchlist.
-- Claude explanations have not been tried on Bedrock yet (no AWS credentials in our environment so far).
+- Only Haiku 4.5 has been exercised on Bedrock (eu-central-1, about USD 0.002 per note); Sonnet 4.5 is
+  selectable in the app but has seen far less testing.
 
 ## Responsible AI
 

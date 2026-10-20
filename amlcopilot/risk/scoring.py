@@ -17,21 +17,8 @@ from dataclasses import dataclass, field
 import numpy as np
 import pandas as pd
 
-DEFAULT_WEIGHTS: dict[str, float] = {
-    "activity_vs_profile": 25.0,    # volume far above the declared AND the client's own previous quarter
-    "largest_payment_jump": 15.0,   # largest payment far above the client's 2Q2026 maximum
-    "pass_through": 15.0,           # money in and straight back out (mule / layering)
-    "structuring": 15.0,            # several remittances just below the threshold
-    "pep": 10.0,                    # politically exposed person
-    "new_account": 10.0,            # opened recently
-    "bank_risk_rating": 5.0,        # the bank's own AML rating (low / medium / high)
-    "remote_onboarding": 5.0,       # contract concluded at a distance (non-face-to-face)
-}
-
-# (minimum score, tier, action). Below the last line: LOW -> AUTO_CLEAR.
-# A score never blocks on its own: only a hard rule (sanctions) can block.
-# Review starts at 35, not 25: on the ČNB data 25 sends 8 % of all clients (454) to review, 35 sends ~1.5 %.
-DEFAULT_TIERS = [(75.0, "CRITICAL", "HUMAN_REVIEW"), (50.0, "HIGH", "HUMAN_REVIEW"), (35.0, "MEDIUM", "HUMAN_REVIEW")]
+from ..config import DEFAULT_TIERS, DEFAULT_WEIGHTS  # re-exported: the engine is where callers look for them
+from .reasons import REASONS
 
 
 @dataclass
@@ -81,7 +68,10 @@ def normalize(f: pd.DataFrame) -> pd.DataFrame:
 
 def unit_weights(weights: dict[str, float]) -> pd.Series:
     w = pd.Series(weights, dtype=float).clip(lower=0)
-    return w / w.sum() * 100
+    total = w.sum()
+    # Every weight at zero is a legitimate setting, not an error: stage 2 then scores nobody and
+    # only the hard rules decide. Rescaling would divide by zero and poison the whole frame.
+    return w if total <= 0 else w / total * 100
 
 
 def tier_of(score: float, tiers=DEFAULT_TIERS) -> tuple[str, str]:
@@ -101,9 +91,13 @@ class VectorRiskEngine:
         x = normalize(feats)
         points = x[self.weights.index] * self.weights
         out = pd.DataFrame({"client_id": feats["client_id"], "risk_score": points.sum(axis=1).round(1)})
-        out[["risk_factor", "action_status"]] = [tier_of(s, self.tiers) for s in out["risk_score"]]
+        out[["risk_factor", "action_status"]] = pd.DataFrame(
+            [tier_of(s, self.tiers) for s in out["risk_score"]],
+            columns=["risk_factor", "action_status"], index=out.index)
         out["stage"] = "2 vector score"
-        out["top_driver"] = points.idxmax(axis=1).where(points.max(axis=1) > 0, "")
+        # No client scores anything when the weights are all zero, and then there is no top driver.
+        best = points.max(axis=1) if len(points.columns) else pd.Series(0.0, index=out.index)
+        out["top_driver"] = points.idxmax(axis=1).where(best > 0, "") if (best > 0).any() else ""
         if hard is not None and not hard.empty:
             worst = hard.assign(block=hard["action"].eq("BLOCK")).sort_values("block", ascending=False)
             worst = worst.drop_duplicates("client_id").set_index("client_id")
@@ -134,48 +128,3 @@ class VectorRiskEngine:
             tier = "HARD RULE"
             action = "BLOCK" if any(r["action"] == "BLOCK" for r in rules) else "HUMAN_REVIEW"
         return ValidationDecision(client_id, score, tier, action, bool(rules), rules, parts)
-
-
-# --- the fact behind each attribute, in words -------------------------------------------------
-
-def czk(v) -> str:
-    return "n/a" if pd.isna(v) else f"CZK {v:,.0f}"
-
-
-def _activity(r, f):
-    raw = (f"{czk(r['monthly_volume'])}/month vs {czk(r['expected_volume'])}/month expected at onboarding "
-           f"({r['declared_ratio']:.1f}x, typical client {f['declared_ratio'].median():.1f}x)")
-    if pd.notna(r["history_ratio"]):
-        raw += (f" and vs own 2Q2026 average {czk(r['history_monthly'])}/month ({r['history_ratio']:.1f}x, "
-                f"typical {f['history_ratio'].median():.1f}x)")
-    return raw, "Activity far above the client's profile" if r["declared_ratio"] > 2 * f["declared_ratio"].median() \
-        else "Activity in line with peers"
-
-
-def _jump(r, f):
-    if pd.isna(r["jump_ratio"]):
-        return "no 2Q2026 history", "Not enough history to compare"
-    return (f"largest payment {czk(r['largest_txn'])} ({r['largest_txn_id']}) = {r['jump_ratio']:.1f}x the 2Q2026 "
-            f"maximum {czk(r['history_max_txn'])} (typical {f['jump_ratio'].median():.1f}x)"), "Unusually large payment"
-
-
-def _pass(r, f):
-    return (f"{int(r['pass_through_episodes'])} day(s) when >= 85% of the last 3 days' inflow left again "
-            f"(in {czk(r['inflow'])}, out {czk(r['outflow'])})"), "Money passes straight through the account"
-
-
-def _struct(r, f):
-    return (f"{int(r['structuring_count'])} remittance(s) of 85-100% of CZK 25,000 within 7 days"), \
-        "Payments split to stay under a threshold"
-
-
-REASONS = {
-    "activity_vs_profile": _activity,
-    "largest_payment_jump": _jump,
-    "pass_through": _pass,
-    "structuring": _struct,
-    "pep": lambda r, f: ("PEP" if r["pep"] else "not a PEP", "Politically exposed person"),
-    "new_account": lambda r, f: (f"account {int(r['account_age_days'])} days old", "New business relationship"),
-    "bank_risk_rating": lambda r, f: (f"bank rating {r['bank_risk']}", "Bank's own AML risk rating"),
-    "remote_onboarding": lambda r, f: (f"contract concluded {r['channel']}", "Non-face-to-face onboarding"),
-}

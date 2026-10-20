@@ -12,8 +12,15 @@ services:
       # data/decisions.csv = analyst decisions; mounted so the decisions survive the container.
       # :Z relabels the folder for SELinux (Fedora with Podman); other systems ignore it.
       - ./data:/app/data:Z
-      # Optional, for "Explain with Claude" via Amazon Bedrock: run `aws sso login --profile hackathon` first.
-      # Writable on purpose: the SDK refreshes the sign-in token cache in there.
+      # Only needed with the AWS CLI route (`aws sso login --profile hackathon`); then also set
+      # AWS_PROFILE below. Writable on purpose: the SDK refreshes the sign-in token cache in there.
       # - ~/.aws:/root/.aws:Z
-    # environment:
-    #   AWS_PROFILE: hackathon
+    environment:
+      # For "Explain with Claude" via Amazon Bedrock. Without the AWS CLI: copy the three
+      # "Set AWS environment variables" lines from the AWS access portal, paste them into the shell
+      # that runs `docker compose up`, and they are handed to the container from there.
+      AWS_REGION: eu-central-1
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
+      # AWS_PROFILE: hackathon

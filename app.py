@@ -1,19 +1,26 @@
+<<<<<<< HEAD
+=======
+"""AML Triage Copilot, the one page.   streamlit run app.py
+
+This file only wires the pieces together: the sidebar says what to analyse, the
+engine in amlcopilot/ decides, the frontend modules draw. Anything longer than
+wiring belongs in one of them.
+"""
+
+>>>>>>> origin/main
 from __future__ import annotations
 
-import csv
-import os
-import re
-from datetime import datetime, timezone
 from pathlib import Path
 
-import altair as alt
-import pandas as pd
 import streamlit as st
 
-from amlcopilot import data, explain, features, pipeline, screening
-from amlcopilot.scoring import DEFAULT_WEIGHTS, VectorRiskEngine
+from amlcopilot.io import csv_source
+from amlcopilot.risk import features, screening
+from amlcopilot.risk.scoring import VectorRiskEngine
+from frontend import client_view, overview, sidebar, theme
 
 ROOT = Path(__file__).resolve().parent
+<<<<<<< HEAD
 DECISIONS = ROOT / "data" / "decisions.csv"
 ATTACHMENTS = ROOT / "data" / "decision_attachments"
 st.set_page_config(page_title="AML Triage Copilot", page_icon="⚖️", layout="wide")
@@ -269,20 +276,25 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+=======
+>>>>>>> origin/main
 
 
 @st.cache_data(show_spinner="Loading data and computing features…")
 def prepare(folder: str):
-    clients, txns = data.load(folder)
-    return txns, features.build(clients, txns), screening.run(txns, data.load_watchlist(folder))
+    """The expensive part: read the CSVs once per dataset, not once per click."""
+    clients, txns = csv_source.load(folder)
+    return txns, features.build(clients, txns), screening.run(txns, csv_source.load_watchlist(folder))
 
 
-def set_weights(w: dict):
-    # runs as a button callback, i.e. before the sliders are drawn again
-    for k, v in w.items():
-        st.session_state[f"w_{k}"] = float(v)
+def tiers_for(review_at: int) -> list[tuple[float, str, str]]:
+    """The threshold the supervisor set, with the fixed bands above it."""
+    return [(max(75.0, review_at), "CRITICAL", "HUMAN_REVIEW"),
+            (max(50.0, review_at), "HIGH", "HUMAN_REVIEW"),
+            (float(review_at), "MEDIUM", "HUMAN_REVIEW")]
 
 
+<<<<<<< HEAD
 st.session_state.setdefault("role", "Supervisor")
 header_left, header_right = st.columns([1, .18], vertical_alignment="center")
 with header_left:
@@ -350,14 +362,20 @@ with st.sidebar:
 
 if dataset_choice == add_dataset and (not clients_file or not transactions_file):
     st.info("Choose both clients.csv and transactions.csv in the sidebar to add a dataset.")
+=======
+theme.apply()
+role = theme.header()
+settings = sidebar.draw(ROOT, role)
+if not settings.ready:
+    st.info(settings.message)
+>>>>>>> origin/main
     st.stop()
 
-txns, feats, hard = prepare(str(ROOT / folder))
-tiers = [(max(75.0, review_at), "CRITICAL", "HUMAN_REVIEW"), (max(50.0, review_at), "HIGH", "HUMAN_REVIEW"),
-         (float(review_at), "MEDIUM", "HUMAN_REVIEW")]
-engine = VectorRiskEngine(weights, tiers)
-res = engine.score(feats, hard)
+txns, feats, hard = prepare(str(ROOT / settings.folder))
+engine = VectorRiskEngine(settings.weights, tiers_for(settings.review_at))
+results = engine.score(feats, hard)
 
+<<<<<<< HEAD
 # --- overview ---------------------------------------------------------------------------------------
 st.markdown('<div class="aml-eyebrow">Portfolio overview</div>', unsafe_allow_html=True)
 st.subheader("AML triage overview")
@@ -519,3 +537,7 @@ for col, decision in ((c1, "ESCALATE"), (c2, "CLOSE_FALSE_POSITIVE")):
             w.writerow([datetime.now(timezone.utc).isoformat(timespec="seconds"), folder, client, d.action_status,
                         d.risk_score, decision, note.strip() + attachment_path])
         st.success(f"Saved to {DECISIONS.relative_to(ROOT)}")
+=======
+client = overview.draw(results)
+client_view.draw(ROOT, settings.folder, engine.explain(feats, client, hard), txns, client)
+>>>>>>> origin/main
