@@ -44,7 +44,46 @@ person, so no client is affected by a solely automated decision (GDPR Art. 22).
 
 Why "the typical client": in the ČNB data the typical client already moves 2.1× its declared volume, so a raw
 ratio would flag half the bank. Why "the lower of the two": a client that outgrew a stale declaration long ago
-but behaves as it did in 2Q2026 is not suspicious. Weights set in the app are rescaled to sum to 100.
+but behaves as it did in 2Q2026 is not suspicious.
+
+### How the weights balance
+
+The score is a plain sum, `risk = Σ xᵢ · wᵢ`, and nothing else happens to it: no model, no hidden term. Each
+`xᵢ` says how far one fact is from normal, between 0 and 1; each `wᵢ` says how much that fact is allowed to
+matter.
+
+**The weights are always rescaled to sum to 100**, whatever the eight sliders say. Setting them to 25/15/15/
+15/10/10/5/5 and to 50/30/30/30/20/20/10/10 gives exactly the same scores — only the *proportions* between
+the sliders count. Two consequences worth knowing before moving anything:
+
+- Raising one slider lowers every other attribute's share, even though their numbers do not move. There is
+  one budget of 100 points, and the sliders divide it.
+- One attribute can never contribute more than its own weight. With the defaults a client whose only problem
+  is structuring reaches 15 of 100, below the review line of 35 — deliberately: one typology alone is a lead,
+  not a case. Calibration on labelled data raises structuring to 35, which is enough on its own.
+
+The review threshold is a separate slider. A score at or above it sends the client to a person (MEDIUM, HIGH
+from 50, CRITICAL from 75); below it the client is cleared. **A score never blocks anyone** — only a stage 1
+hard rule can, and hard rules ignore the weights entirely. Setting every weight to zero is allowed and the
+app says so: stage 2 then scores nobody, and the mandatory rules still fire.
+
+### Red flags for the FINREG output: Type A, B and C
+
+Alongside the client queue the system raises **one alert per red flag**, in the column layout the challenge
+requires, and the app offers them as **Download required alerts CSV**
+([`amlcopilot/risk/alerts.py`](amlcopilot/risk/alerts.py)):
+
+| Type | Fires when | On the ČNB data |
+|---|---|---|
+| **A** profile discrepancy | July turnover ≥ 1.8× the baseline, the baseline being the higher of the declared monthly volume and the client's own 2Q2026 run-rate | 2,867 |
+| **B** jurisdiction or PEP | a payment above CZK 10,000 with an EU/FATF high-risk jurisdiction, or an outgoing payment above CZK 100,000 by a PEP | 4 |
+| **C** flow-through | an incoming payment above CZK 100,000 of which ≥ 80 % leaves within 6 hours | 9 |
+
+Each alert carries a triage (FP or REVIEW), a priority from 0 to 100 built additively from the client's risk
+rating, PEP status, jurisdiction, amount, deviation from profile, age of the relationship, onboarding channel
+and how many flags the client has, an owner and an approver one level above, the reason in words, and a JSON
+log of the inputs that produced it. Type C is never closed automatically, and a client with two or more flags
+always goes to a person. **The full write-up is in [docs/DECISION_LOGIC.md](docs/DECISION_LOGIC.md).**
 
 ## Results
 
@@ -77,40 +116,67 @@ new account 10.0, bank rating 5.1, remote onboarding 4.2.
 
 ## Run it
 
-### Docker or Podman
+You need **Docker Desktop** (running), or Python 3.11+ if you would rather not use a container. The ČNB
+files are not in the repository, so put `clients.csv` and `transactions.csv` into `data/real/` yourself;
+without them the app opens the synthetic sample, which the repository does carry.
 
-Put the ČNB files `clients.csv` and `transactions.csv` into `data/real/` (they are not in the repository).
-Without them the app opens the synthetic sample.
+Step 1 starts the whole system. Step 2 connects Claude, which words the case note an analyst reads; without
+AWS credentials that note comes from a fixed template instead and the app says so on screen, so a missing
+account degrades the explanation but never stops the review.
+
+### 1. Start it
 
 ```bash
-# Docker
-docker build -t aml-copilot .
-docker run --rm -p 8501:8501 -v "$PWD/data:/app/data" aml-copilot
-
-# Podman (the :Z is for SELinux, e.g. Fedora)
-podman build -t aml-copilot .
-podman run --rm -p 8501:8501 -v "$PWD/data:/app/data:Z" aml-copilot
+docker compose up -d --build
 ```
 
-Or with Compose: `docker compose up --build` (`podman compose up --build`). Then open http://localhost:8501
-and stop with Ctrl+C. The `data/` folder is mounted so analyst decisions (`data/decisions.csv`) outlive the
-container.
+Open http://localhost:8501. Stop it with `docker compose down`. `data/` is mounted from the host, so the
+datasets, the analyst decisions (`data/decisions.csv`) and the attachments outlive the container; code
+changes need `--build` again.
 
-- **Claude explanations (optional):** set up the AWS CLI once with `aws configure sso` (start URL from the
-  organisers' AWS guide, SSO region `eu-north-1`, role `ai-hackathon-TeamAdmin`, region `eu-central-1`, profile
-  name `hackathon`), sign in with `aws sso login --profile hackathon` (valid 12 hours), then add
-  `AWS_PROFILE=hackathon` when starting Compose (in PowerShell: `$env:AWS_PROFILE="hackathon"` first). Compose
-  mounts `~/.aws` writable so the SDK can refresh the SSO token cache. For direct `docker run`, add
-  `-v ~/.aws:/root/.aws -e AWS_PROFILE=hackathon`. Without valid credentials the app shows the template
-  explanation instead.
-- **Tests in the container:** `docker run --rm aml-copilot python -m pytest -q`.
+With Podman: `podman compose up --build` (the `:Z` in `compose.yaml` relabels the folder for SELinux).
 
-### Without a container
+### 2. Connect Claude on Amazon Bedrock
+
+Claude turns the facts of one decision into the case note an analyst reads, and the number check runs over
+whatever it writes. Running without credentials falls back to the template — that is a resilience property,
+not the intended mode: it keeps the queue working on a bad connection or an expired token.
+
+Two ways to give the container credentials; whichever you pick, **run `docker compose up` from the same
+shell**, because that is where Compose reads them from. In a bank this step is a role on the machine the app
+runs on, not keys typed by a person; the two routes below are what a hackathon account offers.
+
+**Access portal (quickest).** In the AWS access portal open the account, pick the role, click *Access keys*
+and copy the three `export AWS_...` lines into your shell:
 
 ```bash
-pip install -r requirements.txt     # Python 3.11+
-streamlit run app.py                # http://localhost:8501
-python -m pytest -q                 # 15 tests, about 15 s
+export AWS_ACCESS_KEY_ID="ASIA..."           # the three lines the portal gives you
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_SESSION_TOKEN="..."
+docker compose up -d --force-recreate        # same shell, so the container inherits them
+```
+
+Those keys expire after a few hours; repeat when they do. Never commit them, and never paste them into a
+chat or an issue.
+
+**AWS CLI with SSO (lasts longer).** `aws configure sso` once (start URL from the organisers' guide, SSO
+region `eu-north-1`, role `ai-hackathon-TeamAdmin`, region `eu-central-1`, profile `hackathon`), then
+`aws sso login --profile hackathon` and `AWS_PROFILE=hackathon docker compose up -d --force-recreate`
+(PowerShell: `$env:AWS_PROFILE="hackathon"` first). Compose mounts `~/.aws` writable so the SDK can refresh
+the token cache.
+
+Check it reached the container, without printing the key:
+
+```bash
+docker exec aml-copilot sh -c 'printenv AWS_ACCESS_KEY_ID | cut -c1-8'
+```
+
+### 3. Without a container
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/streamlit run app.py              # http://localhost:8501
+.venv/bin/python -m pytest -q               # 31 tests, a few seconds
 ```
 
 ### Command line
@@ -123,10 +189,22 @@ python -m amlcopilot explain data/sample    # one case note from Claude on Bedro
 python -m amlcopilot check data/sample      # can this folder be scored, and what is wrong with it
 ```
 
-`explain` is the quickest way to check the Bedrock setup: it prints the template note, then Claude's note with
-its source and cost, and when the call did not go through it exits with the AWS error itself
-(`NoCredentialsError`, `AccessDeniedException`, `ExpiredToken`...). Options: `--client K000743`,
-`--model sonnet`, `--facts` to also print the JSON the model is given.
+`check` answers "is this folder a dataset" before anything is computed from it: a missing column or a date
+in the wrong format comes back as a sentence, and the command exits non-zero. `explain` is the quickest way
+to test the Bedrock setup: it prints the template note, then Claude's, and on failure exits with the AWS
+error itself (`NoCredentialsError`, `AccessDeniedException`, `ExpiredToken`, `ServiceUnavailableException`).
+Options: `--client K000743`, `--model sonnet`, `--facts` to also print the JSON the model is given.
+
+In the container, prefix either with `docker exec aml-copilot` instead of `.venv/bin/python`.
+
+### If something does not work
+
+| What you see | What it means |
+|---|---|
+| The dataset selector is empty | no folder under `data/` holds both CSV files; run `synth` or put the ČNB files in `data/real/` |
+| "Claude unavailable … NoCredentialsError" | the shell that started the container had no keys; redo step 2 with `--force-recreate` |
+| "Claude unavailable … ServiceUnavailableException" | Bedrock has no capacity for that model right now; the note is written by the other model automatically, or the template is shown |
+| The app shows old behaviour after a `git pull` | the image still holds the old code: `docker compose up -d --build` |
 
 ## Using the app
 
@@ -163,6 +241,7 @@ the score, the datasets and the decision log run, and are tested, with no UI at 
 | `risk/screening.py` | stage 1 hard rules, and which way the money went |
 | `risk/scoring.py` | stage 2 `VectorRiskEngine`: normalisation, weights, tiers, breakdown |
 | `risk/reasons.py` | the fact behind each attribute, in the words the analyst reads |
+| `risk/alerts.py` | Type A/B/C red flags, triage, priority, four-eyes ownership, the mandatory CSV |
 | `risk/calibrate.py` | weight calibration and precision / recall / F1 |
 | `ai/prompt.py` | what Claude is told before it sees a case |
 | `ai/facts.py` | the JSON one decision becomes, and the deterministic template note |
@@ -188,7 +267,7 @@ the score, the datasets and the decision log run, and are tested, with no UI at 
 | `app.py` | wiring: sidebar → engine → overview → client view |
 | `tests/` | 25 tests: the pipeline, the backend the UI used to own, and the dataset checks |
 | `Dockerfile`, `compose.yaml` | the container |
-| `docs/` | model card, 4-minute demo script |
+| `docs/` | decision logic (the mandatory write-up), model card, 4-minute demo script |
 
 ## Data notes and assumptions
 
