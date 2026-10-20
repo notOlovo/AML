@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Runtime code only; data/real is mounted at runtime and excluded from image.
 COPY app.py .
+COPY .streamlit ./.streamlit
 COPY amlcopilot ./amlcopilot
 COPY frontend ./frontend
 COPY data/sample ./data/sample
