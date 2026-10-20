@@ -46,7 +46,7 @@ if not settings.ready:
 clients, txns, feats, hard = prepare(str(ROOT / settings.folder))
 engine = VectorRiskEngine(settings.weights, tiers_for(settings.review_at))
 results = engine.score(feats, hard)
-alerts = build_alerts(clients, txns, feats)
+alerts = build_alerts(clients, txns, feats, triage_review_at=float(settings.review_at))
 
 st.markdown('<div class="aml-section-label">Mandatory export</div>', unsafe_allow_html=True)
 st.download_button(

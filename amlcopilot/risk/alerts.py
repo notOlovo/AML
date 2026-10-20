@@ -99,8 +99,8 @@ def _priority(row: pd.Series) -> float:
     return round(float(np.clip(score, 0.0, 100.0)), 1)
 
 
-def _triage(row: pd.Series) -> str:
-    if row["priority"] >= 60 or row["alert_type"] == "C" or int(row.get("flag_count", 1)) >= 2:
+def _triage(row: pd.Series, review_priority_at: float = 60.0) -> str:
+    if row["priority"] >= review_priority_at or row["alert_type"] == "C" or int(row.get("flag_count", 1)) >= 2:
         return "REVIEW"
     return "FP"
 
@@ -227,7 +227,8 @@ def _type_c(txns: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_alerts(clients: pd.DataFrame, txns: pd.DataFrame, feats: pd.DataFrame) -> pd.DataFrame:
+def build_alerts(clients: pd.DataFrame, txns: pd.DataFrame, feats: pd.DataFrame,
+                 triage_review_at: float = 60.0) -> pd.DataFrame:
     """Generate alerts in the mandatory output schema.
 
     Type A: profile discrepancy (July vs expected/Q2 baseline)
@@ -259,7 +260,7 @@ def build_alerts(clients: pd.DataFrame, txns: pd.DataFrame, feats: pd.DataFrame)
     alerts = alerts.join(flags, on="client_id")
 
     alerts["priority"] = alerts.apply(_priority, axis=1)
-    alerts["triage"] = alerts.apply(_triage, axis=1)
+    alerts["triage"] = alerts.apply(_triage, axis=1, review_priority_at=float(triage_review_at))
     alerts["executive_role"] = alerts.apply(_executive_role, axis=1)
 
     alerts["alert_id"] = [f"ALR-{i:07d}" for i in range(1, len(alerts) + 1)]
