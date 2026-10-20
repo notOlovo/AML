@@ -4,3 +4,15 @@ data/audit_log.jsonl
 out
 **/__pycache__
 .pytest_cache
+.venv
+.git
+.github
+tests
+docs
+README.md
+README.ru.md
+Dockerfile
+compose.yaml
+pytest.ini
+.containerignore
+.dockerignore

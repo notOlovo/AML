@@ -21,18 +21,20 @@ MIN_HISTORY_DAYS = 30               # shorter history is too noisy to compare wi
 
 def _structuring_count(t: pd.DataFrame) -> pd.Series:
     """Most remittances just below the threshold inside any 7-day window."""
+    amount_col = "amount_czk" if "amount_czk" in t.columns else "amount"
     lo = STRUCTURING_BAND * STRUCTURING_THRESHOLD
-    near = t[t["txn_type"].eq("remittance") & t["amount"].between(lo, STRUCTURING_THRESHOLD, inclusive="left")]
+    near = t[t["txn_type"].eq("remittance") & t[amount_col].between(lo, STRUCTURING_THRESHOLD, inclusive="left")]
     if near.empty:
         return pd.Series(dtype=float)
-    roll = near.set_index("ts").groupby("client_id")["amount"].rolling(STRUCTURING_WINDOW).count()
+    roll = near.set_index("ts").groupby("client_id")[amount_col].rolling(STRUCTURING_WINDOW).count()
     return roll.groupby(level=0).max()
 
 
 def _pass_through_episodes(t: pd.DataFrame) -> pd.Series:
     """Days on which the client sent out >= 85 % of what came in over the last 3 days (and that was >= 50k)."""
+    amount_col = "amount_czk" if "amount_czk" in t.columns else "amount"
     daily = (t.assign(day=t["ts"].dt.floor("D"))
-              .pivot_table(index=["client_id", "day"], columns="direction", values="amount", aggfunc="sum",
+              .pivot_table(index=["client_id", "day"], columns="direction", values=amount_col, aggfunc="sum",
                            fill_value=0.0)
               .reindex(columns=["in", "out"], fill_value=0.0)
               .reset_index(level=0))
@@ -44,18 +46,19 @@ def _pass_through_episodes(t: pd.DataFrame) -> pd.Series:
 
 def build(clients: pd.DataFrame, txns: pd.DataFrame) -> pd.DataFrame:
     t = txns
+    amount_col = "amount_czk" if "amount_czk" in t.columns else "amount"
     start, end = t["ts"].min().normalize(), t["ts"].max().normalize()
     months = ((end - start).days + 1) / 30.44
 
     g = t.groupby("client_id")
     f = clients.set_index("client_id").copy()
     f["txn_count"] = g.size()
-    f["volume"] = g["amount"].sum()
+    f["volume"] = g[amount_col].sum()
     f["monthly_volume"] = f["volume"] / months
-    f["inflow"] = t[t["direction"].eq("in")].groupby("client_id")["amount"].sum()
-    f["outflow"] = t[t["direction"].eq("out")].groupby("client_id")["amount"].sum()
-    top = t.loc[g["amount"].idxmax()].set_index("client_id")
-    f["largest_txn"] = top["amount"]
+    f["inflow"] = t[t["direction"].eq("in")].groupby("client_id")[amount_col].sum()
+    f["outflow"] = t[t["direction"].eq("out")].groupby("client_id")[amount_col].sum()
+    top = t.loc[g[amount_col].idxmax()].set_index("client_id")
+    f["largest_txn"] = top[amount_col]
     f["largest_txn_id"] = top["txn_id"]
 
     # profile: declared expectation (monthly) and the client's own 2Q2026 run-rate

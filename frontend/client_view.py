@@ -10,6 +10,7 @@ import streamlit as st
 
 from amlcopilot import ai
 from amlcopilot.io import decisions
+from amlcopilot.risk.alerts import MANDATORY_COLUMNS
 from amlcopilot.risk.scoring import ValidationDecision
 
 MODELS = list(ai.MODELS)
@@ -31,6 +32,17 @@ TRANSACTION_COLUMNS = {
     "txn_type": st.column_config.TextColumn("Type", width="medium"),
     "counterparty_country": st.column_config.TextColumn("Country", width="small"),
     "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
+}
+
+ALERT_COLUMNS = {
+    "alert_id": st.column_config.TextColumn("Alert ID", width="medium"),
+    "alert_type": st.column_config.TextColumn("Type", width="small"),
+    "transaction_id": st.column_config.TextColumn("Transaction", width="medium"),
+    "triage": st.column_config.TextColumn("Triage", width="small"),
+    "priority": st.column_config.NumberColumn("Priority", format="%.1f", width="small"),
+    "executive_role": st.column_config.TextColumn("Executive role", width="medium"),
+    "executive_person": st.column_config.TextColumn("Executive", width="medium"),
+    "approver": st.column_config.TextColumn("Approver", width="medium"),
 }
 
 
@@ -64,6 +76,26 @@ def _transactions(txns: pd.DataFrame, client: str) -> None:
         largest = txns[txns["client_id"] == client].nlargest(10, "amount")
         st.dataframe(largest[list(TRANSACTION_COLUMNS)], hide_index=True, width="stretch",
                      row_height=35, column_config=TRANSACTION_COLUMNS)
+
+
+def _alerts(client_alerts: pd.DataFrame) -> None:
+    st.markdown("#### Alerts")
+    if client_alerts.empty:
+        st.caption("No Type A/B/C alert for this client in July 2026.")
+        return
+    st.dataframe(
+        client_alerts[list(ALERT_COLUMNS)],
+        hide_index=True,
+        width="stretch",
+        row_height=35,
+        column_config=ALERT_COLUMNS,
+    )
+    first = client_alerts.iloc[0]
+    st.markdown(f"**Reason:** {first['reason']}")
+    st.caption(f"Audit log: {first['log']}")
+    with st.expander("Mandatory 11-column rows for this client", expanded=False):
+        st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
+        st.dataframe(client_alerts.reindex(columns=MANDATORY_COLUMNS), hide_index=True, width="stretch")
 
 
 def _explanation(decision: ValidationDecision, client: str) -> None:
@@ -103,11 +135,13 @@ def _decision(root: Path, dataset: str, decision: ValidationDecision, client: st
             st.success(f"Saved to {path.relative_to(root)}")
 
 
-def draw(root: Path, dataset: str, decision: ValidationDecision, txns: pd.DataFrame, client: str) -> None:
+def draw(root: Path, dataset: str, decision: ValidationDecision, txns: pd.DataFrame,
+         client: str, alerts: pd.DataFrame) -> None:
     st.divider()
     st.markdown('<div class="aml-eyebrow">Client review</div>', unsafe_allow_html=True)
     st.subheader(f"{client} · review details")
     _summary(decision)
+    _alerts(alerts[alerts["client_id"] == client] if len(alerts) else alerts)
     _drivers(decision)
     _transactions(txns, client)
     _explanation(decision, client)

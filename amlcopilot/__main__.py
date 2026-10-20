@@ -13,6 +13,7 @@ from pathlib import Path
 
 from . import ai, pipeline, synth, validation
 from .risk import calibrate
+from .risk.alerts import export_alerts_csv
 
 
 def main(argv=None):
@@ -57,10 +58,13 @@ def main(argv=None):
 
     if a.command == "score":
         out = Path(a.folder) / "results.csv"
+        alerts_out = Path(a.folder) / "alerts.csv"
         res.to_csv(out, index=False)
+        export_alerts_csv(run["alerts"], str(alerts_out))
         print(res["action_status"].value_counts().to_string(), "\n")
         print(res.head(15).to_string(index=False))
         print(f"\nall {len(res)} clients -> {out}")
+        print(f"mandatory alerts export ({len(run['alerts'])} rows) -> {alerts_out}")
     else:
         truth = pipeline.ground_truth(a.folder)
         if truth is None:

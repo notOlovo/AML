@@ -37,13 +37,15 @@ def _flow(g: pd.DataFrame) -> str:
 
 def _hits(txns: pd.DataFrame, mask: pd.Series, rule: str) -> list[dict]:
     action, reason = RULES[rule]
+    amount_col = "amount_czk" if "amount_czk" in txns.columns else "amount"
     return [{"client_id": cid, "rule": rule, "action": action, "reason": reason,
-             "txn_ids": list(g["txn_id"])[:20], "amount": float(g["amount"].sum()), "flow": _flow(g)}
+             "txn_ids": list(g["txn_id"])[:20], "amount": float(g[amount_col].sum()), "flow": _flow(g)}
             for cid, g in txns[mask].groupby("client_id")]
 
 
 def run(txns: pd.DataFrame, watchlist: pd.DataFrame | None = None) -> pd.DataFrame:
     """One row per (client, rule) that fired."""
+    amount_col = "amount_czk" if "amount_czk" in txns.columns else "amount"
     rows = []
     if watchlist is not None and not watchlist.empty:
         lists = watchlist.assign(list=watchlist["list"].str.lower()).set_index("account")["list"]
@@ -51,5 +53,5 @@ def run(txns: pd.DataFrame, watchlist: pd.DataFrame | None = None) -> pd.DataFra
         rows += _hits(txns, hit.eq("sanctions"), "SANCTIONS")
         rows += _hits(txns, hit.eq("warning"), "WARNING_LIST")
     rows += _hits(txns, txns["counterparty_country"].isin(EU_HIGH_RISK_COUNTRIES), "HIGH_RISK_COUNTRY")
-    rows += _hits(txns, txns["txn_type"].eq("remittance") & (txns["amount"] > CASH_LIMIT_CZK), "CASH_LIMIT")
+    rows += _hits(txns, txns["txn_type"].eq("remittance") & (txns[amount_col] > CASH_LIMIT_CZK), "CASH_LIMIT")
     return pd.DataFrame(rows, columns=["client_id", "rule", "action", "reason", "txn_ids", "amount", "flow"])

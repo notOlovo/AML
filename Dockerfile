@@ -7,8 +7,11 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# code + the synthetic sample; the ČNB files (data/real) are mounted at run time, never baked in
-COPY . .
+# Runtime code only; data/real is mounted at runtime and excluded from image.
+COPY app.py .
+COPY amlcopilot ./amlcopilot
+COPY frontend ./frontend
+COPY data/sample ./data/sample
 
 EXPOSE 8501
 # no --server.address: Streamlit then listens on IPv4 and IPv6, so both localhost and 127.0.0.1 work

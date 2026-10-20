@@ -68,6 +68,8 @@ def load(folder: str | Path) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     t["ts"] = pd.to_datetime(t["date"] + " " + t["time"], format="%d.%m.%Y %H:%M:%S")
     t["amount"] = pd.to_numeric(t["amount"], errors="coerce")
+    # The ČNB synthetic files already provide CZK-equivalent volumes for every currency.
+    t["amount_czk"] = t["amount"]
     t["direction"] = np.where(t["txn_type"].eq("incoming payment"), "in", "out")
     incoming = t["direction"].eq("in")
     # the other side of the payment (the client's own account is its client ID)
