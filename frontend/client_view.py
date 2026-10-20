@@ -59,11 +59,22 @@ def _summary(decision: ValidationDecision) -> None:
 def _drivers(decision: ValidationDecision) -> None:
     st.markdown("#### Risk drivers")
     breakdown = pd.DataFrame([vars(part) for part in decision.breakdown])
-    bars = alt.Chart(breakdown).mark_bar().encode(
-        x=alt.X("weighted_points:Q", title="points (xᵢ · wᵢ)",
-                scale=alt.Scale(domain=[0, max(breakdown["weight"].max(), 1)])),
-        y=alt.Y("attribute:N", sort="-x", title=None),
-        tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+    bars = (
+        alt.Chart(breakdown)
+        .mark_bar(color="#e9c46a", cornerRadiusEnd=4, size=16)
+        .encode(
+            x=alt.X("weighted_points:Q", title="points (xᵢ · wᵢ)",
+                    scale=alt.Scale(domain=[0, max(breakdown["weight"].max(), 1)], nice=False),
+                    axis=alt.Axis(tickCount=5, format=".0f")),
+            y=alt.Y("attribute:N", sort="-x", title=None),
+            tooltip=["attribute", "raw_value", "normalized_score", "weight"],
+        )
+        .properties(height=max(180, 34 * len(breakdown)),
+                    padding={"left": 8, "right": 28, "top": 8, "bottom": 8})
+        .configure(background="transparent")
+        .configure_view(strokeWidth=0)
+        .configure_axis(labelColor="#f1ece0", titleColor="#968e7a", gridColor="#221e12",
+                        domainColor="#52462a", tickColor="#52462a", labelLimit=220, labelFontSize=12)
     )
     st.altair_chart(bars, width="stretch", theme=None)
     with st.expander("Evidence & score factors", expanded=False):
@@ -126,7 +137,8 @@ def _decision(root: Path, dataset: str, decision: ValidationDecision, client: st
     reason = st.text_input("Reason", key=f"note_{client}")
     columns = st.columns(len(ACTIONS))
     for column, (action, label) in zip(columns, ACTIONS):
-        if column.button(label, disabled=not reason.strip(), width="stretch"):
+        if column.button(label, disabled=not reason.strip(), width="stretch",
+                         type="primary" if action == "ESCALATE" else "secondary"):
             saved = None
             if attachment is not None:
                 saved = decisions.save_attachment(root, client, attachment.name, attachment.getbuffer())

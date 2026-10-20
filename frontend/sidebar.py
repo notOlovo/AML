@@ -12,7 +12,7 @@ from amlcopilot import validation
 from amlcopilot.config import DEFAULT_WEIGHTS, REVIEW_AT
 from amlcopilot.io import datasets
 
-ADD_DATASET = "➕ Add dataset"
+ADD_DATASET = "+ Add dataset"
 
 
 @dataclass

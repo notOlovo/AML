@@ -44,7 +44,7 @@ def draw(results: pd.DataFrame) -> str:
         view,
         hide_index=True,
         width="stretch",
-        height=min(460, max(180, 48 + len(view.head(9)) * 35)),
+        height=37 + max(3, min(len(view), 9)) * 35,
         row_height=35,
         on_select="rerun",
         selection_mode="multi-row",
