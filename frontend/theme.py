@@ -218,13 +218,14 @@ CSS = """
     /* ---------- sliders ---------- */
     [data-testid="stSlider"] { padding: 0 .25rem; }
     [data-testid="stSlider"] label p { color: var(--text); font-weight: 500; }
-    [data-testid="stSlider"] [role="slider"] {
+    [data-testid="stSlider"] [data-orientation="horizontal"] > [data-rac]:not([data-orientation]) {
         background: var(--accent) !important;
-        box-shadow: 0 0 0 4px rgba(129, 140, 248, .2), 0 0 14px var(--accent-glow);
-        border: 2px solid #0b1120 !important;
+        box-shadow: 0 0 0 4px var(--accent-soft), 0 0 14px var(--accent-glow);
+        border: 2px solid var(--bg) !important; border-radius: 50%;
     }
-    [data-testid="stSlider"] [role="slider"]:hover, [data-testid="stSlider"] [role="slider"]:focus {
-        box-shadow: 0 0 0 6px rgba(129, 140, 248, .28), 0 0 18px rgba(129, 140, 248, .65);
+    [data-testid="stSlider"]:hover [data-orientation="horizontal"] > [data-rac]:not([data-orientation]),
+    [data-testid="stSlider"]:focus-within [data-orientation="horizontal"] > [data-rac]:not([data-orientation]) {
+        box-shadow: 0 0 0 6px var(--accent-soft), 0 0 18px var(--accent-glow);
     }
     [data-testid="stSliderThumbValue"] {
         color: #0b1120 !important; background: var(--accent); border-radius: 6px;
