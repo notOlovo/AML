@@ -133,7 +133,7 @@ def _alert_body(alert: pd.Series) -> None:
         '</div>',
         unsafe_allow_html=True,
     )
-    with st.expander("Details and audit log", expanded=False):
+    with st.expander("Details and audit log", expanded=True):
         st.markdown(_grid([
             ("Transaction", str(alert["transaction_id"])),
             ("Executive role", str(alert["executive_role"])),
@@ -157,7 +157,7 @@ def _alerts(client_alerts: pd.DataFrame) -> None:
         return
     for _, alert in client_alerts.iterrows():
         _alert_card(alert)
-    with st.expander("Mandatory 11-column rows for this client", expanded=False):
+    with st.expander("Mandatory 11-column rows for this client", expanded=True):
         st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
         st.dataframe(client_alerts.reindex(columns=MANDATORY_COLUMNS), hide_index=True, width="stretch")
 
