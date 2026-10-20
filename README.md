@@ -133,8 +133,8 @@ its source and cost, and when the call did not go through it exits with the AWS 
 1. **Sidebar:** pick the dataset, move the eight weight sliders or the review threshold. The counts and the
    table update at once.
 2. **Table:** the clients that need action, BLOCK first, then by score. Select one or more rows and use the CSV
-   button below the table to download the selected cases (decision, risk score, and top driver). Selecting a row
-   still opens that client's details.
+   button below the table to download their generated alerts in the mandatory 11-column format. Selected clients
+   without generated alerts are omitted. Selecting a row still opens that client's details.
 3. **Client:** the hard rules that fired, the points of every attribute (xi · wi) with the fact behind them,
    a text explanation and the client's largest payments. "Explain with Claude" turns the same facts into a case
    note through Amazon Bedrock (Claude Haiku 4.5 or Sonnet 4.5, eu-central-1); every number in Claude's text is

@@ -27,6 +27,12 @@ MANDATORY_COLUMNS = [
     "log",
 ]
 
+
+def select_alerts(alerts: pd.DataFrame, client_ids: pd.Series) -> pd.DataFrame:
+    """Return generated alerts for selected clients in the mandatory export schema."""
+    return alerts.loc[alerts["client_id"].isin(client_ids)].reindex(columns=MANDATORY_COLUMNS)
+
+
 EU_FATF_HIGH_RISK = {
     "AF", "BF", "CD", "CM", "HT", "IR", "KP", "ML", "MM", "MZ", "NG", "PH", "SN", "SS", "SY",
     "TZ", "VE", "VN", "YE"

@@ -5,6 +5,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from amlcopilot.risk.alerts import select_alerts
+
 INTRO = (
     '<p class="aml-intro"><strong>Stage 1</strong> hard rules (sanctions, high-risk country, cash limit) '
     'decide on their own. <strong>Stage 2</strong> scores everyone else: '
@@ -31,7 +33,7 @@ def _counters(results: pd.DataFrame) -> None:
     columns[3].metric("AUTO_CLEAR", f"{int(counts.get('AUTO_CLEAR', 0)):,}")
 
 
-def draw(results: pd.DataFrame) -> str:
+def draw(results: pd.DataFrame, alerts: pd.DataFrame) -> str:
     """Draw the overview and return the client the analyst is looking at."""
     st.markdown('<div class="aml-eyebrow">Portfolio overview</div>', unsafe_allow_html=True)
     st.subheader("AML triage overview")
@@ -51,16 +53,22 @@ def draw(results: pd.DataFrame) -> str:
         column_config=TABLE_COLUMNS,
     )
     selected_rows = [row for row in picked.selection.rows if 0 <= row < len(view)]
+    selected_clients = view.iloc[selected_rows]["client_id"]
+    selected_alerts = select_alerts(alerts, selected_clients)
     if selected_rows:
-        st.session_state["client"] = view.iloc[selected_rows[0]]["client_id"]
+        st.session_state["client"] = selected_clients.iloc[0]
     st.download_button(
-        f"Download selected cases CSV ({len(selected_rows)})",
-        data=view.iloc[selected_rows].to_csv(index=False).encode("utf-8-sig"),
-        file_name="selected_cases.csv",
+        f"Download selected alerts CSV ({len(selected_alerts)})",
+        data=selected_alerts.to_csv(index=False).encode("utf-8-sig"),
+        file_name="selected_alerts.csv",
         mime="text/csv",
-        disabled=not selected_rows,
+        disabled=selected_alerts.empty,
         use_container_width=True,
     )
+    if selected_rows and selected_alerts.empty:
+        st.caption("The selected cases have no alerts to export in the mandatory 11-column format.")
+    elif len(selected_alerts) < len(selected_clients):
+        st.caption("Cases without generated alerts are omitted from the CSV.")
 
     # The remembered client can fall out of the table when the weights or the dataset change.
     client = st.session_state.get("client")

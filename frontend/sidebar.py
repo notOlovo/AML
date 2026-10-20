@@ -72,7 +72,7 @@ def draw(root: Path, role: str) -> Settings:
             st.subheader("Stage 2 weights")
             weights = {k: st.slider(k.replace("_", " "), 0.0, 50.0, step=0.5, key=f"w_{k}")
                        for k in DEFAULT_WEIGHTS}
-            review_at = st.slider("Send to human review from score (Stage 2 + Alert triage)", 10, 80,
+            review_at = st.slider("Send to human review from score", 10, 80,
                                   int(REVIEW_AT))
             st.button("Reset to default weights", on_click=_set_weights, args=(DEFAULT_WEIGHTS,))
             st.caption(f"Sum {sum(weights.values()):.1f}, rescaled to 100.")

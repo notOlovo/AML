@@ -12,7 +12,7 @@ from pathlib import Path
 import streamlit as st
 
 from amlcopilot.io import csv_source
-from amlcopilot.risk.alerts import MANDATORY_COLUMNS, build_alerts
+from amlcopilot.risk.alerts import build_alerts
 from amlcopilot.risk import features, screening
 from amlcopilot.risk.scoring import VectorRiskEngine
 from frontend import client_view, overview, sidebar, theme
@@ -48,17 +48,5 @@ engine = VectorRiskEngine(settings.weights, tiers_for(settings.review_at))
 results = engine.score(feats, hard)
 alerts = build_alerts(clients, txns, feats, triage_review_at=float(settings.review_at))
 
-st.markdown('<div class="aml-section-label">Mandatory export</div>', unsafe_allow_html=True)
-st.download_button(
-    "Download required alerts CSV",
-    data=alerts.reindex(columns=MANDATORY_COLUMNS).to_csv(index=False),
-    file_name="alerts.csv",
-    mime="text/csv",
-    use_container_width=True,
-)
-with st.expander("Show mandatory 11-column schema and preview", expanded=False):
-    st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
-    st.dataframe(alerts.reindex(columns=MANDATORY_COLUMNS).head(20), hide_index=True, width="stretch")
-
-client = overview.draw(results)
+client = overview.draw(results, alerts)
 client_view.draw(ROOT, settings.folder, engine.explain(feats, client, hard), txns, client, alerts)
