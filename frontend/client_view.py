@@ -67,16 +67,16 @@ def _drivers(decision: ValidationDecision) -> None:
                         domainColor="#3b4b70", tickColor="#3b4b70", labelLimit=220, labelFontSize=12)
     )
     st.altair_chart(bars, width="stretch", theme=None)
-    with st.expander("Evidence & score factors", expanded=False):
-        st.dataframe(breakdown[list(BREAKDOWN_COLUMNS)], hide_index=True, width="stretch",
-                     row_height=38, column_config=BREAKDOWN_COLUMNS)
+    st.markdown("#### Evidence & score factors")
+    st.dataframe(breakdown[list(BREAKDOWN_COLUMNS)], hide_index=True, width="stretch",
+                 row_height=38, column_config=BREAKDOWN_COLUMNS)
 
 
 def _transactions(txns: pd.DataFrame, client: str) -> None:
-    with st.expander("Largest transactions · top 10", expanded=False):
-        largest = txns[txns["client_id"] == client].nlargest(10, "amount")
-        st.dataframe(largest[list(TRANSACTION_COLUMNS)], hide_index=True, width="stretch",
-                     row_height=35, column_config=TRANSACTION_COLUMNS)
+    st.markdown("#### Largest transactions · top 10")
+    largest = txns[txns["client_id"] == client].nlargest(10, "amount")
+    st.dataframe(largest[list(TRANSACTION_COLUMNS)], hide_index=True, width="stretch",
+                 row_height=35, column_config=TRANSACTION_COLUMNS)
 
 
 LOG_LABELS = {
