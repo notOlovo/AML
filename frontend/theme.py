@@ -247,7 +247,8 @@ CSS = """
     [class*="st-key-alert_"] {
         background: var(--surface); border: 1px solid var(--border);
         border-left: 3px solid var(--accent); border-radius: var(--radius);
-        padding: .85rem 1.1rem .35rem; gap: .35rem;
+        /* the details sit in the card itself now, so the card carries the bottom padding */
+        padding: .85rem 1.1rem 1.1rem; gap: .35rem;
     }
     [class*="st-key-alert_"] [data-testid="stVerticalBlock"] { gap: .35rem; }
     [class*="st-key-alert_"] [data-testid="stExpander"] {
