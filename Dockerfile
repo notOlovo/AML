@@ -9,9 +9,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Runtime code only; data/real is mounted at runtime and excluded from image.
 COPY app.py .
+COPY .streamlit ./.streamlit
 COPY amlcopilot ./amlcopilot
 COPY frontend ./frontend
 COPY data/sample ./data/sample
+COPY .streamlit .streamlit
 
 EXPOSE 8501
 # no --server.address: Streamlit then listens on IPv4 and IPv6, so both localhost and 127.0.0.1 work

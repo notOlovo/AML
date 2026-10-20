@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from amlcopilot.risk.alerts import MANDATORY_COLUMNS, build_alerts
+from amlcopilot.risk.alerts import MANDATORY_COLUMNS, build_alerts, select_alerts
 
 
 def _clients() -> pd.DataFrame:
@@ -73,6 +73,16 @@ def test_alerts_have_mandatory_schema_and_values():
     assert set(alerts["triage"]) <= {"FP", "REVIEW"}
     assert alerts["priority"].between(0, 100).all()
     assert (alerts["executive_person"] != alerts["approver"]).all()
+
+
+def test_selected_alerts_keep_only_selected_clients_and_mandatory_schema():
+    alerts = build_alerts(_clients(), _txns(), pd.DataFrame())
+
+    selected = select_alerts(alerts, pd.Series(["C1", "C3"]))
+
+    assert list(selected.columns) == MANDATORY_COLUMNS
+    assert set(selected["client_id"]) == {"C1", "C3"}
+    assert len(selected) == len(alerts[alerts["client_id"].isin(["C1", "C3"])])
 
 
 def test_alert_rules_type_b_type_c_and_multiflag_behavior():

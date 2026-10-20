@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import html
+import json
 from pathlib import Path
 
 import altair as alt
@@ -34,18 +36,6 @@ TRANSACTION_COLUMNS = {
     "counterparty_account": st.column_config.TextColumn("Counterparty account", width="large"),
 }
 
-ALERT_COLUMNS = {
-    "alert_id": st.column_config.TextColumn("Alert ID", width="medium"),
-    "alert_type": st.column_config.TextColumn("Type", width="small"),
-    "transaction_id": st.column_config.TextColumn("Transaction", width="medium"),
-    "triage": st.column_config.TextColumn("Triage", width="small"),
-    "priority": st.column_config.NumberColumn("Priority", format="%.1f", width="small"),
-    "executive_role": st.column_config.TextColumn("Executive role", width="medium"),
-    "executive_person": st.column_config.TextColumn("Executive", width="medium"),
-    "approver": st.column_config.TextColumn("Approver", width="medium"),
-}
-
-
 def _summary(decision: ValidationDecision) -> None:
     columns = st.columns(3)
     columns[0].metric("Decision", decision.action_status)
@@ -61,7 +51,7 @@ def _drivers(decision: ValidationDecision) -> None:
     breakdown = pd.DataFrame([vars(part) for part in decision.breakdown])
     bars = (
         alt.Chart(breakdown)
-        .mark_bar(color="#e9c46a", cornerRadiusEnd=4, size=16)
+        .mark_bar(color="#818cf8", cornerRadiusEnd=4, size=16)
         .encode(
             x=alt.X("weighted_points:Q", title="points (xᵢ · wᵢ)",
                     scale=alt.Scale(domain=[0, max(breakdown["weight"].max(), 1)], nice=False),
@@ -73,8 +63,8 @@ def _drivers(decision: ValidationDecision) -> None:
                     padding={"left": 8, "right": 28, "top": 8, "bottom": 8})
         .configure(background="transparent")
         .configure_view(strokeWidth=0)
-        .configure_axis(labelColor="#f1ece0", titleColor="#968e7a", gridColor="#221e12",
-                        domainColor="#52462a", tickColor="#52462a", labelLimit=220, labelFontSize=12)
+        .configure_axis(labelColor="#e2e8f0", titleColor="#94a3b8", gridColor="#1c2740",
+                        domainColor="#3b4b70", tickColor="#3b4b70", labelLimit=220, labelFontSize=12)
     )
     st.altair_chart(bars, width="stretch", theme=None)
     with st.expander("Evidence & score factors", expanded=False):
@@ -89,21 +79,84 @@ def _transactions(txns: pd.DataFrame, client: str) -> None:
                      row_height=35, column_config=TRANSACTION_COLUMNS)
 
 
+LOG_LABELS = {
+    "rule": "Rule",
+    "amount_czk": "Amount",
+    "deviation_ratio": "Deviation",
+    "flag_count": "Flags",
+    "bank_risk": "Bank risk",
+    "pep": "PEP",
+    "country": "Client country",
+    "counterparty_country": "Counterparty country",
+}
+LOG_HIDDEN = {"alert_type", "priority", "triage"}   # already shown in the card header
+
+
+def _log_value(key: str, value) -> str:
+    """One audit-log value in words a reader does not have to decode."""
+    if value in ("", None):
+        return "—"
+    if key == "amount_czk":
+        return f"CZK {float(value):,.0f}"
+    if key == "deviation_ratio":
+        return f"{float(value):.2f}×"
+    if isinstance(value, bool):
+        return "Yes" if value else "No"
+    if key == "rule":
+        return str(value).replace("_", " ").capitalize()
+    return str(value).capitalize() if key == "bank_risk" else str(value)
+
+
+def _grid(pairs: list[tuple[str, str]]) -> str:
+    cells = "".join(f'<div class="aml-kv-item"><span>{html.escape(k)}</span>'
+                    f'<strong>{html.escape(v)}</strong></div>' for k, v in pairs)
+    return f'<div class="aml-kv">{cells}</div>'
+
+
+def _alert_card(alert: pd.Series) -> None:
+    with st.container(border=True, key=f"alert_{alert['alert_id']}"):
+        _alert_body(alert)
+
+
+def _alert_body(alert: pd.Series) -> None:
+    triage = str(alert["triage"])
+    badge = "review" if triage == "REVIEW" else "fp"
+    st.markdown(
+        '<div class="aml-alert">'
+        '<div class="aml-alert-head">'
+        f'<span class="aml-alert-id">{html.escape(str(alert["alert_id"]))}</span>'
+        f'<span class="aml-badge">Type {html.escape(str(alert["alert_type"]))}</span>'
+        f'<span class="aml-badge aml-badge-{badge}">{html.escape(triage)}</span>'
+        f'<span class="aml-alert-priority">Priority <strong>{float(alert["priority"]):.1f}</strong></span>'
+        '</div>'
+        f'<div class="aml-alert-reason">{html.escape(str(alert["reason"]))}</div>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+    with st.expander("Details and audit log", expanded=False):
+        st.markdown(_grid([
+            ("Transaction", str(alert["transaction_id"])),
+            ("Executive role", str(alert["executive_role"])),
+            ("Executive", str(alert["executive_person"])),
+            ("Approver", str(alert["approver"])),
+        ]), unsafe_allow_html=True)
+        st.markdown('<div class="aml-section-label">Audit log</div>', unsafe_allow_html=True)
+        try:
+            log = json.loads(alert["log"])
+        except (TypeError, ValueError):
+            st.code(str(alert["log"]), language="json")
+            return
+        st.markdown(_grid([(LOG_LABELS.get(k, k.replace("_", " ").capitalize()), _log_value(k, v))
+                           for k, v in log.items() if k not in LOG_HIDDEN]), unsafe_allow_html=True)
+
+
 def _alerts(client_alerts: pd.DataFrame) -> None:
     st.markdown("#### Alerts")
     if client_alerts.empty:
         st.caption("No Type A/B/C alert for this client in July 2026.")
         return
-    st.dataframe(
-        client_alerts[list(ALERT_COLUMNS)],
-        hide_index=True,
-        width="stretch",
-        row_height=35,
-        column_config=ALERT_COLUMNS,
-    )
-    first = client_alerts.iloc[0]
-    st.markdown(f"**Reason:** {first['reason']}")
-    st.caption(f"Audit log: {first['log']}")
+    for _, alert in client_alerts.iterrows():
+        _alert_card(alert)
     with st.expander("Mandatory 11-column rows for this client", expanded=False):
         st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
         st.dataframe(client_alerts.reindex(columns=MANDATORY_COLUMNS), hide_index=True, width="stretch")

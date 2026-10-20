@@ -14,17 +14,17 @@ ROLES = ["Supervisor", "User"]
 CSS = """
     <style>
     :root {
-        --bg: #0a0907;
-        --surface: #12100b;
-        --surface-2: #18150e;
-        --border: #2e2818;
-        --border-strong: #52462a;
-        --accent: #e9c46a;
-        --accent-dim: #c9a24a;
-        --accent-soft: rgba(233, 196, 106, .10);
-        --accent-glow: rgba(233, 196, 106, .45);
-        --text: #f1ece0;
-        --muted: #968e7a;
+        --bg: #0b1120;
+        --surface: #111a2f;
+        --surface-2: #16213a;
+        --border: #24324d;
+        --border-strong: #3b4b70;
+        --accent: #818cf8;
+        --accent-dim: #6366f1;
+        --accent-soft: rgba(129, 140, 248, .10);
+        --accent-glow: rgba(129, 140, 248, .45);
+        --text: #e2e8f0;
+        --muted: #94a3b8;
         --radius: 12px;
     }
 
@@ -44,7 +44,7 @@ CSS = """
     h4 { margin: 1.4rem 0 .6rem !important; padding: 0 !important; }
     hr { border-color: var(--border) !important; margin: 1.75rem 0 !important; }
     p, li, label, span { overflow-wrap: anywhere; }
-    ::selection { background: var(--accent); color: #14110a; }
+    ::selection { background: var(--accent); color: #0b1120; }
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
@@ -74,7 +74,7 @@ CSS = """
         flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px;
         display: grid; place-items: center;
         background: var(--accent-soft); border: 1px solid var(--border-strong);
-        box-shadow: 0 0 24px rgba(233, 196, 106, .18);
+        box-shadow: 0 0 24px rgba(129, 140, 248, .18);
     }
     .aml-header-title { font-size: 1.55rem; font-weight: 800; line-height: 1.2; color: var(--text); }
     .aml-header-title span { color: var(--accent); }
@@ -130,7 +130,7 @@ CSS = """
         display: flex; flex-direction: column; justify-content: space-between;
         transition: border-color .15s ease, box-shadow .15s ease;
     }
-    [data-testid="stMetric"]:hover { border-color: var(--accent); box-shadow: 0 0 22px rgba(233, 196, 106, .12); }
+    [data-testid="stMetric"]:hover { border-color: var(--accent); box-shadow: 0 0 22px rgba(129, 140, 248, .12); }
     [data-testid="stMetricLabel"] { color: var(--muted); min-height: 0; }
     [data-testid="stMetricLabel"] p {
         font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600;
@@ -201,33 +201,34 @@ CSS = """
     [data-testid="stFileUploaderFile"] { overflow: hidden; }
 
     /* ---------- buttons ---------- */
-    .stButton > button, [data-testid="stBaseButton-secondary"] {
+    .stButton > button, [data-testid="stDownloadButton"] button, [data-testid="stBaseButton-secondary"] {
         border-radius: 10px; font-weight: 600; min-height: 2.6rem;
         background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong);
         white-space: normal; line-height: 1.25; transition: all .15s ease;
     }
-    .stButton > button:hover:not(:disabled) {
+    .stButton > button:hover:not(:disabled), [data-testid="stDownloadButton"] button:hover:not(:disabled) {
         border-color: var(--accent); color: var(--accent); background: var(--accent-soft);
     }
-    .stButton > button:disabled { opacity: .4; }
+    .stButton > button:disabled, [data-testid="stDownloadButton"] button:disabled { opacity: .4; }
     .stButton > button[kind="primary"], [data-testid="stBaseButton-primary"] {
-        background: var(--accent); color: #14110a; border-color: var(--accent);
+        background: var(--accent-dim); color: #fff; border-color: var(--accent-dim);
     }
-    .stButton > button[kind="primary"]:hover:not(:disabled) { background: var(--accent-dim); color: #14110a; }
+    .stButton > button[kind="primary"]:hover:not(:disabled) { background: var(--accent-dim); color: #0b1120; }
 
     /* ---------- sliders ---------- */
     [data-testid="stSlider"] { padding: 0 .25rem; }
     [data-testid="stSlider"] label p { color: var(--text); font-weight: 500; }
-    [data-testid="stSlider"] [role="slider"] {
+    [data-testid="stSlider"] [data-orientation="horizontal"] > [data-rac]:not([data-orientation]) {
         background: var(--accent) !important;
-        box-shadow: 0 0 0 4px rgba(233, 196, 106, .2), 0 0 14px var(--accent-glow);
-        border: 2px solid #0a0907 !important;
+        box-shadow: 0 0 0 4px var(--accent-soft), 0 0 14px var(--accent-glow);
+        border: 2px solid var(--bg) !important; border-radius: 50%;
     }
-    [data-testid="stSlider"] [role="slider"]:hover, [data-testid="stSlider"] [role="slider"]:focus {
-        box-shadow: 0 0 0 6px rgba(233, 196, 106, .28), 0 0 18px rgba(233, 196, 106, .65);
+    [data-testid="stSlider"]:hover [data-orientation="horizontal"] > [data-rac]:not([data-orientation]),
+    [data-testid="stSlider"]:focus-within [data-orientation="horizontal"] > [data-rac]:not([data-orientation]) {
+        box-shadow: 0 0 0 6px var(--accent-soft), 0 0 18px var(--accent-glow);
     }
     [data-testid="stSliderThumbValue"] {
-        color: #14110a !important; background: var(--accent); border-radius: 6px;
+        color: #0b1120 !important; background: var(--accent); border-radius: 6px;
         padding: .05rem .4rem; font-size: .72rem; font-weight: 700;
     }
     [data-testid="stSliderTickBarMin"], [data-testid="stSliderTickBarMax"] { color: var(--muted); font-size: .7rem; }
@@ -241,6 +242,38 @@ CSS = """
         border-radius: var(--radius); padding: .75rem .5rem .25rem; overflow: hidden;
     }
     [data-testid="stCaptionContainer"] { color: var(--muted); }
+
+    /* ---------- alert cards ---------- */
+    [class*="st-key-alert_"] {
+        background: var(--surface); border: 1px solid var(--border);
+        border-left: 3px solid var(--accent); border-radius: var(--radius);
+        padding: .85rem 1.1rem .35rem; gap: .35rem;
+    }
+    [class*="st-key-alert_"] [data-testid="stVerticalBlock"] { gap: .35rem; }
+    [class*="st-key-alert_"] [data-testid="stExpander"] {
+        border: 0; border-top: 1px solid var(--border); border-radius: 0; background: transparent;
+        margin: .3rem -1.1rem 0; width: calc(100% + 2.2rem);
+    }
+    [class*="st-key-alert_"] [data-testid="stExpander"] details summary { padding: .6rem 1.1rem; }
+    [class*="st-key-alert_"] [data-testid="stExpander"] details div[data-testid="stExpanderDetails"] { padding: .35rem 1.1rem 1rem; }
+    [class*="st-key-alert_"] .aml-section-label { margin: 0; padding: 0; }
+    [class*="st-key-alert_"] [data-testid="stElementContainer"]:has(.aml-section-label) { margin: .9rem 0 .4rem; padding-top: .9rem; border-top: 1px dashed var(--border); }
+    .aml-alert { margin: 0; }
+    .aml-alert-head { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; }
+    .aml-alert-id { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 700; color: var(--text); }
+    .aml-alert-priority { margin-left: auto; color: var(--muted); font-size: .85rem; }
+    .aml-alert-priority strong { color: var(--text); }
+    .aml-badge {
+        display: inline-block; padding: .08rem .55rem; border-radius: 999px; font-size: .72rem; font-weight: 700;
+        letter-spacing: .04em; color: var(--muted); background: var(--surface-2); border: 1px solid var(--border-strong);
+    }
+    .aml-badge-review { color: var(--accent); background: var(--accent-soft); border-color: var(--accent-dim); }
+    .aml-badge-fp { color: var(--muted); }
+    .aml-alert-reason { margin-top: .55rem; padding-bottom: .75rem; color: var(--text); line-height: 1.55; font-size: .95rem; }
+    .aml-kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .65rem 1.25rem; }
+    .aml-kv-item { display: flex; flex-direction: column; gap: .1rem; }
+    .aml-kv-item span { color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }
+    .aml-kv-item strong { color: var(--text); font-weight: 600; font-size: .92rem; overflow-wrap: anywhere; }
 
     /* ---------- responsive ---------- */
     @media (max-width: 900px) {
@@ -264,7 +297,7 @@ def header() -> str:
     left, right = st.columns([1, .2], vertical_alignment="center")
     with left:
         st.markdown(
-            '<div class="aml-header"><div class="aml-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e9c46a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div><div>'
+            '<div class="aml-header"><div class="aml-logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div><div>'
             '<div class="aml-header-title">AML Triage <span>Copilot</span></div>'
             '<div class="aml-header-subtitle">Explainable transaction monitoring</div>'
             '</div></div>',
