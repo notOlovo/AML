@@ -133,21 +133,23 @@ def _alert_body(alert: pd.Series) -> None:
         '</div>',
         unsafe_allow_html=True,
     )
-    with st.expander("Details and audit log", expanded=False):
-        st.markdown(_grid([
-            ("Transaction", str(alert["transaction_id"])),
-            ("Executive role", str(alert["executive_role"])),
-            ("Executive", str(alert["executive_person"])),
-            ("Approver", str(alert["approver"])),
-        ]), unsafe_allow_html=True)
-        st.markdown('<div class="aml-section-label">Audit log</div>', unsafe_allow_html=True)
-        try:
-            log = json.loads(alert["log"])
-        except (TypeError, ValueError):
-            st.code(str(alert["log"]), language="json")
-            return
-        st.markdown(_grid([(LOG_LABELS.get(k, k.replace("_", " ").capitalize()), _log_value(k, v))
-                           for k, v in log.items() if k not in LOG_HIDDEN]), unsafe_allow_html=True)
+    # Ownership and the audit log stay open: an analyst should not have to click to see who owns
+    # the alert and what it was decided from.
+    st.markdown('<div class="aml-section-label">Details and audit log</div>', unsafe_allow_html=True)
+    st.markdown(_grid([
+        ("Transaction", str(alert["transaction_id"])),
+        ("Executive role", str(alert["executive_role"])),
+        ("Executive", str(alert["executive_person"])),
+        ("Approver", str(alert["approver"])),
+    ]), unsafe_allow_html=True)
+    st.markdown('<div class="aml-section-label">Audit log</div>', unsafe_allow_html=True)
+    try:
+        log = json.loads(alert["log"])
+    except (TypeError, ValueError):
+        st.code(str(alert["log"]), language="json")
+        return
+    st.markdown(_grid([(LOG_LABELS.get(k, k.replace("_", " ").capitalize()), _log_value(k, v))
+                       for k, v in log.items() if k not in LOG_HIDDEN]), unsafe_allow_html=True)
 
 
 def _alerts(client_alerts: pd.DataFrame) -> None:
@@ -157,9 +159,9 @@ def _alerts(client_alerts: pd.DataFrame) -> None:
         return
     for _, alert in client_alerts.iterrows():
         _alert_card(alert)
-    with st.expander("Mandatory 11-column rows for this client", expanded=False):
-        st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
-        st.dataframe(client_alerts.reindex(columns=MANDATORY_COLUMNS), hide_index=True, width="stretch")
+    st.markdown("#### Mandatory 11-column rows for this client")
+    st.caption("Column order: " + ", ".join(MANDATORY_COLUMNS))
+    st.dataframe(client_alerts.reindex(columns=MANDATORY_COLUMNS), hide_index=True, width="stretch")
 
 
 def _explanation(decision: ValidationDecision, client: str) -> None:
