@@ -265,7 +265,7 @@ the score, the datasets and the decision log run, and are tested, with no UI at 
 | File | What it does |
 |---|---|
 | `app.py` | wiring: sidebar → engine → overview → client view |
-| `tests/` | 25 tests: the pipeline, the backend the UI used to own, and the dataset checks |
+| `tests/` | 32 tests: the pipeline, the alerts, the backend the UI used to own, and the dataset checks |
 | `Dockerfile`, `compose.yaml` | the container |
 | `docs/` | decision logic (the mandatory write-up), model card, 4-minute demo script |
 
