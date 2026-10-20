@@ -5,7 +5,6 @@
 
 A simple, explainable prototype. It reads the ČNB synthetic AML dataset (5,493 clients, 397,853 payments),
 decides for every client **BLOCK**, **HUMAN_REVIEW** or **AUTO_CLEAR**, and shows exactly why.
-Russian version for the team: [README.ru.md](README.ru.md).
 
 ## How it decides: two stages
 
