@@ -176,7 +176,7 @@ docker exec aml-copilot sh -c 'printenv AWS_ACCESS_KEY_ID | cut -c1-8'
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/streamlit run app.py              # http://localhost:8501
-.venv/bin/python -m pytest -q               # 31 tests, a few seconds
+.venv/bin/python -m pytest -q               # 32 tests, a few seconds (the image excludes them)
 ```
 
 ### Command line
