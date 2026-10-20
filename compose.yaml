@@ -12,15 +12,15 @@ services:
       # data/decisions.csv = analyst decisions; mounted so the decisions survive the container.
       # :Z relabels the folder for SELinux (Fedora with Podman); other systems ignore it.
       - ./data:/app/data:Z
-      # Only needed with the AWS CLI route (`aws sso login --profile hackathon`); then also set
-      # AWS_PROFILE below. Writable on purpose: the SDK refreshes the sign-in token cache in there.
-      # - ~/.aws:/root/.aws:Z
+      # Writable so the AWS SDK can refresh the SSO token cache after `aws sso login`.
+      - ${HOME}/.aws:/root/.aws:rw
     environment:
       # For "Explain with Claude" via Amazon Bedrock. Without the AWS CLI: copy the three
       # "Set AWS environment variables" lines from the AWS access portal, paste them into the shell
-      # that runs `docker compose up`, and they are handed to the container from there.
+      # that runs `docker compose up`. Or use AWS SSO and set AWS_PROFILE in that shell.
       AWS_REGION: eu-central-1
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
-      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN:-}
-      # AWS_PROFILE: hackathon
+      # Null values pass through from the host if set and are omitted otherwise.
+      AWS_ACCESS_KEY_ID:
+      AWS_SECRET_ACCESS_KEY:
+      AWS_SESSION_TOKEN:
+      AWS_PROFILE:

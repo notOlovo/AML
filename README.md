@@ -99,8 +99,10 @@ container.
 - **Claude explanations (optional):** set up the AWS CLI once with `aws configure sso` (start URL from the
   organisers' AWS guide, SSO region `eu-north-1`, role `ai-hackathon-TeamAdmin`, region `eu-central-1`, profile
   name `hackathon`), sign in with `aws sso login --profile hackathon` (valid 12 hours), then add
-  `-v ~/.aws:/root/.aws -e AWS_PROFILE=hackathon` to the run command. Keep that mount writable: the SDK
-  refreshes the sign-in token there. Without credentials the app shows the template explanation instead.
+  `AWS_PROFILE=hackathon` when starting Compose (in PowerShell: `$env:AWS_PROFILE="hackathon"` first). Compose
+  mounts `~/.aws` writable so the SDK can refresh the SSO token cache. For direct `docker run`, add
+  `-v ~/.aws:/root/.aws -e AWS_PROFILE=hackathon`. Without valid credentials the app shows the template
+  explanation instead.
 - **Tests in the container:** `docker run --rm aml-copilot python -m pytest -q`.
 
 ### Without a container
@@ -130,7 +132,9 @@ its source and cost, and when the call did not go through it exits with the AWS 
 
 1. **Sidebar:** pick the dataset, move the eight weight sliders or the review threshold. The counts and the
    table update at once.
-2. **Table:** the clients that need action, BLOCK first, then by score. Click a row.
+2. **Table:** the clients that need action, BLOCK first, then by score. Select one or more rows and use the CSV
+   button below the table to download the selected cases (decision, risk score, and top driver). Selecting a row
+   still opens that client's details.
 3. **Client:** the hard rules that fired, the points of every attribute (xi · wi) with the fact behind them,
    a text explanation and the client's largest payments. "Explain with Claude" turns the same facts into a case
    note through Amazon Bedrock (Claude Haiku 4.5 or Sonnet 4.5, eu-central-1); every number in Claude's text is

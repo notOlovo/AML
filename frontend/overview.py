@@ -47,11 +47,20 @@ def draw(results: pd.DataFrame) -> str:
         height=min(460, max(180, 48 + len(view.head(9)) * 35)),
         row_height=35,
         on_select="rerun",
-        selection_mode="single-row",
+        selection_mode="multi-row",
         column_config=TABLE_COLUMNS,
     )
-    if picked.selection.rows and picked.selection.rows[0] < len(view):
-        st.session_state["client"] = view.iloc[picked.selection.rows[0]]["client_id"]
+    selected_rows = [row for row in picked.selection.rows if 0 <= row < len(view)]
+    if selected_rows:
+        st.session_state["client"] = view.iloc[selected_rows[0]]["client_id"]
+    st.download_button(
+        f"Download selected cases CSV ({len(selected_rows)})",
+        data=view.iloc[selected_rows].to_csv(index=False).encode("utf-8-sig"),
+        file_name="selected_cases.csv",
+        mime="text/csv",
+        disabled=not selected_rows,
+        use_container_width=True,
+    )
 
     # The remembered client can fall out of the table when the weights or the dataset change.
     client = st.session_state.get("client")
